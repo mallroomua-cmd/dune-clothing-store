@@ -6,7 +6,10 @@ declare global {
   interface Window {
     dataLayer: any[];
     gtag?: (...args: any[]) => void;
+    fbq?: (...args: any[]) => void;
+    _fbq?: any;
     __tagsInit?: boolean;
+    __fbInit?: boolean;
     __ANALYTICS_DEBUG__?: boolean;
   }
 }
@@ -15,9 +18,10 @@ export interface AnalyticsEventLog {
   id: string;
   timestamp: string;
   eventName: string;
-  platform: 'Google Analytics' | 'Google Ads' | 'DataLayer' | 'System';
+  platform: 'Google Analytics' | 'Google Ads' | 'Facebook Pixel' | 'DataLayer' | 'System';
   payload: Record<string, any>;
 }
+
 
 let eventListeners: ((event: AnalyticsEventLog) => void)[] = [];
 export const eventHistory: AnalyticsEventLog[] = [];
@@ -31,9 +35,10 @@ export function subscribeToAnalytics(listener: (event: AnalyticsEventLog) => voi
 
 export function logEvent(
   eventName: string,
-  platform: 'Google Analytics' | 'Google Ads' | 'DataLayer' | 'System',
+  platform: 'Google Analytics' | 'Google Ads' | 'Facebook Pixel' | 'DataLayer' | 'System',
   payload: Record<string, any>
 ) {
+
   const item: AnalyticsEventLog = {
     id: `ev-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
     timestamp: new Date().toLocaleTimeString('uk-UA'),
@@ -176,6 +181,33 @@ export function initializeTracking(config: AnalyticsConfig) {
       logEvent('site_verification_added', 'System', { content });
     }
   }
+
+  // Facebook Pixel initialization
+  if (config.fbPixelId && !window.__fbInit) {
+    window.__fbInit = true;
+    (function (f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = !0;
+      n.version = '2.0';
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = !0;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s?.parentNode?.insertBefore(t, s);
+    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+    if (window.fbq) {
+      window.fbq('init', config.fbPixelId);
+      window.fbq('track', 'PageView');
+      logEvent('PageView (init)', 'Facebook Pixel', { pixelId: config.fbPixelId });
+    }
+  }
 }
 
 export function trackViewItem(product: Product, selectedVariant?: string) {
@@ -190,6 +222,21 @@ export function trackViewItem(product: Product, selectedVariant?: string) {
     window.gtag('event', 'view_item', payload);
   }
   logEvent('view_item', 'Google Analytics', payload);
+
+  if (window.fbq) {
+    window.fbq('track', 'ViewContent', {
+      content_name: product.title,
+      content_ids: [item.item_id],
+      content_type: 'product',
+      value: item.price,
+      currency: 'UAH',
+    });
+    logEvent('ViewContent', 'Facebook Pixel', {
+      content_name: product.title,
+      value: item.price,
+      currency: 'UAH',
+    });
+  }
 }
 
 export function trackAddToCart(product: Product, quantity = 1, selectedVariant?: string) {
@@ -204,6 +251,21 @@ export function trackAddToCart(product: Product, quantity = 1, selectedVariant?:
     window.gtag('event', 'add_to_cart', payload);
   }
   logEvent('add_to_cart', 'Google Analytics', payload);
+
+  if (window.fbq) {
+    window.fbq('track', 'AddToCart', {
+      content_name: product.title,
+      content_ids: [item.item_id],
+      content_type: 'product',
+      value: item.price * quantity,
+      currency: 'UAH',
+    });
+    logEvent('AddToCart', 'Facebook Pixel', {
+      content_name: product.title,
+      value: item.price * quantity,
+      currency: 'UAH',
+    });
+  }
 }
 
 export function trackRemoveFromCart(product: Product, quantity = 1, selectedVariant?: string) {
@@ -231,6 +293,19 @@ export function trackBeginCheckout(items: CartItem[], total: number) {
     window.gtag('event', 'begin_checkout', payload);
   }
   logEvent('begin_checkout', 'Google Analytics', payload);
+
+  if (window.fbq) {
+    window.fbq('track', 'InitiateCheckout', {
+      value: total,
+      currency: 'UAH',
+      num_items: items.length,
+    });
+    logEvent('InitiateCheckout', 'Facebook Pixel', {
+      value: total,
+      currency: 'UAH',
+      num_items: items.length,
+    });
+  }
 }
 
 /**
@@ -286,4 +361,20 @@ export async function trackPurchase(
     }
     logEvent('conversion', 'Google Ads', gadsPayload);
   }
+
+  // 4. Facebook Pixel Purchase event
+  if (window.fbq) {
+    window.fbq('track', 'Purchase', {
+      value: order.total,
+      currency: 'UAH',
+      content_type: 'product',
+      order_id: transactionId,
+    });
+    logEvent('Purchase', 'Facebook Pixel', {
+      value: order.total,
+      currency: 'UAH',
+      order_id: transactionId,
+    });
+  }
 }
+

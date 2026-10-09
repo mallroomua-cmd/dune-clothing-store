@@ -156,9 +156,153 @@ export function parseShopifyCsv(csvString: string): Promise<Product[]> {
           reject(err);
         }
       },
-      error: (err: any) => {
+      error: (err: unknown) => {
         reject(err);
       },
     });
   });
 }
+
+/**
+ * Analyzes CSV content before applying, returning preview metrics:
+ * total rows, valid products, invalid prices count, missing images count, categories list
+ */
+export async function validateCsvPreview(
+  csvString: string,
+  filename?: string,
+  fileSizeBytes?: number
+): Promise<import('../types').CsvPreviewResult> {
+  const products = await parseShopifyCsv(csvString);
+
+  const categoriesSet = new Set<string>();
+  let invalidPriceCount = 0;
+  let missingImageCount = 0;
+
+  products.forEach((p) => {
+    if (p.productType) categoriesSet.add(p.productType);
+    if (!p.price || p.price <= 0) invalidPriceCount++;
+    if (!p.featuredImage || p.featuredImage.includes('unsplash.com/photo-1523275335684')) {
+      missingImageCount++;
+    }
+  });
+
+  const lines = csvString.split(/\r?\n/).filter((l) => l.trim().length > 0);
+  const totalRows = Math.max(0, lines.length - 1);
+
+  return {
+    totalRows,
+    validProducts: products,
+    invalidPriceCount,
+    missingImageCount,
+    categories: Array.from(categoriesSet),
+    filename,
+    fileSizeBytes,
+  };
+}
+
+/**
+ * Converts products catalog back into a standard, Shopify-compatible CSV format
+ * Includes UTF-8 BOM (\uFEFF) for immediate compatibility with Ukrainian/European Microsoft Excel
+ */
+export function exportProductsToShopifyCsv(products: Product[]): string {
+  const rows: Record<string, string | number>[] = [];
+
+  products.forEach((product) => {
+    const tagsString = (product.tags || []).join(', ');
+    const variants =
+      product.variants && product.variants.length > 0
+        ? product.variants
+        : [
+            {
+              id: `v-${product.id}`,
+              title: 'Default Title',
+              price: product.price,
+              compareAtPrice: product.compareAtPrice,
+              sku: product.sku,
+            },
+          ];
+
+    variants.forEach((variant, vIdx) => {
+      const isFirst = vIdx === 0;
+      const imageSrc = product.images[vIdx] || (isFirst ? product.featuredImage : '');
+
+      rows.push({
+        Handle: product.handle || product.id,
+        Title: product.title,
+        'Body (HTML)': isFirst ? product.bodyHtml || '' : '',
+        Vendor: product.vendor || '',
+        'Product Category': product.productType || 'Загальне',
+        Type: product.productType || 'Загальне',
+        Tags: isFirst ? tagsString : '',
+        Published: 'TRUE',
+        'Option1 Name': 'Title',
+        'Option1 Value': variant.title || 'Default Title',
+        'Option2 Name': '',
+        'Option2 Value': '',
+        'Option3 Name': '',
+        'Option3 Value': '',
+        'Variant SKU': variant.sku || (isFirst ? product.sku || '' : ''),
+        'Variant Inventory Qty': product.available ? 99 : 0,
+        'Variant Inventory Policy': 'continue',
+        'Variant Price': variant.price ?? product.price,
+        'Variant Compare At Price':
+          variant.compareAtPrice || (isFirst && product.compareAtPrice ? product.compareAtPrice : ''),
+        'Image Src': imageSrc || (isFirst ? product.featuredImage || '' : ''),
+        'Image Position': imageSrc ? vIdx + 1 : '',
+        Status: product.available ? 'active' : 'draft',
+      });
+    });
+
+    if (product.images.length > variants.length) {
+      for (let i = variants.length; i < product.images.length; i++) {
+        rows.push({
+          Handle: product.handle || product.id,
+          Title: product.title,
+          'Body (HTML)': '',
+          Vendor: product.vendor || '',
+          'Product Category': product.productType || '',
+          Type: product.productType || '',
+          Tags: '',
+          Published: 'TRUE',
+          'Option1 Name': '',
+          'Option1 Value': '',
+          'Option2 Name': '',
+          'Option2 Value': '',
+          'Option3 Name': '',
+          'Option3 Value': '',
+          'Variant SKU': '',
+          'Variant Inventory Qty': '',
+          'Variant Inventory Policy': '',
+          'Variant Price': '',
+          'Variant Compare At Price': '',
+          'Image Src': product.images[i],
+          'Image Position': i + 1,
+          Status: 'active',
+        });
+      }
+    }
+  });
+
+  const unparsed = Papa.unparse(rows, {
+    quotes: true,
+    quoteChar: '"',
+    escapeChar: '"',
+    header: true,
+  });
+
+  return '\uFEFF' + unparsed;
+}
+
+export function downloadShopifyCsv(products: Product[], filename = 'shopify_catalog_export.csv') {
+  const csvContent = exportProductsToShopifyCsv(products);
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+

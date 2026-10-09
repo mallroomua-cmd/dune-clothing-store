@@ -28,6 +28,7 @@ export interface AnalyticsConfig {
   googleAdsConversionLabel: string; // e.g. AbC123XyZ
   merchantCenterTag: string; // e.g. <meta name="google-site-verification" content="..." />
   gtmId: string; // e.g. GTM-XXXXXXX
+  fbPixelId: string; // e.g. 123456789012345
   telegramBotToken: string; // Telegram bot token for instant order leads
   telegramChatId: string; // Telegram chat ID
   novaPoshtaApiKey: string; // Optional Nova Poshta API key
@@ -54,4 +55,26 @@ export interface OrderDetails {
   website?: string;
   elapsedMs?: number;
 }
+
+export type OrderStatus = 'new' | 'confirmed' | 'shipped' | 'completed' | 'cancelled';
+
+export interface StoredOrder extends OrderDetails {
+  id: string;
+  orderId: string;
+  date: string;
+  createdAt: number;
+  status: OrderStatus;
+  syncedToTelegram?: boolean;
+}
+
+export interface CsvPreviewResult {
+  totalRows: number;
+  validProducts: Product[];
+  invalidPriceCount: number;
+  missingImageCount: number;
+  categories: string[];
+  filename?: string;
+  fileSizeBytes?: number;
+}
+
 

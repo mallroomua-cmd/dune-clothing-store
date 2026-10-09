@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, AnalyticsConfig, CartItem, OrderDetails } from '../types';
+import { Product, AnalyticsConfig, CartItem, OrderDetails, StoredOrder, OrderStatus } from '../types';
+
 import { SAMPLE_PRODUCTS } from '../lib/sample-data';
 import { parseShopifyCsv } from '../lib/shopify-parser';
 import { dbGet, dbSet, dbDelete } from '../lib/db';
@@ -13,13 +14,20 @@ import {
   trackViewItem,
 } from '../lib/analytics';
 import { sendTelegramOrderNotification } from '../lib/telegram';
-import { sendOrderPayload, enqueuePendingOrder, startOutboxWorker } from '../lib/outbox';
-
+import {
+  sendOrderPayload,
+  enqueuePendingOrder,
+  startOutboxWorker,
+  subscribeToOutbox,
+  flushOutboxWithReport,
+} from '../lib/outbox';
 
 interface StoreContextType {
   products: Product[];
   analyticsConfig: AnalyticsConfig;
   cart: CartItem[];
+  orders: StoredOrder[];
+  outboxCount: number;
   selectedProduct: Product | null;
   selectedVariant: string;
   isCheckoutOpen: boolean;
@@ -52,6 +60,14 @@ interface StoreContextType {
     website?: string;
     elapsedMs?: number;
   }) => Promise<{ success: boolean; orderId: string }>;
+  updateProduct: (product: Product) => Promise<void>;
+  addProduct: (product: Product) => Promise<void>;
+  deleteProduct: (productId: string) => Promise<void>;
+  updateOrderStatus: (orderId: string, status: OrderStatus) => Promise<void>;
+  deleteOrder: (orderId: string) => Promise<void>;
+  clearOrders: () => Promise<void>;
+  retryTelegramNotification: (orderId: string) => Promise<{ success: boolean; error?: string }>;
+  flushPendingOutbox: () => Promise<{ total: number; sent: number; remaining: number }>;
 }
 
 // Fallback to environment variables if provided (critical for production visitors!)
@@ -61,17 +77,23 @@ const DEFAULT_ANALYTICS: AnalyticsConfig = {
   googleAdsConversionLabel: (import.meta.env.VITE_ADS_LABEL as string) || '',
   merchantCenterTag: (import.meta.env.VITE_GMC_TAG as string) || '',
   gtmId: (import.meta.env.VITE_GTM_ID as string) || '',
+  fbPixelId: (import.meta.env.VITE_FB_PIXEL_ID as string) || '',
   telegramBotToken: '', // Token is strictly kept on server to prevent leakage; set in Admin UI only for local sandbox testing
   telegramChatId: (import.meta.env.VITE_TG_CHAT_ID as string) || '',
   novaPoshtaApiKey: (import.meta.env.VITE_NP_KEY as string) || '',
   debugMode: import.meta.env.DEV,
 };
 
+
 const StoreContext = createContext<StoreContextType | null>(null);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>(SAMPLE_PRODUCTS);
   const [hydrated, setHydrated] = useState(false);
+
+  const [orders, setOrders] = useState<StoredOrder[]>([]);
+  const [ordersHydrated, setOrdersHydrated] = useState(false);
+  const [outboxCount, setOutboxCount] = useState(0);
 
   const [analyticsConfig, setAnalyticsConfig] = useState<AnalyticsConfig>(() => {
     try {
@@ -99,10 +121,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
 
-  // Background retry worker for offline/failed orders
+  // Background retry worker for offline/failed orders & outbox listener
   useEffect(() => {
-    const cleanup = startOutboxWorker();
-    return cleanup;
+    const cleanupWorker = startOutboxWorker();
+    const cleanupSub = subscribeToOutbox((count) => setOutboxCount(count));
+    return () => {
+      cleanupWorker();
+      cleanupSub();
+    };
   }, []);
 
   // Load products asynchronously from IndexedDB
@@ -119,6 +145,29 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       });
   }, []);
 
+  // Load orders asynchronously from IndexedDB with localStorage fallback
+  useEffect(() => {
+    dbGet<StoredOrder[]>('shopify_store_orders')
+      .then((saved) => {
+        if (saved && saved.length > 0) {
+          setOrders(saved);
+        } else {
+          try {
+            const localSaved = localStorage.getItem('shopify_store_orders');
+            if (localSaved) {
+              setOrders(JSON.parse(localSaved));
+            }
+          } catch {
+            // ignore
+          }
+        }
+      })
+      .catch((e) => console.warn('Failed to load orders from IndexedDB', e))
+      .finally(() => {
+        setOrdersHydrated(true);
+      });
+  }, []);
+
   // Save products asynchronously to IndexedDB ONLY after initial hydration
   useEffect(() => {
     if (!hydrated) return;
@@ -126,6 +175,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       console.warn('Failed to save products to IndexedDB', e)
     );
   }, [products, hydrated]);
+
+  // Save orders asynchronously to IndexedDB & localStorage ONLY after initial orders hydration
+  useEffect(() => {
+    if (!ordersHydrated) return;
+    dbSet('shopify_store_orders', orders).catch((e) =>
+      console.warn('Failed to save orders to IndexedDB', e)
+    );
+    try {
+      localStorage.setItem('shopify_store_orders', JSON.stringify(orders));
+    } catch {
+      // ignore
+    }
+  }, [orders, ordersHydrated]);
 
   // Sync analytics config and initialize tracking once
   useEffect(() => {
@@ -166,6 +228,98 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const resetToDemo = async () => {
     setProducts(SAMPLE_PRODUCTS);
     await dbDelete('shopify_store_products');
+  };
+
+  const updateProduct = async (updated: Product) => {
+    setProducts((prev) => {
+      const next = prev.map((p) => (p.id === updated.id ? updated : p));
+      void dbSet('shopify_store_products', next);
+      return next;
+    });
+  };
+
+  const addProduct = async (newProduct: Product) => {
+    setProducts((prev) => {
+      const next = [newProduct, ...prev];
+      void dbSet('shopify_store_products', next);
+      return next;
+    });
+  };
+
+  const deleteProduct = async (productId: string) => {
+    setProducts((prev) => {
+      const next = prev.filter((p) => p.id !== productId);
+      void dbSet('shopify_store_products', next);
+      return next;
+    });
+    setCart((prev) => prev.filter((c) => c.product.id !== productId));
+  };
+
+  const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
+    setOrders((prev) => {
+      const next = prev.map((o) => (o.orderId === orderId ? { ...o, status } : o));
+      void dbSet('shopify_store_orders', next);
+      try {
+        localStorage.setItem('shopify_store_orders', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
+  const deleteOrder = async (orderId: string) => {
+    setOrders((prev) => {
+      const next = prev.filter((o) => o.orderId !== orderId);
+      void dbSet('shopify_store_orders', next);
+      try {
+        localStorage.setItem('shopify_store_orders', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
+  const clearOrders = async () => {
+    setOrders([]);
+    await dbDelete('shopify_store_orders');
+    localStorage.removeItem('shopify_store_orders');
+  };
+
+  const retryTelegramNotification = async (
+    orderId: string
+  ): Promise<{ success: boolean; error?: string }> => {
+    const order = orders.find((o) => o.orderId === orderId);
+    if (!order) return { success: false, error: 'Замовлення не знайдено' };
+    if (!analyticsConfig.telegramBotToken || !analyticsConfig.telegramChatId) {
+      return { success: false, error: 'Telegram Bot Token або Chat ID не налаштовані' };
+    }
+
+    const res = await sendTelegramOrderNotification(
+      order,
+      analyticsConfig.telegramBotToken,
+      analyticsConfig.telegramChatId
+    );
+
+    if (res.success) {
+      setOrders((prev) => {
+        const next = prev.map((o) => (o.orderId === orderId ? { ...o, syncedToTelegram: true } : o));
+        void dbSet('shopify_store_orders', next);
+        try {
+          localStorage.setItem('shopify_store_orders', JSON.stringify(next));
+        } catch {
+          // ignore
+        }
+        return next;
+      });
+    }
+
+    return res;
+  };
+
+  const flushPendingOutbox = async () => {
+    return await flushOutboxWithReport();
   };
 
   const updateAnalyticsConfig = (newConfig: Partial<AnalyticsConfig>) => {
@@ -260,7 +414,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     website?: string;
     elapsedMs?: number;
   }): Promise<{ success: boolean; orderId: string }> => {
-    // Generate unified Order ID
     const orderId = newOrderId();
 
     const itemsToOrder: CartItem[] = checkoutProduct
@@ -285,13 +438,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       total,
     };
 
-    // 1. Direct Telegram dispatch ONLY if merchant explicitly set token in admin drawer
+    // 1. Direct Telegram dispatch if merchant set token
+    let directTelegramSuccess = false;
     if (analyticsConfig.telegramBotToken && analyticsConfig.telegramChatId) {
-      sendTelegramOrderNotification(
-        fullOrder,
-        analyticsConfig.telegramBotToken,
-        analyticsConfig.telegramChatId
-      ).catch((err) => console.warn('Direct Telegram notification failed:', err));
+      try {
+        const tgRes = await sendTelegramOrderNotification(
+          fullOrder,
+          analyticsConfig.telegramBotToken,
+          analyticsConfig.telegramChatId
+        );
+        directTelegramSuccess = tgRes.success;
+      } catch (err) {
+        console.warn('Direct Telegram notification failed:', err);
+      }
     }
 
     // 2. Dispatch to Serverless API with Outbox fallback
@@ -304,22 +463,30 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const sent = await sendOrderPayload(payload);
     if (!sent) {
-      // Offline fallback: enqueue to IndexedDB outbox for automatic background retry
       await enqueuePendingOrder(payload);
     }
 
-    // 3. Save order history
-    try {
-      const history = JSON.parse(localStorage.getItem('shopify_store_orders') || '[]');
-      history.unshift({
-        ...fullOrder,
-        id: orderId,
-        date: new Date().toLocaleString('uk-UA'),
-      });
-      localStorage.setItem('shopify_store_orders', JSON.stringify(history.slice(0, 50)));
-    } catch (e) {
-      console.warn('Failed saving order history', e);
-    }
+    // 3. Save order history in StoredOrder format
+    const storedOrder: StoredOrder = {
+      ...fullOrder,
+      id: orderId,
+      orderId,
+      createdAt: Date.now(),
+      date: new Date().toLocaleString('uk-UA'),
+      status: 'new',
+      syncedToTelegram: directTelegramSuccess,
+    };
+
+    setOrders((prev) => {
+      const next = [storedOrder, ...prev].slice(0, 150);
+      void dbSet('shopify_store_orders', next);
+      try {
+        localStorage.setItem('shopify_store_orders', JSON.stringify(next));
+      } catch (e) {
+        console.warn('Failed saving order history', e);
+      }
+      return next;
+    });
 
     // 4. Track Purchase & Google Ads Enhanced Conversion AFTER order is successfully recorded!
     void trackPurchase({ ...fullOrder, orderId }, analyticsConfig);
@@ -339,6 +506,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         products,
         analyticsConfig,
         cart,
+        orders,
+        outboxCount,
         selectedProduct,
         selectedVariant,
         isCheckoutOpen,
@@ -361,12 +530,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         openQuickOrder,
         openCartCheckout,
         submitOrder,
+        updateProduct,
+        addProduct,
+        deleteProduct,
+        updateOrderStatus,
+        deleteOrder,
+        clearOrders,
+        retryTelegramNotification,
+        flushPendingOutbox,
       }}
     >
       {children}
     </StoreContext.Provider>
   );
 };
+
 
 export const useStore = () => {
   const ctx = useContext(StoreContext);

@@ -9,7 +9,7 @@ import { MobileFloatingBar } from './components/MobileFloatingBar';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { CheckoutModal } from './components/CheckoutModal';
 import { CartDrawer } from './components/CartDrawer';
-import { AdminDrawer } from './components/AdminDrawer';
+import { AdminControlHub } from './components/AdminControlHub';
 import { Footer } from './components/Footer';
 
 export const AppContent: React.FC = () => {
@@ -31,10 +31,11 @@ export const AppContent: React.FC = () => {
       <ProductDetailModal />
       <CheckoutModal />
       <CartDrawer />
-      <AdminDrawer />
+      <AdminControlHub />
     </div>
   );
 };
+
 
 export default function App() {
   return (
