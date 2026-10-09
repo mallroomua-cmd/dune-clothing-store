@@ -244,20 +244,20 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                     <Sparkles className="w-4 h-4" />
                   </div>
                   <h4 className="font-bold text-xs uppercase tracking-wide text-black mb-1">
-                    Експертний підбір
+                    Стилістичний підбір
                   </h4>
                   <p className="text-xs text-neutral-500 leading-normal">
-                    Індивідуальний підбір доглядової рутини під потреби вашої шкіри: себорегуляція, боротьба з акне, відновлення бар'єру чи anti-age.
+                    Допомога у підборі розміру (за довжиною устілки та параметрами зросту), посадки (Oversize / Regular / Gorpcore) та формуванні готових сетів.
                   </p>
                 </div>
               </div>
 
               <div className="space-y-3 pt-2 border-t border-neutral-100">
                 <h4 className="font-bold text-sm text-black uppercase tracking-wide">
-                  Культура вибору та свідомий догляд
+                  Культура дропів та автентичності
                 </h4>
                 <p className="text-neutral-600 text-xs sm:text-sm">
-                  Ми віримо, що догляд за шкірою — це щоденний ритуал турботи про себе, а не хаотичні покупки. У нашому каталозі немає випадкових товарів: кожна сироватка, крем або SPF-засіб перевірені за складом (INCI) на ефективність концентрацій (ніацинамід, пептиди, центелла, кислоти AHA/BHA/PHA, муцин равлика).
+                  Ми віримо, що вулична мода та снікер-культура — це форма самовираження та естетика деталей. У нашому просторі немає випадкових речей: кожен реліз ретельно відбирається з увагою до якості матеріалів (Heavyweight Cotton, Cordura, Vibram, GORE-TEX) та проходить безкомпромісну перевірку на 100% оригінальність.
                 </p>
               </div>
 

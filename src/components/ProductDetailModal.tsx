@@ -8,8 +8,6 @@ import {
   Share2,
   Eye,
   Sparkles,
-  Sun,
-  Moon,
 } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { useStore } from '../context/StoreContext';
@@ -89,62 +87,39 @@ export const ProductDetailModal: React.FC = () => {
     return badges.slice(0, 3);
   }, [selectedProduct]);
 
-  // Routine AM/PM Protocol & Synergy Rules
-  const routineProtocol = useMemo(() => {
+  // Streetwear Drop & Style Guide classification
+  const styleProtocol = useMemo(() => {
     if (!selectedProduct) return null;
     const type = (selectedProduct.productType || '').toLowerCase();
     const title = selectedProduct.title.toLowerCase();
 
-    if (type.includes('сонцезах') || title.includes('spf') || title.includes('sun')) {
+    if (type.includes('взуття') || type.includes('кросів') || title.includes('jordan') || title.includes('sneaker') || title.includes('salomon') || title.includes('balance')) {
       return {
-        step: 'КРОК 5: ЗАХИСТ ВІД UV',
-        time: 'morning' as const,
-        timeLabel: 'ТІЛЬКИ ВРАНЦІ (☀️ AM)',
-        synergyWith: 'Гіалуронова кислота, центелла, ніацинамід. Наносити за 15 хвилин до виходу на сонце.',
-        conflictWith: 'Не конфліктує. Є обов’язковим завершенням будь-якої ранкової рутини.',
+        step: 'FOOTWEAR // SNEAKER ARCHIVE',
+        badge: '👟 СНІКЕРИ',
       };
     }
-    if (type.includes('крем') || title.includes('cream')) {
+    if (type.includes('худі') || type.includes('світшот') || title.includes('hoodie') || title.includes('crewneck')) {
       return {
-        step: 'КРОК 4: БАР’ЄРНЕ ЗВОЛОЖЕННЯ',
-        time: 'both' as const,
-        timeLabel: 'РАНОК ТА ВЕЧІР (☀️ AM / 🌙 PM)',
-        synergyWith: 'Ідеально «закриває» сироватки з центеллою або муцином, утримуючи вологу та ліпіди.',
-        conflictWith: 'Уникайте нанесення занадто щільних шарів перед нанесенням макіяжу.',
+        step: 'HEAVYWEIGHT FLEECE // OVERSIZE',
+        badge: '👕 ХУДІ ТА СВІТШОТИ',
       };
     }
-    if (
-      type.includes('сироват') ||
-      type.includes('есенц') ||
-      type.includes('ампул') ||
-      title.includes('serum') ||
-      title.includes('ampoule') ||
-      title.includes('essence') ||
-      title.includes('муцин')
-    ) {
+    if (type.includes('штани') || type.includes('джинси') || title.includes('pant') || title.includes('double knee')) {
       return {
-        step: 'КРОК 3: ТАРГЕТНИЙ АКТИВ',
-        time: 'both' as const,
-        timeLabel: 'РАНОК ТА ВЕЧІР (☀️ AM / 🌙 PM)',
-        synergyWith: 'Центелла, пептиди, пантенол, ніацинамід, гіалуронова кислота.',
-        conflictWith: 'Не поєднувати високі концентрації AHA/BHA з чистим ретинолом в одному вечірньому нанесенні.',
+        step: 'WORKWEAR CANVAS // RELAXED FIT',
+        badge: '👖 ШТАНИ КАРГО',
       };
     }
-    if (type.includes('тонер') || type.includes('тонік') || title.includes('toner')) {
+    if (type.includes('куртк') || title.includes('jacket') || title.includes('shell') || title.includes('stone island')) {
       return {
-        step: 'КРОК 2: ТОНІЗУВАННЯ ТА ГІДРАТАЦІЯ',
-        time: 'both' as const,
-        timeLabel: 'РАНОК ТА ВЕЧІР (☀️ AM / 🌙 PM)',
-        synergyWith: 'Готує шкіру до проникнення концентрованих сироваток, нормалізує фізіологічний pH 5.5.',
-        conflictWith: 'Не змивати водою після нанесення.',
+        step: 'TECHNICAL GORPCORE // WEATHERPROOF',
+        badge: '🧥 ВЕРХНІЙ ОДЯГ',
       };
     }
     return {
-      step: 'КРОК 1: ДЕЛІКАТНЕ ОЧИЩЕННЯ',
-      time: 'both' as const,
-      timeLabel: 'РАНОК ТА ВЕЧІР (☀️ AM / 🌙 PM)',
-      synergyWith: 'Наступне зволоження тонером або сироваткою протягом перших 60 секунд після вмивання.',
-      conflictWith: 'Не використовувати гарячу воду, щоб не пошкодити гідроліпідну мантію.',
+      step: 'STREETWEAR BASICS // 100% ORIGINAL',
+      badge: '⚡ КУЛЬТОВИЙ ДРОП',
     };
   }, [selectedProduct]);
 
@@ -307,16 +282,12 @@ export const ProductDetailModal: React.FC = () => {
             {selectedProduct.title}
           </h2>
 
-          {/* Active Derm Ingredients & AM/PM Protocol */}
+          {/* Streetwear Drop & Style Badges */}
           <div className="flex flex-wrap items-center gap-1.5 mb-3">
-            {routineProtocol && (
+            {styleProtocol && (
               <span className="font-mono text-[10px] font-bold px-2 py-0.5 bg-black text-white uppercase tracking-wider flex items-center gap-1">
-                {routineProtocol.time === 'morning' ? (
-                  <Sun className="w-3 h-3 text-dune-ochre" />
-                ) : (
-                  <Moon className="w-3 h-3 text-dune-ochre" />
-                )}
-                <span>{routineProtocol.step}</span>
+                <Sparkles className="w-3 h-3 text-dune-ochre" />
+                <span>{styleProtocol.step}</span>
               </span>
             )}
             {dermBadges.map((b) => (
@@ -610,16 +581,16 @@ export const ProductDetailModal: React.FC = () => {
                       onChange={(e) => setReviewSkin(e.target.value)}
                       className="px-2.5 py-1.5 rounded-none border border-neutral-300 text-xs focus:outline-none focus:border-black font-mono bg-white"
                     >
-                      <option value="Комбінована">Комбінована</option>
-                      <option value="Жирна/проблемна">Жирна/акне</option>
-                      <option value="Суха">Суха</option>
-                      <option value="Чутлива">Чутлива</option>
+                      <option value="True to size">Розмір відповідає сітці</option>
+                      <option value="Oversize fit">Вільний Oversize крій</option>
+                      <option value="Трохи маломірить">Трохи маломірить (-0.5 розміру)</option>
+                      <option value="Трохи більшомірить">Трохи більшомірить (+0.5 розміру)</option>
                     </select>
                   </div>
                   <textarea
                     required
                     rows={2}
-                    placeholder="Ваші враження від використання засобу..."
+                    placeholder="Ваші враження від речі (якість матеріалів, шви, посадка, розмір)..."
                     value={reviewText}
                     onChange={(e) => setReviewText(e.target.value)}
                     className="w-full px-2.5 py-1.5 rounded-none border border-neutral-300 text-xs focus:outline-none focus:border-black font-sans resize-none"

@@ -129,7 +129,7 @@ export const ProductGrid: React.FC = () => {
               Каталог товарів
             </h2>
             <p className="font-mono text-xs text-neutral-500 uppercase tracking-wider mt-1">
-              ДОСТУПНО ДО ВІДПРАВКИ: {filteredProducts.length} ЗАСОБІВ
+              ДОСТУПНО ДО ВІДПРАВКИ: {filteredProducts.length} ПОЗИЦІЙ
             </p>
           </div>
 

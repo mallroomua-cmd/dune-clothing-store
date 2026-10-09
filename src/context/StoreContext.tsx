@@ -50,8 +50,7 @@ export const DEFAULT_PROMO_CODES: PromoCode[] = [
   { id: 'promo-1', code: 'DUNE10', discountType: 'percent', discountValue: 10, minOrderAmount: 1000, isActive: true },
   { id: 'promo-2', code: 'DROP100', discountType: 'fixed', discountValue: 100, minOrderAmount: 1500, isActive: true },
   { id: 'promo-3', code: 'VIP15', discountType: 'percent', discountValue: 15, minOrderAmount: 1500, isActive: true },
-  { id: 'promo-legacy', code: 'BEAUTY10', discountType: 'percent', discountValue: 10, minOrderAmount: 500, isActive: true },
-  { id: 'promo-legacy2', code: 'GLOW50', discountType: 'fixed', discountValue: 50, minOrderAmount: 600, isActive: true },
+  { id: 'promo-4', code: 'SNEAKER5', discountType: 'percent', discountValue: 5, minOrderAmount: 800, isActive: true },
 ];
 
 export const DEFAULT_REVIEWS: ProductReview[] = [
@@ -547,17 +546,23 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
   }, []);
 
-  // Load products asynchronously from IndexedDB with cosmetics catalog migration
+  // Load products asynchronously from IndexedDB with streetwear catalog migration
   useEffect(() => {
     dbGet<Product[]>('shopify_store_products')
       .then((saved) => {
-        const hasLegacy = saved && saved.some((p) => p.vendor === 'TechPro' || p.handle.includes('smart-watch'));
-        const nicheVersion = localStorage.getItem('mallroom_catalog_niche');
+        const hasLegacy = saved && saved.some((p) =>
+          p.vendor === 'TechPro' ||
+          p.vendor === 'COSRX' ||
+          p.vendor === 'Beauty of Joseon' ||
+          p.handle.includes('smart-watch') ||
+          p.handle.includes('snail')
+        );
+        const nicheVersion = localStorage.getItem('dune_catalog_niche');
 
-        if (!saved || saved.length === 0 || hasLegacy || nicheVersion !== 'cosmetics_v2') {
+        if (!saved || saved.length === 0 || hasLegacy || nicheVersion !== 'dune_streetwear_v2') {
           setProducts(SAMPLE_PRODUCTS);
           void dbSet('shopify_store_products', SAMPLE_PRODUCTS);
-          localStorage.setItem('mallroom_catalog_niche', 'cosmetics_v2');
+          localStorage.setItem('dune_catalog_niche', 'dune_streetwear_v2');
         } else {
           setProducts(saved);
         }

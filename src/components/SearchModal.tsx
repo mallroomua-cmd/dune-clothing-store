@@ -33,7 +33,7 @@ export const SearchModal: React.FC = () => {
     ).slice(0, 8);
   }, [products, query]);
 
-  const popularTags = ['COSRX', 'SPF', 'Муцин', 'Beauty of Joseon', 'Тонер', 'Сироватка', 'Крем', 'Round Lab'];
+  const popularTags = ['Jordan', 'Stüssy', 'New Balance', 'Salomon', 'Худі', 'Кросівки', 'Carhartt WIP', 'Supreme', 'Stone Island'];
 
   if (!isSearchOpen) return null;
 
@@ -54,7 +54,7 @@ export const SearchModal: React.FC = () => {
           <input
             ref={inputRef}
             type="text"
-            placeholder="ВВЕДІТЬ НАЗВУ, БРЕНД ЧИ КАТЕГОРІЮ (НАПР. COSRX, SPF, МУЦИН)..."
+            placeholder="ВВЕДІТЬ НАЗВУ, БРЕНД ЧИ КАТЕГОРІЮ (НАПР. JORDAN, STÜSSY, ХУДІ, SNEAKERS)..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 text-xs sm:text-sm font-mono uppercase text-black placeholder:text-neutral-400 focus:outline-none bg-transparent"
@@ -164,7 +164,7 @@ export const SearchModal: React.FC = () => {
                 За запитом "{query}" нічого не знайдено
               </p>
               <p className="text-[11px] text-neutral-400 uppercase">
-                Спробуйте пошукати за брендом (COSRX, Beauty of Joseon, Round Lab) або засобом (SPF, сироватка)
+                Спробуйте пошукати за брендом (Jordan, Stüssy, Salomon, New Balance) або типом (худі, кросівки, штани)
               </p>
             </div>
           ) : (
@@ -177,7 +177,7 @@ export const SearchModal: React.FC = () => {
         {/* Footer */}
         {query.trim() && searchResults.length > 0 && (
           <div className="p-3 hairline-t bg-neutral-50 text-center text-[10px] text-neutral-500 uppercase">
-            Знайдено {searchResults.length} засобів за запитом "{query}"
+            Знайдено {searchResults.length} позицій за запитом "{query}"
           </div>
         )}
       </div>

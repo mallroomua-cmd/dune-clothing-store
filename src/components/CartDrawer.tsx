@@ -300,7 +300,7 @@ export const CartDrawer: React.FC = () => {
                   <div className="flex gap-1.5">
                     <input
                       type="text"
-                      placeholder="ПРОМОКОД (НАПР. BEAUTY10)"
+                      placeholder="ПРОМОКОД (НАПР. DUNE10)"
                       value={promoInput}
                       onChange={(e) => {
                         setPromoInput(e.target.value.toUpperCase());

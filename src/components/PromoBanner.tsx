@@ -1,12 +1,24 @@
 import React from 'react';
-import { ArrowRight, Sparkles, Tag, ChevronLeft, ChevronRight } from 'lucide-react';
-import birthdayBannerImg from '../assets/birthday-deals.png';
+import { ArrowRight, Sparkles, ShieldCheck, Flame, Compass } from 'lucide-react';
+import duneBannerImg from '../assets/dune-banner.jpg';
+import { useStore } from '../context/StoreContext';
 
 interface PromoBannerProps {
   onExploreDeals?: () => void;
 }
 
+const QUICK_DROPS = [
+  { id: 'all', label: 'УСІ ДРОПИ', filter: 'all' },
+  { id: 'sneakers', label: '👟 СНІКЕРИ', filter: 'Взуття' },
+  { id: 'hoodies', label: '👕 ХУДІ & СВІТШОТИ', filter: 'Одяг' },
+  { id: 'jackets', label: '🧥 ВЕРХНІЙ ОДЯГ', filter: 'Одяг' },
+  { id: 'pants', label: '👖 ШТАНИ КАРГО', filter: 'Одяг' },
+  { id: 'deadstock', label: '🔥 DEADSTOCK', filter: 'all' },
+];
+
 export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
+  const { setSelectedCategory, setIsQuizOpen } = useStore();
+
   const handleBannerClick = () => {
     if (onExploreDeals) {
       onExploreDeals();
@@ -18,77 +30,111 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
     }
   };
 
+  const handleQuickFilter = (e: React.MouseEvent, filterCat: string) => {
+    e.stopPropagation();
+    setSelectedCategory(filterCat);
+    const el = document.getElementById('catalog-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section className="relative w-full bg-neutral-900 border-b border-neutral-200 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-6">
-        {/* Banner Card Container */}
+    <section className="relative w-full bg-[#0d0d0d] border-b border-neutral-800 text-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        {/* Main Banner Hero Card */}
         <div
           onClick={handleBannerClick}
-          className="group relative w-full cursor-pointer overflow-hidden rounded-xl bg-black shadow-md transition-all duration-300 hover:shadow-xl"
+          className="group relative w-full cursor-pointer overflow-hidden rounded-2xl bg-[#111111] border border-neutral-800/80 shadow-2xl transition-all duration-300 hover:border-neutral-700"
         >
-          {/* Main Banner Image */}
-          <div className="relative w-full aspect-[21/9] sm:aspect-[24/9] md:aspect-[28/9] min-h-[170px] sm:min-h-[220px] md:min-h-[260px] overflow-hidden bg-neutral-950 flex items-center justify-center">
+          {/* Banner Image Container with adaptive aspect ratio */}
+          <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-[2.1/1] min-h-[260px] sm:min-h-[340px] md:min-h-[420px] bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
             <img
-              src={birthdayBannerImg}
-              alt="New Season Drops - Знижки до -50% на культовий одяг та снікери"
-              className="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+              src={duneBannerImg}
+              alt="DUNE Streetwear Concept Store - Новий дроп одягу та снікер-культури"
+              className="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-[1.015]"
               loading="eager"
             />
 
-            {/* Subtle Gradient vignette for contrast */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/30 pointer-events-none" />
+            {/* Subtle cinematic gradient vignette for text legibility */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/40 pointer-events-none" />
 
-            {/* Floating Editorial Badges */}
-            <div className="absolute top-3 left-3 sm:top-5 sm:left-5 flex flex-wrap items-center gap-2 pointer-events-none">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-black/85 backdrop-blur-md text-white font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-white/20 rounded shadow-sm">
-                <Sparkles className="w-3 h-3 text-[#dec400] animate-pulse" />
-                <span>NEW SEASON DROPS</span>
-              </span>
-              <span className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 bg-[#dec400] text-black font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider rounded">
-                <Tag className="w-2.5 h-2.5" />
-                <span>ДО -50%</span>
+            {/* Top Bar Badges */}
+            <div className="absolute top-3 left-3 sm:top-5 sm:left-5 right-3 sm:right-5 flex items-center justify-between pointer-events-none">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-black/80 backdrop-blur-md text-white font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-white/15 rounded shadow-sm">
+                  <Sparkles className="w-3 h-3 text-[#dec400] animate-pulse" />
+                  <span>DUNE // LOOKBOOK 2026</span>
+                </span>
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 bg-[#dec400] text-black font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider rounded">
+                  <Flame className="w-3 h-3" />
+                  <span>NEW SEASON DROP</span>
+                </span>
+              </div>
+
+              <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 bg-black/70 backdrop-blur-md text-neutral-300 font-mono text-[11px] border border-white/10 rounded">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#dec400]" />
+                <span>100% LEGIT CHECK</span>
               </span>
             </div>
 
-            {/* Bottom Floating CTA Bar */}
-            <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white text-black font-mono text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg group-hover:bg-[#dec400] group-hover:text-black transition-all transform group-hover:translate-x-0.5">
-                <span>ПЕРЕЙТИ ДО ДРОПІВ</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            {/* Bottom Content Area */}
+            <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+              {/* Editorial Headings */}
+              <div className="max-w-xl space-y-1 sm:space-y-2 pointer-events-none">
+                <div className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-[#dec400] font-semibold flex items-center gap-1.5">
+                  <span>STREETWEAR</span>
+                  <span>•</span>
+                  <span>WORKWEAR</span>
+                  <span>•</span>
+                  <span>GORPCORE</span>
+                </div>
+                <h2 className="text-xl sm:text-3xl md:text-4xl font-black font-display text-white uppercase tracking-tight leading-tight drop-shadow-md">
+                  ВУЛИЧНА МОДА ТА СНІКЕР-КУЛЬТУРА
+                </h2>
+                <p className="hidden sm:block text-xs md:text-sm text-neutral-300 font-sans max-w-lg leading-relaxed drop-shadow">
+                  Культові релізи світових брендів: Jordan, Stüssy, New Balance, Carhartt WIP, Salomon, Supreme.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2 self-start md:self-end">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsQuizOpen(true);
+                  }}
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 bg-black/80 hover:bg-black text-white font-mono text-xs font-bold uppercase tracking-wider border border-white/20 rounded-lg shadow-lg backdrop-blur-md transition-all active:scale-[0.98]"
+                >
+                  <Compass className="w-3.5 h-3.5 text-[#dec400]" />
+                  <span>ПІДБІР СТИЛЮ</span>
+                </button>
+
+                <div className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-[#dec400] hover:bg-[#ebd52d] text-black font-mono text-xs font-black uppercase tracking-wider rounded-lg shadow-xl transition-all transform group-hover:translate-x-0.5">
+                  <span>ДО КАТАЛОГУ</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </div>
               </div>
             </div>
-
-            {/* Cosibella Style Nav Arrows (Visual/Interactive) */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleBannerClick();
-              }}
-              className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/70 hover:bg-white text-black items-center justify-center shadow backdrop-blur transition-all opacity-0 group-hover:opacity-100"
-              aria-label="Попередній банер"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleBannerClick();
-              }}
-              className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/70 hover:bg-white text-black items-center justify-center shadow backdrop-blur transition-all opacity-0 group-hover:opacity-100"
-              aria-label="Наступний банер"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
           </div>
+        </div>
 
-          {/* Dots Indicator (Cosibella slider style) */}
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10 pointer-events-none">
-            <span className="w-6 h-1.5 rounded-full bg-[#dec400]" />
-            <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
-            <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
-          </div>
+        {/* Quick Drop Category Chips under the banner */}
+        <div className="flex items-center gap-2 overflow-x-auto py-3 scrollbar-none">
+          <span className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest shrink-0 mr-1">
+            ДРОПИ:
+          </span>
+          {QUICK_DROPS.map((drop) => (
+            <button
+              key={drop.id}
+              onClick={(e) => handleQuickFilter(e, drop.filter)}
+              className="px-3 py-1.5 rounded-full bg-neutral-900 hover:bg-neutral-800 text-neutral-200 hover:text-white border border-neutral-800 hover:border-neutral-700 font-mono text-xs font-semibold uppercase tracking-wider shrink-0 transition-all active:scale-95 flex items-center gap-1.5"
+            >
+              <span>{drop.label}</span>
+            </button>
+          ))}
         </div>
       </div>
     </section>
