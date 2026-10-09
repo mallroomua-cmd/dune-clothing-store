@@ -4,7 +4,7 @@ import { useStore } from '../context/StoreContext';
 import { getDispatchStatus } from '../lib/related';
 
 export const Hero: React.FC = () => {
-  const { products } = useStore();
+  const { products, setIsQuizOpen } = useStore();
   const dispatch = getDispatchStatus();
 
   const scrollToCatalog = () => {
@@ -38,17 +38,24 @@ export const Hero: React.FC = () => {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12">
             <button
-              onClick={scrollToCatalog}
-              className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest transition-all active:scale-[0.98]"
+              onClick={() => setIsQuizOpen(true)}
+              className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest transition-all active:scale-[0.98] shadow-sm"
             >
               <Sparkles className="w-4 h-4 text-dune-ochre" />
-              <span>ОБРАТИ ДОГЛЯД ({products.length})</span>
-              <ArrowDown className="w-3.5 h-3.5" />
+              <span>ПІДІБРАТИ РУТИНУ (-15%)</span>
+            </button>
+
+            <button
+              onClick={scrollToCatalog}
+              className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white hover:bg-neutral-50 text-black font-mono font-bold text-xs uppercase tracking-widest hairline-all transition-all active:scale-[0.98]"
+            >
+              <span>КАТАЛОГ ({products.length})</span>
+              <ArrowDown className="w-3.5 h-3.5 text-neutral-500" />
             </button>
 
             <a
               href="#catalog-section"
-              className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white hover:bg-neutral-50 text-black font-mono font-semibold text-xs uppercase tracking-widest hairline-all transition-all active:scale-[0.98]"
+              className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white hover:bg-neutral-50 text-neutral-700 font-mono font-medium text-xs uppercase tracking-widest hairline-all transition-all active:scale-[0.98]"
             >
               <ShieldCheck className="w-4 h-4 text-dune-ochre" />
               <span>ОПЛАТА ПРИ ОТРИМАННІ</span>

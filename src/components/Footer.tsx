@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin, Clock, Settings, ShieldCheck, Truck, RotateCcw, Fi
 import { useStore } from '../context/StoreContext';
 
 export const Footer: React.FC = () => {
-  const { setIsAdminOpen, openPolicyModal } = useStore();
+  const { setIsAdminOpen, openPolicyModal, setIsQuizOpen, setIsTrackingOpen } = useStore();
 
   return (
     <footer className="bg-black text-[#dec400] pt-16 pb-12 hairline-t border-neutral-800 text-xs font-mono">
@@ -84,6 +84,24 @@ export const Footer: React.FC = () => {
                   className="hover:text-white transition-colors flex items-center gap-1.5 text-left"
                 >
                   <span>[ 06 ] Контакти та реквізити ФОП</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setIsTrackingOpen(true)}
+                  className="text-white hover:text-[#dec400] transition-colors flex items-center gap-1.5 text-left font-bold"
+                >
+                  <Truck className="w-3.5 h-3.5 text-[#dec400]" />
+                  <span>[ 07 ] Відстеження посилки / ТТН</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setIsQuizOpen(true)}
+                  className="text-white hover:text-[#dec400] transition-colors flex items-center gap-1.5 text-left font-bold"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#dec400]" />
+                  <span>[ 08 ] Тест шкіри & Підбір рутини (-15%)</span>
                 </button>
               </li>
             </ul>

@@ -109,4 +109,25 @@ export interface CsvPreviewResult {
   fileSizeBytes?: number;
 }
 
+export interface ProductReview {
+  id: string;
+  productId: string;
+  author: string;
+  rating: number; // 1 to 5
+  text: string;
+  date: string;
+  verified: boolean;
+  skinType?: string;
+}
+
+export interface CustomerRecord {
+  phone: string;
+  name: string;
+  city: string;
+  ordersCount: number;
+  totalSpent: number;
+  lastOrderDate: string;
+  status: 'new' | 'regular' | 'vip';
+}
+
 

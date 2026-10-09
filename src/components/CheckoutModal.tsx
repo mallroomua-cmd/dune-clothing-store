@@ -15,6 +15,9 @@ export const CheckoutModal: React.FC = () => {
     cart,
     submitOrder,
     appliedPromo,
+    applyPromoCode,
+    removePromoCode,
+    setIsTrackingOpen,
   } = useStore();
 
   const isQuick = !!checkoutProduct;
@@ -32,6 +35,8 @@ export const CheckoutModal: React.FC = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [promoInput, setPromoInput] = useState('');
+  const [promoFeedback, setPromoFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // Restore saved name and phone for returning customers
   React.useEffect(() => {
@@ -190,12 +195,25 @@ export const CheckoutModal: React.FC = () => {
               )}
             </div>
 
-            <button
-              onClick={handleClose}
-              className="w-full min-h-[46px] py-3 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest transition-all"
-            >
-              [ ПОВЕРНУТИСЯ ДО МАГАЗИНУ ]
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  handleClose();
+                  setIsTrackingOpen(true);
+                }}
+                className="flex-1 min-h-[46px] py-3 bg-white hover:bg-neutral-50 text-black font-mono font-bold text-xs uppercase tracking-widest hairline-all transition-all"
+              >
+                [ 📦 ВІДСТЕЖИТИ ТТН ]
+              </button>
+              <button
+                type="button"
+                onClick={handleClose}
+                className="flex-1 min-h-[46px] py-3 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest transition-all"
+              >
+                [ ДО МАГАЗИНУ ]
+              </button>
+            </div>
           </div>
         ) : (
           /* Checkout Form */
@@ -253,6 +271,55 @@ export const CheckoutModal: React.FC = () => {
                   <span className="tabular-nums">-{discountAmount.toLocaleString('uk-UA')} ₴</span>
                 </div>
               )}
+
+              {/* Promo Code Input Toggle */}
+              <div className="hairline-t pt-2 mt-2">
+                {appliedPromo ? (
+                  <div className="flex items-center justify-between text-[11px] text-emerald-700 bg-emerald-50 px-2 py-1 hairline-all">
+                    <span>ПРОМОКОД <strong>{appliedPromo.code}</strong> АКТИВОВАНО (-{discountAmount} ₴)</span>
+                    <button
+                      type="button"
+                      onClick={() => removePromoCode()}
+                      className="text-neutral-500 hover:text-black uppercase text-[10px] font-bold"
+                    >
+                      [ ВИДАЛИТИ ]
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="flex gap-1.5">
+                      <input
+                        type="text"
+                        placeholder="ПРОМОКОД (НАПР. VIP15)"
+                        value={promoInput}
+                        onChange={(e) => setPromoInput(e.target.value)}
+                        className="flex-1 px-2.5 py-1 text-xs font-mono uppercase bg-white hairline-all focus:outline-none focus:border-black"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!promoInput.trim()) return;
+                          const res = applyPromoCode(promoInput, subtotal);
+                          if (res.success) {
+                            setPromoFeedback({ type: 'success', text: res.message });
+                            setPromoInput('');
+                          } else {
+                            setPromoFeedback({ type: 'error', text: res.message });
+                          }
+                        }}
+                        className="px-3 py-1 bg-black hover:bg-neutral-800 text-white font-mono text-[10px] uppercase font-bold transition-all"
+                      >
+                        ЗАСТОСУВАТИ
+                      </button>
+                    </div>
+                    {promoFeedback && (
+                      <p className={`text-[10px] mt-1 ${promoFeedback.type === 'success' ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        {promoFeedback.text}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {errorMessage && (

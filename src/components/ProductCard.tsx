@@ -125,6 +125,13 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           </div>
         )}
 
+        {/* Star Rating Badge */}
+        <div className="flex items-center gap-1 font-mono text-[10px] text-neutral-400 mb-1">
+          <span className="text-dune-ochre">★ 5.0</span>
+          <span>•</span>
+          <span>ПЕРЕВІРЕНО</span>
+        </div>
+
         {/* Title */}
         <h3 className="font-sans font-medium text-xs sm:text-sm text-black line-clamp-2 uppercase group-hover:text-dune-ochre transition-colors leading-snug mb-2">
           {product.title}

@@ -9,6 +9,7 @@ import {
   StoreSettings,
   PromoCode,
   ToastMessage,
+  ProductReview,
 } from '../types';
 import { PolicyTabKey } from '../components/PolicyModal';
 
@@ -51,6 +52,49 @@ export const DEFAULT_PROMO_CODES: PromoCode[] = [
   { id: 'promo-3', code: 'VIP15', discountType: 'percent', discountValue: 15, minOrderAmount: 1500, isActive: true },
 ];
 
+export const DEFAULT_REVIEWS: ProductReview[] = [
+  {
+    id: 'rev-1',
+    productId: 'all',
+    author: 'Анастасія М.',
+    rating: 5,
+    text: 'Це абсолютний мастхев! Муцин равлика неймовірно зволожує, заспокоює запалення та вирівнює рельєф. Купую вже втретє в цьому магазині.',
+    date: '04.10.2026',
+    verified: true,
+    skinType: 'Комбінована',
+  },
+  {
+    id: 'rev-2',
+    productId: 'all',
+    author: 'Юлія К.',
+    rating: 5,
+    text: 'Найкращий сонцезахисний крем, який колись пробувала! Легка кремова текстура, вбирається за секунди, не білить і дарує гарне сяйво.',
+    date: '01.10.2026',
+    verified: true,
+    skinType: 'Суха',
+  },
+  {
+    id: 'rev-3',
+    productId: 'all',
+    author: 'Оксана Д.',
+    rating: 5,
+    text: 'Ампула з центеллою просто врятувала мою реактивну шкіру після стресу. Почервоніння зникають буквально за ніч!',
+    date: '28.09.2026',
+    verified: true,
+    skinType: 'Чутлива',
+  },
+  {
+    id: 'rev-4',
+    productId: 'all',
+    author: 'Марина С.',
+    rating: 5,
+    text: 'М’яко відлущує без кислотного подразнення завдяки ензимам, чудово зволожує та освіжає тон.',
+    date: '25.09.2026',
+    verified: true,
+    skinType: 'Нормальна',
+  },
+];
+
 interface StoreContextType {
   products: Product[];
   analyticsConfig: AnalyticsConfig;
@@ -63,6 +107,9 @@ interface StoreContextType {
   appliedPromo: PromoCode | null;
   applyPromoCode: (code: string, currentTotal: number) => { success: boolean; message: string };
   removePromoCode: () => void;
+  reviews: ProductReview[];
+  addReview: (review: Omit<ProductReview, 'id' | 'date'>) => void;
+  getProductReviews: (productId: string) => ProductReview[];
   wishlist: string[];
   toggleWishlist: (productId: string) => void;
   isInWishlist: (productId: string) => boolean;
@@ -85,6 +132,10 @@ interface StoreContextType {
   checkoutVariant: string;
   isAdminOpen: boolean;
   isCartDrawerOpen: boolean;
+  isQuizOpen: boolean;
+  setIsQuizOpen: (open: boolean) => void;
+  isTrackingOpen: boolean;
+  setIsTrackingOpen: (open: boolean) => void;
   isPolicyModalOpen: boolean;
   policyModalTab: PolicyTabKey;
   openPolicyModal: (tab?: PolicyTabKey) => void;
@@ -322,6 +373,40 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const isInWishlist = (productId: string) => wishlist.includes(productId);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isTrackingOpen, setIsTrackingOpen] = useState(false);
+
+  // Product Reviews system
+  const [reviews, setReviews] = useState<ProductReview[]>(() => {
+    try {
+      const saved = localStorage.getItem('shopify_store_reviews');
+      return saved ? JSON.parse(saved) : DEFAULT_REVIEWS;
+    } catch {
+      return DEFAULT_REVIEWS;
+    }
+  });
+
+  const addReview = (review: Omit<ProductReview, 'id' | 'date'>) => {
+    const newRev: ProductReview = {
+      ...review,
+      id: `rev-${Date.now()}`,
+      date: new Date().toLocaleDateString('uk-UA'),
+    };
+    setReviews((prev) => {
+      const next = [newRev, ...prev];
+      try {
+        localStorage.setItem('shopify_store_reviews', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+    addToast('Дякуємо! Ваш відгук успішно опубліковано.', 'success');
+  };
+
+  const getProductReviews = useCallback((productId: string) => {
+    return reviews.filter((r) => r.productId === productId || r.productId === 'all');
+  }, [reviews]);
 
   // Recently Viewed
   const [recentlyViewed, setRecentlyViewed] = useState<string[]>(() => {
@@ -877,6 +962,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         checkoutVariant,
         isAdminOpen,
         isCartDrawerOpen,
+        isQuizOpen,
+        setIsQuizOpen,
+        isTrackingOpen,
+        setIsTrackingOpen,
         isPolicyModalOpen,
         policyModalTab,
         openPolicyModal,
@@ -905,6 +994,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         clearOrders,
         retryTelegramNotification,
         flushPendingOutbox,
+        reviews,
+        addReview,
+        getProductReviews,
       }}
     >
       {children}

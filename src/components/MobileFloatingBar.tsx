@@ -1,9 +1,9 @@
 import React from 'react';
-import { ShoppingBag, Phone, ArrowDown } from 'lucide-react';
+import { ShoppingBag, Phone, ArrowDown, Sparkles, Search } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 export const MobileFloatingBar: React.FC = () => {
-  const { cart, setIsCartDrawerOpen } = useStore();
+  const { cart, setIsCartDrawerOpen, setIsQuizOpen, setIsSearchOpen } = useStore();
   const totalCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const totalSum = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
 
@@ -13,16 +13,38 @@ export const MobileFloatingBar: React.FC = () => {
 
   return (
     <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-black/95 text-white backdrop-blur-lg hairline-t p-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] transition-transform duration-300">
-      <div className="flex items-center gap-2 max-w-lg mx-auto">
+      <div className="flex items-center gap-1.5 max-w-lg mx-auto">
         {/* Support Phone */}
         <a
           href="tel:+380800332211"
-          className="w-11 h-11 bg-neutral-900 text-white flex items-center justify-center shrink-0 border border-neutral-700 active:scale-95 transition-all"
+          className="w-10 h-10 bg-neutral-900 text-white flex items-center justify-center shrink-0 border border-neutral-700 active:scale-95 transition-all"
           title="Зателефонувати менеджеру"
           aria-label="Зателефонувати менеджеру"
         >
-          <Phone className="w-4 h-4 text-dune-ochre" />
+          <Phone className="w-3.5 h-3.5 text-dune-ochre" />
         </a>
+
+        {/* Quick Search */}
+        <button
+          type="button"
+          onClick={() => setIsSearchOpen(true)}
+          className="w-10 h-10 bg-neutral-900 text-white flex items-center justify-center shrink-0 border border-neutral-700 active:scale-95 transition-all"
+          title="Пошук товарів"
+          aria-label="Пошук товарів"
+        >
+          <Search className="w-3.5 h-3.5 text-neutral-300" />
+        </button>
+
+        {/* Skin Quiz Button */}
+        <button
+          type="button"
+          onClick={() => setIsQuizOpen(true)}
+          className="w-10 h-10 bg-neutral-900 text-white flex items-center justify-center shrink-0 border border-neutral-700 active:scale-95 transition-all"
+          title="Пройти тест шкіри"
+          aria-label="Пройти тест шкіри"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-dune-ochre" />
+        </button>
 
         {/* Action Button */}
         {totalCount > 0 ? (

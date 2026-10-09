@@ -18,6 +18,9 @@ import { SocialProofToast } from './components/SocialProofToast';
 import { ToastContainer } from './components/ToastContainer';
 import { RecentlyViewed } from './components/RecentlyViewed';
 import { ScrollToTop } from './components/ScrollToTop';
+import { RoutineQuizModal } from './components/RoutineQuizModal';
+import { OrderTrackingModal } from './components/OrderTrackingModal';
+import { FaqSection } from './components/FaqSection';
 
 // Code-splitting heavy components (Admin Hub: 2400+ LOC & Policy docs)
 // This cuts initial bundle size drastically for storefront visitors
@@ -40,6 +43,7 @@ export const AppContent: React.FC = () => {
         <ProductGrid />
         <ReviewsSection />
         <RecentlyViewed />
+        <FaqSection />
       </main>
       <Footer />
 
@@ -58,6 +62,8 @@ export const AppContent: React.FC = () => {
       <CartDrawer />
       <WishlistModal />
       <SearchModal />
+      <RoutineQuizModal />
+      <OrderTrackingModal />
 
       {/* Lazy Modals loaded only on demand */}
       {isPolicyModalOpen && (
