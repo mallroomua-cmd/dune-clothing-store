@@ -1,4 +1,5 @@
 import { AnalyticsConfig, Product, OrderDetails } from '../types';
+import { normalizeUaPhoneForAnalytics } from './formatters';
 
 declare global {
   interface Window {
@@ -26,7 +27,7 @@ export function subscribeToAnalytics(listener: (event: AnalyticsEventLog) => voi
   };
 }
 
-function logEvent(
+export function logEvent(
   eventName: string,
   platform: 'Google Analytics' | 'Google Ads' | 'DataLayer' | 'System',
   payload: Record<string, any>
@@ -83,8 +84,10 @@ export function initializeTracking(config: AnalyticsConfig) {
     }
 
     if (config.googleAdsId) {
-      window.gtag('config', config.googleAdsId);
-      logEvent('config', 'Google Ads', { id: config.googleAdsId });
+      window.gtag('config', config.googleAdsId, {
+        allow_enhanced_conversions: true,
+      });
+      logEvent('config', 'Google Ads', { id: config.googleAdsId, enhanced_conversions: true });
     }
   }
 
@@ -120,6 +123,7 @@ export function trackViewItem(product: Product, _config?: AnalyticsConfig) {
         item_id: product.id,
         item_name: product.title,
         item_category: product.productType,
+        item_brand: product.vendor,
         price: product.price,
         quantity: 1,
       },
@@ -144,6 +148,7 @@ export function trackAddToCart(product: Product, quantity = 1, _config?: Analyti
         item_id: product.id,
         item_name: product.title,
         item_category: product.productType,
+        item_brand: product.vendor,
         price: product.price,
         quantity,
       },
@@ -166,6 +171,8 @@ export function trackBeginCheckout(items: { product: Product; quantity: number }
     items: items.map((i) => ({
       item_id: i.product.id,
       item_name: i.product.title,
+      item_category: i.product.productType,
+      item_brand: i.product.vendor,
       price: i.product.price,
       quantity: i.quantity,
     })),
@@ -178,12 +185,28 @@ export function trackBeginCheckout(items: { product: Product; quantity: number }
 }
 
 /**
- * Track Purchase & Google Ads Conversion
+ * Track Purchase & Google Ads Enhanced Conversion
  */
 export function trackPurchase(order: OrderDetails, config: AnalyticsConfig) {
   const transactionId = `ORD-${Date.now()}`;
+  const formattedPhone = normalizeUaPhoneForAnalytics(order.phone);
 
-  // 1. GA4 Purchase
+  // 1. Google Ads Enhanced Conversions: send user_data prior to conversion
+  if (window.gtag && formattedPhone) {
+    window.gtag('set', 'user_data', {
+      phone_number: formattedPhone,
+      address: {
+        city: order.city,
+        country: 'UA',
+      },
+    });
+    logEvent('set_user_data (Enhanced Conversions)', 'Google Ads', {
+      phone: formattedPhone,
+      city: order.city,
+    });
+  }
+
+  // 2. GA4 Purchase event
   const gaPayload = {
     transaction_id: transactionId,
     value: order.total,
@@ -193,6 +216,8 @@ export function trackPurchase(order: OrderDetails, config: AnalyticsConfig) {
     items: order.items.map((i) => ({
       item_id: i.product.id,
       item_name: i.product.title,
+      item_category: i.product.productType,
+      item_brand: i.product.vendor,
       price: i.product.price,
       quantity: i.quantity,
     })),
@@ -203,7 +228,7 @@ export function trackPurchase(order: OrderDetails, config: AnalyticsConfig) {
   }
   logEvent('purchase', 'Google Analytics', gaPayload);
 
-  // 2. Google Ads Conversion
+  // 3. Google Ads Conversion event
   if (config.googleAdsId && config.googleAdsConversionLabel) {
     const sendTo = `${config.googleAdsId}/${config.googleAdsConversionLabel}`;
     const gadsPayload = {
@@ -219,7 +244,7 @@ export function trackPurchase(order: OrderDetails, config: AnalyticsConfig) {
     logEvent('conversion', 'Google Ads', gadsPayload);
   }
 
-  // 3. Generic DataLayer push
+  // 4. DataLayer push
   if (window.dataLayer) {
     window.dataLayer.push({
       event: 'ecommerce_purchase',

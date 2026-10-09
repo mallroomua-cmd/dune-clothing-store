@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, ShoppingCart, Zap, CheckCircle2, ShieldCheck, Truck } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { ProductJsonLd } from './ProductJsonLd';
 
 export const ProductDetailModal: React.FC = () => {
   const { selectedProduct, setSelectedProduct, addToCart, openQuickOrder } = useStore();
@@ -27,6 +28,9 @@ export const ProductDetailModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+      {/* Schema.org JSON-LD microdata for Google Merchant / SEO */}
+      <ProductJsonLd product={selectedProduct} />
+
       <div
         className="relative bg-white rounded-3xl max-w-3xl w-full shadow-2xl overflow-hidden border border-slate-100 my-8 flex flex-col md:flex-row max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}

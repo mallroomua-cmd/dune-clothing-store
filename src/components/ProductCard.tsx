@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, Zap, Eye, Check } from 'lucide-react';
+import { ShoppingCart, Zap, Eye, Check, Flame } from 'lucide-react';
 import { Product } from '../types';
 import { useStore } from '../context/StoreContext';
 
@@ -49,6 +49,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           src={product.featuredImage}
           alt={product.title}
           loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
@@ -78,10 +79,16 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           {product.title}
         </h2>
 
-        {/* In-Stock Indicator */}
-        <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mb-3">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>В наявності (відправка сьогодні)</span>
+        {/* In-Stock Indicator & CRO Urgency */}
+        <div className="flex items-center justify-between text-xs mb-3">
+          <div className="flex items-center gap-1.5 text-emerald-600 font-semibold">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>В наявності</span>
+          </div>
+          <div className="flex items-center gap-1 text-[11px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded font-medium">
+            <Flame className="w-3 h-3 text-amber-500 fill-amber-500" />
+            <span>Залишилось 3 шт.</span>
+          </div>
         </div>
 
         {/* Price Box */}

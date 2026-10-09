@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product, AnalyticsConfig, CartItem, OrderDetails } from '../types';
 import { SAMPLE_PRODUCTS } from '../lib/sample-data';
 import { parseShopifyCsv } from '../lib/shopify-parser';
+import { dbGet, dbSet, dbDelete } from '../lib/db';
 import {
   initializeTracking,
   trackAddToCart,
@@ -9,6 +10,7 @@ import {
   trackPurchase,
   trackViewItem,
 } from '../lib/analytics';
+import { sendTelegramOrderNotification } from '../lib/telegram';
 
 interface StoreContextType {
   products: Product[];
@@ -24,7 +26,7 @@ interface StoreContextType {
   setIsAdminOpen: (open: boolean) => void;
   setIsCartDrawerOpen: (open: boolean) => void;
   uploadCsv: (csvContent: string) => Promise<{ count: number }>;
-  resetToDemo: () => void;
+  resetToDemo: () => Promise<void>;
   updateAnalyticsConfig: (config: Partial<AnalyticsConfig>) => void;
   addToCart: (product: Product, quantity?: number, variant?: string) => void;
   removeFromCart: (productId: string) => void;
@@ -49,20 +51,16 @@ const DEFAULT_ANALYTICS: AnalyticsConfig = {
   googleAdsConversionLabel: '',
   merchantCenterTag: '',
   gtmId: '',
+  telegramBotToken: '',
+  telegramChatId: '',
+  novaPoshtaApiKey: '',
   debugMode: true,
 };
 
 const StoreContext = createContext<StoreContextType | null>(null);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [products, setProducts] = useState<Product[]>(() => {
-    try {
-      const saved = localStorage.getItem('shopify_store_products');
-      return saved ? JSON.parse(saved) : SAMPLE_PRODUCTS;
-    } catch {
-      return SAMPLE_PRODUCTS;
-    }
-  });
+  const [products, setProducts] = useState<Product[]>(SAMPLE_PRODUCTS);
 
   const [analyticsConfig, setAnalyticsConfig] = useState<AnalyticsConfig>(() => {
     try {
@@ -88,13 +86,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
 
-  // Sync products to local storage
+  // Load products asynchronously from IndexedDB
   useEffect(() => {
-    try {
-      localStorage.setItem('shopify_store_products', JSON.stringify(products));
-    } catch (e) {
-      console.warn('Storage quota exceeded for products', e);
-    }
+    dbGet<Product[]>('shopify_store_products').then((saved) => {
+      if (saved && saved.length > 0) {
+        setProducts(saved);
+      }
+    });
+  }, []);
+
+  // Save products asynchronously to IndexedDB (supports unlimited feed size)
+  useEffect(() => {
+    dbSet('shopify_store_products', products);
   }, [products]);
 
   // Sync analytics config and re-initialize tracking
@@ -129,12 +132,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       throw new Error('У файлі не знайдено валідних товарів Shopify');
     }
     setProducts(parsed);
+    await dbSet('shopify_store_products', parsed);
     return { count: parsed.length };
   };
 
-  const resetToDemo = () => {
+  const resetToDemo = async () => {
     setProducts(SAMPLE_PRODUCTS);
-    localStorage.removeItem('shopify_store_products');
+    await dbDelete('shopify_store_products');
   };
 
   const updateAnalyticsConfig = (newConfig: Partial<AnalyticsConfig>) => {
@@ -212,10 +216,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       total,
     };
 
-    // Trigger purchase and Google Ads conversion events!
+    // 1. Google Ads Enhanced Conversions + GA4 purchase
     trackPurchase(fullOrder, analyticsConfig);
 
-    // Save order history in localStorage for admin to review
+    // 2. Telegram order notification
+    if (analyticsConfig.telegramBotToken && analyticsConfig.telegramChatId) {
+      sendTelegramOrderNotification(
+        fullOrder,
+        analyticsConfig.telegramBotToken,
+        analyticsConfig.telegramChatId
+      ).catch((err) => console.warn('Telegram send failed', err));
+    }
+
+    // 3. Save order history in localStorage for admin
     try {
       const history = JSON.parse(localStorage.getItem('shopify_store_orders') || '[]');
       history.unshift({

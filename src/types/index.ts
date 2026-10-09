@@ -28,6 +28,9 @@ export interface AnalyticsConfig {
   googleAdsConversionLabel: string; // e.g. AbC123XyZ
   merchantCenterTag: string; // e.g. <meta name="google-site-verification" content="..." />
   gtmId: string; // e.g. GTM-XXXXXXX
+  telegramBotToken: string; // Telegram bot token for instant order leads
+  telegramChatId: string; // Telegram chat ID
+  novaPoshtaApiKey: string; // Optional Nova Poshta API key
   debugMode: boolean;
 }
 

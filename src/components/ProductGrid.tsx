@@ -1,13 +1,16 @@
 import React, { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, PackageX } from 'lucide-react';
+import { Search, SlidersHorizontal, PackageX, ChevronDown } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from './ProductCard';
+
+const PAGE_SIZE = 12;
 
 export const ProductGrid: React.FC = () => {
   const { products } = useStore();
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price_asc' | 'price_desc' | 'discount'>('popular');
+  const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
 
   // Extract distinct categories
   const categories = useMemo(() => {
@@ -51,6 +54,9 @@ export const ProductGrid: React.FC = () => {
     return result;
   }, [products, search, selectedCategory, sortBy]);
 
+  const displayedProducts = filteredProducts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredProducts.length;
+
   return (
     <section id="catalog-section" className="py-12 sm:py-16 bg-slate-50/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,7 +79,10 @@ export const ProductGrid: React.FC = () => {
             <SlidersHorizontal className="w-4 h-4 text-slate-400" />
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => {
+                setSortBy(e.target.value as any);
+                setVisibleCount(PAGE_SIZE);
+              }}
               className="bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl px-3 py-2 outline-none focus:border-brand-500 shadow-sm cursor-pointer"
             >
               <option value="popular">За популярністю</option>
@@ -93,7 +102,10 @@ export const ProductGrid: React.FC = () => {
               type="text"
               placeholder="Пошук товарів за назвою, брендом або тегом..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setVisibleCount(PAGE_SIZE);
+              }}
               className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 shadow-sm transition-all"
             />
             {search && (
@@ -109,7 +121,10 @@ export const ProductGrid: React.FC = () => {
           {/* Category Chips */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
             <button
-              onClick={() => setSelectedCategory('all')}
+              onClick={() => {
+                setSelectedCategory('all');
+                setVisibleCount(PAGE_SIZE);
+              }}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all shadow-sm ${
                 selectedCategory === 'all'
                   ? 'bg-brand-600 text-white shadow-brand-600/20'
@@ -123,7 +138,10 @@ export const ProductGrid: React.FC = () => {
               return (
                 <button
                   key={cat}
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => {
+                    setSelectedCategory(cat);
+                    setVisibleCount(PAGE_SIZE);
+                  }}
                   className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all shadow-sm ${
                     selectedCategory === cat
                       ? 'bg-brand-600 text-white shadow-brand-600/20'
@@ -138,12 +156,27 @@ export const ProductGrid: React.FC = () => {
         </div>
 
         {/* Product Grid */}
-        {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+        {displayedProducts.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {displayedProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {/* Load More Button */}
+            {hasMore && (
+              <div className="text-center mt-12">
+                <button
+                  onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm border border-slate-200/80 shadow-md transition-all active:scale-95"
+                >
+                  <span>Показати ще товари (залишилось {filteredProducts.length - visibleCount})</span>
+                  <ChevronDown className="w-4 h-4 text-brand-600" />
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-16 bg-white rounded-2xl border border-slate-200/80 p-8 max-w-md mx-auto shadow-sm">
             <PackageX className="w-12 h-12 text-slate-300 mx-auto mb-3" />
@@ -157,6 +190,7 @@ export const ProductGrid: React.FC = () => {
               onClick={() => {
                 setSearch('');
                 setSelectedCategory('all');
+                setVisibleCount(PAGE_SIZE);
               }}
               className="px-4 py-2 rounded-xl bg-brand-50 text-brand-700 font-bold text-sm hover:bg-brand-100 transition-colors"
             >

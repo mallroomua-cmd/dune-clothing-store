@@ -13,6 +13,8 @@ import {
   ShoppingBag,
   ShieldCheck,
   Play,
+  Send,
+  FileCode,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { SAMPLE_SHOPIFY_CSV } from '../lib/sample-data';
@@ -22,6 +24,8 @@ import {
   AnalyticsEventLog,
   trackPurchase,
 } from '../lib/analytics';
+import { downloadGoogleMerchantXml } from '../lib/merchant-xml';
+import { sendTelegramOrderNotification } from '../lib/telegram';
 
 export const AdminDrawer: React.FC = () => {
   const {
@@ -34,7 +38,7 @@ export const AdminDrawer: React.FC = () => {
     updateAnalyticsConfig,
   } = useStore();
 
-  const [activeTab, setActiveTab] = useState<'csv' | 'analytics' | 'debug' | 'orders'>('csv');
+  const [activeTab, setActiveTab] = useState<'csv' | 'analytics' | 'telegram' | 'debug' | 'orders'>('csv');
   const [dragActive, setDragActive] = useState(false);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
@@ -46,7 +50,11 @@ export const AdminDrawer: React.FC = () => {
   const [gadsLabel, setGadsLabel] = useState(analyticsConfig.googleAdsConversionLabel);
   const [gmcTag, setGmcTag] = useState(analyticsConfig.merchantCenterTag);
   const [gtmId, setGtmId] = useState(analyticsConfig.gtmId);
+  const [tgToken, setTgToken] = useState(analyticsConfig.telegramBotToken);
+  const [tgChatId, setTgChatId] = useState(analyticsConfig.telegramChatId);
+  const [npKey, setNpKey] = useState(analyticsConfig.novaPoshtaApiKey);
   const [savedNotice, setSavedNotice] = useState(false);
+  const [tgTestResult, setTgTestResult] = useState<string | null>(null);
 
   // Live debug events
   const [logs, setLogs] = useState<AnalyticsEventLog[]>([]);
@@ -58,6 +66,9 @@ export const AdminDrawer: React.FC = () => {
     setGadsLabel(analyticsConfig.googleAdsConversionLabel);
     setGmcTag(analyticsConfig.merchantCenterTag);
     setGtmId(analyticsConfig.gtmId);
+    setTgToken(analyticsConfig.telegramBotToken);
+    setTgChatId(analyticsConfig.telegramChatId);
+    setNpKey(analyticsConfig.novaPoshtaApiKey);
   }, [analyticsConfig]);
 
   useEffect(() => {
@@ -95,7 +106,7 @@ export const AdminDrawer: React.FC = () => {
     try {
       const text = await file.text();
       const res = await uploadCsv(text);
-      setUploadSuccess(`Успішно завантажено та розпізнано ${res.count} товарів!`);
+      setUploadSuccess(`Успішно завантажено та збережено в IndexedDB ${res.count} товарів!`);
     } catch (err: any) {
       setUploadError(err.message || 'Помилка читання файлу CSV');
     } finally {
@@ -122,7 +133,7 @@ export const AdminDrawer: React.FC = () => {
     document.body.removeChild(link);
   };
 
-  const handleSaveAnalytics = (e: React.FormEvent) => {
+  const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
     updateAnalyticsConfig({
       gaMeasurementId: gaId.trim(),
@@ -130,9 +141,55 @@ export const AdminDrawer: React.FC = () => {
       googleAdsConversionLabel: gadsLabel.trim(),
       merchantCenterTag: gmcTag.trim(),
       gtmId: gtmId.trim(),
+      telegramBotToken: tgToken.trim(),
+      telegramChatId: tgChatId.trim(),
+      novaPoshtaApiKey: npKey.trim(),
     });
     setSavedNotice(true);
     setTimeout(() => setSavedNotice(false), 2500);
+  };
+
+  const handleTestTelegram = async () => {
+    setTgTestResult('Відправка тестового сповіщення...');
+    const res = await sendTelegramOrderNotification(
+      {
+        name: 'Тестовий Клієнт',
+        phone: '+380991234567',
+        city: 'Київ',
+        warehouse: 'Відділення №1 (Тест)',
+        deliveryMethod: 'nova_poshta',
+        paymentMethod: 'cash_on_delivery',
+        notes: 'Тестове повідомлення з адмін-панелі',
+        items: [
+          {
+            product: products[0] || {
+              id: 'test-1',
+              title: 'Тестовий товар',
+              price: 1500,
+              productType: 'Тест',
+              tags: [],
+              images: [],
+              featuredImage: '',
+              handle: 'test',
+              bodyHtml: '',
+              vendor: '',
+              available: true,
+              variants: [],
+            },
+            quantity: 1,
+          },
+        ],
+        total: products[0]?.price || 1500,
+      },
+      tgToken,
+      tgChatId
+    );
+
+    if (res.success) {
+      setTgTestResult('✅ Успішно надіслано в Telegram!');
+    } else {
+      setTgTestResult(`❌ Помилка: ${res.error}`);
+    }
   };
 
   const handleTestConversion = () => {
@@ -187,7 +244,7 @@ export const AdminDrawer: React.FC = () => {
               </h2>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Завантаження CSV фіда, налаштування реклами та аналітики
+              CSV фід, Google Ads, Telegram бот та Google Merchant Center
             </p>
           </div>
           <button
@@ -228,6 +285,19 @@ export const AdminDrawer: React.FC = () => {
           </button>
 
           <button
+            onClick={() => setActiveTab('telegram')}
+            className={`py-3.5 px-3 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
+              activeTab === 'telegram'
+                ? 'border-brand-600 text-brand-600'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Send className="w-4 h-4" />
+            <span>Telegram Бот</span>
+            {analyticsConfig.telegramBotToken && <span className="w-2 h-2 rounded-full bg-blue-500" />}
+          </button>
+
+          <button
             onClick={() => setActiveTab('debug')}
             className={`py-3.5 px-3 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
               activeTab === 'debug'
@@ -236,7 +306,7 @@ export const AdminDrawer: React.FC = () => {
             }`}
           >
             <Terminal className="w-4 h-4" />
-            <span>Консоль подій</span>
+            <span>Консоль</span>
             {logs.length > 0 && (
               <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600">
                 {logs.length}
@@ -259,7 +329,7 @@ export const AdminDrawer: React.FC = () => {
 
         {/* Tab Content */}
         <div className="flex-1 overflow-y-auto p-5 sm:p-8">
-          {/* TAB 1: CSV UPLOAD */}
+          {/* TAB 1: CSV UPLOAD & MERCHANT EXPORT */}
           {activeTab === 'csv' && (
             <div className="space-y-6">
               {/* Dropzone */}
@@ -284,7 +354,7 @@ export const AdminDrawer: React.FC = () => {
                   Перетягніть CSV файл Shopify сюди
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto mb-5 leading-relaxed">
-                  Підтримується стандартний експорт товарів Shopify (Handle, Title, Images, Variants, Price, Tags).
+                  Підтримується необмежений розмір завдяки IndexedDB. Імпортуються назви, фотографії, ціни та варіанти.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -309,7 +379,7 @@ export const AdminDrawer: React.FC = () => {
               {uploadLoading && (
                 <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-sm flex items-center gap-3 animate-pulse">
                   <div className="w-5 h-5 border-2 border-amber-600 border-t-transparent rounded-full animate-spin shrink-0" />
-                  <span>Розпізнавання та імпорт товарів з CSV...</span>
+                  <span>Розпізнавання та збереження товарів в IndexedDB...</span>
                 </div>
               )}
 
@@ -330,34 +400,39 @@ export const AdminDrawer: React.FC = () => {
               {/* Extra helper controls */}
               <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200/70 space-y-4">
                 <h4 className="font-bold text-slate-800 text-sm flex items-center gap-2">
-                  <span>Допоміжні інструменти</span>
+                  <span>Експорт та інструменти фіда</span>
                 </h4>
 
                 <div className="flex flex-wrap items-center gap-3">
+                  {/* Google Merchant XML Export Button */}
                   <button
-                    onClick={handleDownloadSample}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-bold transition-colors shadow-sm"
+                    onClick={() => downloadGoogleMerchantXml(products)}
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 text-xs font-bold transition-all shadow-md active:scale-95"
                   >
-                    <Download className="w-3.5 h-3.5 text-brand-600" />
-                    <span>Зразок Shopify CSV (завантажити)</span>
+                    <FileCode className="w-4 h-4" />
+                    <span>Експорт XML для Google Merchant Center</span>
                   </button>
 
                   <button
-                    onClick={() => {
+                    onClick={handleDownloadSample}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-bold transition-colors shadow-sm"
+                  >
+                    <Download className="w-3.5 h-3.5 text-brand-600" />
+                    <span>Зразок Shopify CSV</span>
+                  </button>
+
+                  <button
+                    onClick={async () => {
                       if (confirm('Скинути всі товари до початкових демо-даних?')) {
-                        resetToDemo();
+                        await resetToDemo();
                         setUploadSuccess('Товари повернуто до початкових демо-значень.');
                       }
                     }}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-xs font-bold transition-colors shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-xs font-bold transition-colors shadow-sm"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Скинути до демо-товарів</span>
+                    <span>Скинути до демо</span>
                   </button>
-                </div>
-
-                <div className="text-[11px] text-slate-500 border-t border-slate-200/60 pt-3 leading-relaxed">
-                  💡 <strong>Порада:</strong> Після завантаження файлу товари автоматично зберігаються в пам'яті браузера вашого пристрою. Ви зможете оновлювати фід у будь-який момент.
                 </div>
               </div>
             </div>
@@ -365,19 +440,19 @@ export const AdminDrawer: React.FC = () => {
 
           {/* TAB 2: MARKETING & ANALYTICS */}
           {activeTab === 'analytics' && (
-            <form onSubmit={handleSaveAnalytics} className="space-y-6">
+            <form onSubmit={handleSaveSettings} className="space-y-6">
               <div className="bg-blue-50/80 border border-blue-200/80 rounded-2xl p-4 text-xs text-blue-900 leading-relaxed flex items-start gap-3">
                 <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="block font-bold mb-0.5">Як це працює:</strong>
-                  Введіть ваші ID з кабінетів Google Ads або Google Analytics. Тег автоматично активується, почне відстежувати перегляди карток (`view_item`), кліки у кошик (`add_to_cart`) та головну цільову конверсію після підтвердження замовлення (`purchase` та `conversion`).
+                  <strong className="block font-bold mb-0.5">Розширені конверсії (Enhanced Conversions):</strong>
+                  Тег автоматично активує Enhanced Conversions у Google Ads, передаючи нормалізований номер телефону `+380...` та місто клієнта для максимізації ефективності Smart Bidding!
                 </div>
               </div>
 
               {/* GA4 */}
               <div className="space-y-2">
                 <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
-                  Google Analytics 4 (Ідентифікатор потоку даних)
+                  Google Analytics 4 (Ідентифікатор вимірювання)
                 </label>
                 <input
                   type="text"
@@ -386,16 +461,13 @@ export const AdminDrawer: React.FC = () => {
                   onChange={(e) => setGaId(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                 />
-                <p className="text-[11px] text-slate-500">
-                  Знаходиться в: Google Analytics → Адміністратор → Потоки даних → Ідентифікатор вимірювання (G-...).
-                </p>
               </div>
 
               {/* Google Ads */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    Google Ads ID (Тег конверсій)
+                    Google Ads ID
                   </label>
                   <input
                     type="text"
@@ -404,7 +476,6 @@ export const AdminDrawer: React.FC = () => {
                     onChange={(e) => setGadsId(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
-                  <p className="text-[11px] text-slate-500">Наприклад: AW-123456789</p>
                 </div>
 
                 <div className="space-y-2">
@@ -418,7 +489,6 @@ export const AdminDrawer: React.FC = () => {
                     onChange={(e) => setGadsLabel(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
-                  <p className="text-[11px] text-slate-500">Код мітки створеної конверсії "Покупка"</p>
                 </div>
               </div>
 
@@ -434,12 +504,9 @@ export const AdminDrawer: React.FC = () => {
                   onChange={(e) => setGmcTag(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                 />
-                <p className="text-[11px] text-slate-500">
-                  Вставте мета-тег або код підтвердження з Google Merchant Center / Search Console. Тег автоматично додається у шапку сайту.
-                </p>
               </div>
 
-              {/* Google Tag Manager (Optional) */}
+              {/* GTM */}
               <div className="space-y-2">
                 <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
                   Google Tag Manager ID (Необов'язково)
@@ -460,32 +527,100 @@ export const AdminDrawer: React.FC = () => {
                   className="w-full py-3.5 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2"
                 >
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>Зберегти налаштування тегів</span>
+                  <span>Зберегти налаштування реклами</span>
                 </button>
               </div>
 
               {savedNotice && (
                 <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold text-center animate-fade-in">
-                  ✅ Налаштування успішно збережено та активовано!
+                  ✅ Налаштування успішно збережено!
                 </div>
               )}
             </form>
           )}
 
-          {/* TAB 3: LIVE EVENT DEBUGGER */}
+          {/* TAB 3: TELEGRAM BOT */}
+          {activeTab === 'telegram' && (
+            <form onSubmit={handleSaveSettings} className="space-y-6">
+              <div className="bg-sky-50 border border-sky-200 rounded-2xl p-4 text-xs text-sky-900 leading-relaxed flex items-start gap-3">
+                <Send className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
+                <div>
+                  <strong className="block font-bold mb-0.5">Миттєві сповіщення про замовлення:</strong>
+                  Кожне замовлення миттєво надсилається у ваш приватний Telegram-чат з деталями: ім'я, телефон, товари, сума, місто та відділення Нової Пошти.
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                  Telegram Bot Token
+                </label>
+                <input
+                  type="text"
+                  placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
+                  value={tgToken}
+                  onChange={(e) => setTgToken(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:border-brand-500"
+                />
+                <p className="text-[11px] text-slate-500">
+                  Отримайте у безкоштовному боті @BotFather у Telegram через команду /newbot.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                  Telegram Chat ID
+                </label>
+                <input
+                  type="text"
+                  placeholder="987654321 або -100123456789"
+                  value={tgChatId}
+                  onChange={(e) => setTgChatId(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:border-brand-500"
+                />
+                <p className="text-[11px] text-slate-500">
+                  Ваш ID або ID групи (можна дізнатися у боті @userinfobot).
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="submit"
+                  className="flex-1 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md transition-all"
+                >
+                  Зберегти Telegram налаштування
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleTestTelegram}
+                  className="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors flex items-center gap-1.5"
+                >
+                  <Play className="w-3.5 h-3.5" />
+                  <span>Тест бота</span>
+                </button>
+              </div>
+
+              {tgTestResult && (
+                <div className="p-3 rounded-xl bg-slate-100 text-slate-800 text-xs font-medium text-center">
+                  {tgTestResult}
+                </div>
+              )}
+            </form>
+          )}
+
+          {/* TAB 4: LIVE EVENT DEBUGGER */}
           {activeTab === 'debug' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="font-bold text-slate-800 text-sm">Журнал подій аналітики</h4>
                   <p className="text-xs text-slate-500">
-                    Переглядайте в реальному часі спрацьовування тегів під час навігації покупців
+                    Переглядайте в реальному часі спрацьовування тегів
                   </p>
                 </div>
                 <button
                   onClick={handleTestConversion}
                   className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-accent-500 hover:bg-accent-600 text-white text-xs font-bold shadow-sm transition-all active:scale-95"
-                  title="Надіслати тестову покупку для перевірки Google Ads / GA4"
                 >
                   <Play className="w-3.5 h-3.5 fill-current" />
                   <span>Тест конверсії</span>
@@ -519,7 +654,7 @@ export const AdminDrawer: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 4: ORDERS */}
+          {/* TAB 5: ORDERS */}
           {activeTab === 'orders' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between mb-2">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, ShieldCheck, Truck, CreditCard, Banknote, Sparkles } from 'lucide-react';
+import { X, CheckCircle, ShieldCheck, Truck, CreditCard, Banknote, Sparkles, MapPin } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { formatUaPhone, POPULAR_UA_CITIES } from '../lib/formatters';
 
 export const CheckoutModal: React.FC = () => {
   const {
@@ -30,6 +31,11 @@ export const CheckoutModal: React.FC = () => {
 
   const total = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatUaPhone(e.target.value);
+    setPhone(formatted);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim() || !city.trim()) {
@@ -43,17 +49,17 @@ export const CheckoutModal: React.FC = () => {
       setOrderNumber(ordNum);
 
       await submitOrder({
-        name,
-        phone,
-        city,
-        warehouse: warehouse || 'Відділення №1',
+        name: name.trim(),
+        phone: phone.trim(),
+        city: city.trim(),
+        warehouse: warehouse.trim() || 'Відділення №1',
         deliveryMethod,
         paymentMethod,
-        notes,
+        notes: notes.trim(),
       });
 
       setOrderComplete(true);
-    } catch (err) {
+    } catch {
       alert('Помилка при оформленні. Спробуйте ще раз.');
     } finally {
       setIsSubmitting(false);
@@ -95,7 +101,7 @@ export const CheckoutModal: React.FC = () => {
             </h3>
 
             <p className="text-sm text-slate-600 max-w-md mx-auto mb-6 leading-relaxed">
-              Наш менеджер зв’яжеться з вами за номером <strong>{phone}</strong> протягом 10–15 хвилин для підтвердження та уточнення відділення відправки.
+              Наш менеджер зв’яжеться з вами за номером <strong>{phone}</strong> протягом 10–15 хвилин для підтвердження та відправки.
             </p>
 
             <div className="bg-slate-50 rounded-2xl p-4 text-left border border-slate-200/60 text-xs text-slate-600 space-y-2 mb-6">
@@ -108,11 +114,11 @@ export const CheckoutModal: React.FC = () => {
                 <span>{city}</span>
               </div>
               <div className="flex justify-between">
-                <span>Відділення:</span>
+                <span>Відділення / Поштомат:</span>
                 <span>{warehouse || 'Уточнюється менеджером'}</span>
               </div>
               <div className="flex justify-between">
-                <span>Оплата:</span>
+                <span>Спосіб оплати:</span>
                 <span>{paymentMethod === 'cash_on_delivery' ? 'При отриманні (накладений платіж)' : 'Оплата карткою'}</span>
               </div>
               <div className="flex justify-between font-bold text-sm text-slate-900 border-t pt-2">
@@ -125,7 +131,7 @@ export const CheckoutModal: React.FC = () => {
               onClick={handleClose}
               className="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md transition-all"
             >
-              Повернутися до покупок
+              Повернутися до каталогу
             </button>
           </div>
         ) : (
@@ -171,7 +177,7 @@ export const CheckoutModal: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name & Phone */}
+              {/* Name & Phone with Auto Mask */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
@@ -188,15 +194,15 @@ export const CheckoutModal: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Номер телефону *
+                    Номер телефону (Україна) *
                   </label>
                   <input
                     type="tel"
                     required
                     placeholder="+380 (99) 000-00-00"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                    onChange={handlePhoneChange}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
                 </div>
               </div>
@@ -234,33 +240,48 @@ export const CheckoutModal: React.FC = () => {
                 </div>
               </div>
 
-              {/* City & Branch */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Місто / Населений пункт *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Київ, Львів, Одеса..."
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
-                  />
+              {/* City with Quick Selection Chips */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Місто / Населений пункт *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Введіть або оберіть місто нижче..."
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 mb-1.5"
+                />
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px]">
+                  <span className="text-slate-400 flex items-center gap-0.5 shrink-0">
+                    <MapPin className="w-3 h-3" /> Популярні:
+                  </span>
+                  {POPULAR_UA_CITIES.slice(0, 5).map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setCity(c)}
+                      className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 shrink-0 font-medium transition-colors"
+                    >
+                      {c}
+                    </button>
+                  ))}
                 </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Відділення або поштомат
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Відділення №12 / Поштомат №5432"
-                    value={warehouse}
-                    onChange={(e) => setWarehouse(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
-                  />
-                </div>
+              </div>
+
+              {/* Department / Branch */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Номер відділення або поштомату
+                </label>
+                <input
+                  type="text"
+                  placeholder="Наприклад: Відділення №12 або Поштомат №5432"
+                  value={warehouse}
+                  onChange={(e) => setWarehouse(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                />
               </div>
 
               {/* Payment Method */}
