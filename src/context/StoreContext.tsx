@@ -131,6 +131,34 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
   }, []);
 
+  // Auto-open on #admin hash, query param, or Ctrl+Shift+A / Cmd+Shift+A shortcut
+  useEffect(() => {
+    const checkHash = () => {
+      if (
+        window.location.hash === '#admin' ||
+        window.location.search.includes('admin')
+      ) {
+        setIsAdminOpen(true);
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+
+    const handleKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        setIsAdminOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+
+    return () => {
+      window.removeEventListener('hashchange', checkHash);
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, []);
+
+
   // Load products asynchronously from IndexedDB
   useEffect(() => {
     dbGet<Product[]>('shopify_store_products')

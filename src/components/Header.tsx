@@ -11,14 +11,20 @@ export const Header: React.FC = () => {
   const [isAdminVisible, setIsAdminVisible] = useState(false);
 
   useEffect(() => {
-    if (
-      import.meta.env.DEV ||
-      window.location.hash === '#admin' ||
-      window.location.search.includes('admin')
-    ) {
-      setIsAdminVisible(true);
-    }
+    const updateVisibility = () => {
+      if (
+        import.meta.env.DEV ||
+        window.location.hash === '#admin' ||
+        window.location.search.includes('admin')
+      ) {
+        setIsAdminVisible(true);
+      }
+    };
+    updateVisibility();
+    window.addEventListener('hashchange', updateVisibility);
+    return () => window.removeEventListener('hashchange', updateVisibility);
   }, []);
+
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md hairline-b transition-all">
