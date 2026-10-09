@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, ShieldCheck, Truck, CreditCard, Banknote, Sparkles, MapPin, Zap } from 'lucide-react';
+import { CheckCircle, ShieldCheck, Truck, CreditCard, Banknote } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { formatUaPhone, POPULAR_UA_CITIES } from '../lib/formatters';
 import { findVariant } from '../lib/ids';
@@ -59,15 +59,14 @@ export const CheckoutModal: React.FC = () => {
     e.preventDefault();
     setErrorMessage(null);
 
-    // Validate phone: must contain 12 digits in UA international format
     const cleanDigits = phone.replace(/\D/g, '');
     if (cleanDigits.length < 12) {
-      setErrorMessage('Будь ласка, введіть повний номер телефону: +380 (XX) XXX-XX-XX');
+      setErrorMessage('Введіть повний номер телефону: +380 (XX) XXX-XX-XX');
       return;
     }
 
     if (!isQuick && !city.trim()) {
-      setErrorMessage('Будь ласка, вкажіть місто для доставки');
+      setErrorMessage('Вкажіть місто для доставки');
       return;
     }
 
@@ -97,134 +96,128 @@ export const CheckoutModal: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-md flex items-end sm:items-center justify-center sm:p-4 overscroll-contain animate-fade-in"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 overscroll-contain animate-fade-in font-mono"
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="checkout-title"
     >
       <div
-        className="relative bg-white rounded-t-3xl sm:rounded-3xl max-w-lg w-full shadow-2xl max-h-[94dvh] sm:max-h-[90vh] overflow-y-auto border border-slate-100 p-5 sm:p-8 overscroll-contain"
+        className="relative bg-white max-w-lg w-full hairline-all max-h-[94dvh] sm:max-h-[90vh] overflow-y-auto p-5 sm:p-7 overscroll-contain"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Mobile bottom-sheet handle */}
-        <div className="w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3 sm:hidden shrink-0" />
+        {/* Mobile top handle */}
+        <div className="w-10 h-1 bg-neutral-300 mx-auto mb-3 sm:hidden shrink-0" />
 
-        {/* Close Button - 44px hit target */}
+        {/* Close Button */}
         <button
           onClick={handleClose}
           aria-label="Закрити вікно замовлення"
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-11 h-11 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors active:scale-90"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-8 h-8 font-mono text-neutral-400 hover:text-black flex items-center justify-center transition-colors"
         >
-          <X className="w-5 h-5" />
+          ✕
         </button>
 
         {orderComplete ? (
           /* Success Screen */
           <div className="text-center py-6 animate-fade-in">
-            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="w-10 h-10" />
+            <div className="w-14 h-14 bg-black text-white flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-8 h-8 text-dune-ochre" />
             </div>
 
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Замовлення №{orderNumber} прийнято!</span>
+            <span className="font-mono text-xs uppercase tracking-widest text-dune-ochre mb-2 inline-block">
+              // ЗАМОВЛЕННЯ №{orderNumber}
             </span>
 
-            <h3 className="text-2xl font-black font-heading text-slate-900 mb-2">
-              Дякуємо за покупку!
+            <h3 className="text-xl sm:text-2xl font-bold font-display uppercase text-black mb-2">
+              Дякуємо за замовлення!
             </h3>
 
-            <p className="text-sm text-slate-600 max-w-md mx-auto mb-6 leading-relaxed">
-              Наш менеджер зв’яжеться з вами за номером <strong>{phone}</strong> протягом 10 хвилин для підтвердження та уточнення відділення відправки.
+            <p className="text-xs text-neutral-600 max-w-md mx-auto mb-6 leading-relaxed font-sans">
+              Менеджер зв’яжеться з вами за номером <strong>{phone}</strong> протягом 10 хвилин для підтвердження відправки.
             </p>
 
-            <div className="bg-slate-50 rounded-2xl p-4 text-left border border-slate-200/80 text-xs text-slate-700 space-y-2 mb-6">
-              <div className="flex justify-between font-bold text-slate-900 border-b border-slate-200 pb-2">
-                <span>Номер замовлення:</span>
-                <span className="font-mono text-brand-600 font-bold">{orderNumber}</span>
+            <div className="bg-neutral-50 p-4 text-left hairline-all text-xs space-y-2 mb-6">
+              <div className="flex justify-between font-bold text-black border-b border-neutral-200 pb-2">
+                <span>НОМЕР ЗАМОВЛЕННЯ:</span>
+                <span className="text-dune-ochre">{orderNumber}</span>
               </div>
               <div className="flex justify-between">
-                <span>Телефон покупця:</span>
-                <span className="font-semibold text-slate-900">{phone}</span>
+                <span>ТЕЛЕФОН:</span>
+                <span className="text-black font-semibold">{phone}</span>
               </div>
-              <div className="flex justify-between font-bold text-sm text-slate-900 border-t border-slate-200 pt-2">
-                <span>Сума до сплати:</span>
-                <span className="text-brand-600 tabular-nums">{total.toLocaleString('uk-UA')} ₴</span>
+              <div className="flex justify-between font-bold text-sm text-black border-t border-neutral-200 pt-2">
+                <span>СУМА ДО СПЛАТИ:</span>
+                <span className="tabular-nums">{total.toLocaleString('uk-UA')} ₴</span>
               </div>
             </div>
 
             <button
               onClick={handleClose}
-              className="w-full min-h-[48px] py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 active:scale-[0.97] text-white font-extrabold text-sm shadow-md transition-all"
+              className="w-full min-h-[46px] py-3 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest transition-all"
             >
-              Повернутися до магазину
+              [ ПОВЕРНУТИСЯ ДО МАГАЗИНУ ]
             </button>
           </div>
         ) : (
           /* Checkout Form */
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className={`px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1 ${
-                isQuick ? 'bg-amber-100 text-amber-900' : 'bg-brand-100 text-brand-900'
-              }`}>
-                {isQuick ? <Zap className="w-3.5 h-3.5 fill-current" /> : null}
-                {isQuick ? 'Швидке замовлення в 1 клік' : 'Оформлення замовлення'}
+            <div className="flex items-center gap-2 mb-2">
+              <span className="font-mono text-xs font-bold text-dune-ochre uppercase tracking-wider">
+                {isQuick ? '// 1-CLICK CHECKOUT' : '// FAST CHECKOUT'}
               </span>
             </div>
 
-            <h2 id="checkout-title" className="text-xl sm:text-2xl font-black font-heading text-slate-900 mb-1">
-              {isQuick ? 'Замовлення в 1 клік' : 'Ваше замовлення'}
+            <h2 id="checkout-title" className="text-lg sm:text-xl font-bold font-display uppercase text-black mb-1">
+              {isQuick ? 'Замовлення в 1 клік' : 'Оформлення замовлення'}
             </h2>
-            <p className="text-xs text-slate-600 mb-5">
+            <p className="text-xs text-neutral-500 font-sans mb-5">
               {isQuick
                 ? 'Введіть номер телефону — наш менеджер зателефонує та оформить доставку!'
-                : 'Заповніть дані для відправки Новою Поштою або Укрпоштою'}
+                : 'Заповніть контактні дані для відправки Новою Поштою'}
             </p>
 
             {/* Order Items Preview */}
-            <div className="bg-slate-50 rounded-2xl p-3.5 mb-5 border border-slate-200/80 max-h-40 overflow-y-auto space-y-2.5">
+            <div className="bg-neutral-50 p-3 mb-5 hairline-all max-h-40 overflow-y-auto space-y-2">
               {items.map((item, idx) => {
                 const v = findVariant(item.product, item.selectedVariant);
                 const price = v?.price || item.product.price;
                 return (
                   <div key={idx} className="flex items-center justify-between gap-3 text-xs">
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2 min-w-0">
                       <img
                         src={item.product.featuredImage}
                         alt=""
-                        className="w-10 h-10 rounded-lg object-cover shrink-0 border border-slate-200"
+                        className="w-9 h-9 object-cover bg-white shrink-0 mix-blend-multiply"
                       />
                       <div className="truncate">
-                        <p className="font-bold text-slate-900 truncate">{item.product.title}</p>
-                        <p className="text-slate-600">
-                          {item.selectedVariant && item.selectedVariant !== 'Default Title'
-                            ? `${item.selectedVariant} • `
-                            : ''}
-                          <span className="tabular-nums">{item.quantity} шт. × {price} ₴</span>
+                        <p className="font-medium text-black truncate uppercase font-sans text-xs">
+                          {item.product.title}
+                        </p>
+                        <p className="text-neutral-500 text-[10px]">
+                          {item.quantity} шт. × {price} ₴
                         </p>
                       </div>
                     </div>
-                    <span className="font-bold text-slate-900 shrink-0 tabular-nums">
+                    <span className="font-bold text-black shrink-0 tabular-nums">
                       {(price * item.quantity).toLocaleString('uk-UA')} ₴
                     </span>
                   </div>
                 );
               })}
-              <div className="border-t border-slate-200 pt-2 flex justify-between items-center text-sm font-black text-slate-900">
-                <span>Разом:</span>
-                <span className="text-brand-600 text-base tabular-nums">{total.toLocaleString('uk-UA')} ₴</span>
+              <div className="hairline-t pt-2 flex justify-between items-center text-xs font-bold text-black">
+                <span>РАЗОМ ДО СПЛАТИ:</span>
+                <span className="text-sm tabular-nums">{total.toLocaleString('uk-UA')} ₴</span>
               </div>
             </div>
 
             {errorMessage && (
-              <div role="alert" className="p-3 mb-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
+              <div role="alert" className="p-3 mb-4 bg-neutral-100 hairline-all text-black text-xs font-semibold">
                 {errorMessage}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Hidden Honeypot Field */}
               <input
                 type="text"
                 name="website"
@@ -236,10 +229,10 @@ export const CheckoutModal: React.FC = () => {
                 aria-hidden="true"
               />
 
-              {/* Phone Input (Primary conversion driver) */}
+              {/* Phone Input */}
               <div>
-                <label className="block text-xs font-bold text-slate-800 mb-1">
-                  Номер телефону (Україна) *
+                <label className="block text-[11px] font-bold text-black uppercase mb-1">
+                  НОМЕР ТЕЛЕФОНУ (УКРАЇНА) *
                 </label>
                 <input
                   type="tel"
@@ -249,14 +242,14 @@ export const CheckoutModal: React.FC = () => {
                   placeholder="+380 (99) 000-00-00"
                   value={phone}
                   onChange={handlePhoneChange}
-                  className="w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-300 text-base font-bold text-slate-900 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 shadow-sm"
+                  className="w-full min-h-[46px] px-3 py-2 bg-white hairline-all text-sm font-bold text-black focus:outline-none focus:border-black"
                 />
               </div>
 
-              {/* Name (Optional in 1-click mode) */}
+              {/* Name */}
               <div>
-                <label className="block text-xs font-bold text-slate-800 mb-1">
-                  Ваше ім'я {isQuick ? '(необов’язково)' : '*'}
+                <label className="block text-[11px] font-bold text-black uppercase mb-1">
+                  ВАШЕ ІМ'Я {isQuick ? '(НЕОБОВ’ЯЗКОВО)' : '*'}
                 </label>
                 <input
                   type="text"
@@ -264,50 +257,49 @@ export const CheckoutModal: React.FC = () => {
                   placeholder="Олександр"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 shadow-sm"
+                  className="w-full min-h-[44px] px-3 py-2 bg-white hairline-all text-xs text-black focus:outline-none focus:border-black"
                 />
               </div>
 
-              {/* Full Checkout Fields (Hidden in 1-Click mode for maximum conversion speed!) */}
               {!isQuick && (
                 <>
                   {/* Delivery Service */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 mb-1.5">
-                      Служба доставки
+                    <label className="block text-[11px] font-bold text-black uppercase mb-1.5">
+                      СЛУЖБА ДОСТАВКИ
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
                         onClick={() => setDeliveryMethod('nova_poshta')}
-                        className={`min-h-[46px] p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
+                        className={`min-h-[42px] p-2 hairline-all text-xs uppercase font-bold flex items-center justify-center gap-1.5 transition-all ${
                           deliveryMethod === 'nova_poshta'
-                            ? 'border-brand-600 bg-brand-50 text-brand-800 shadow-sm'
-                            : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                            ? 'bg-black text-white'
+                            : 'bg-white text-neutral-600 hover:text-black'
                         }`}
                       >
-                        <Truck className="w-4 h-4 text-brand-600" />
-                        <span>Нова Пошта (1-2 дні)</span>
+                        <Truck className="w-3.5 h-3.5" />
+                        <span>НОВА ПОШТА</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => setDeliveryMethod('ukrposhta')}
-                        className={`min-h-[46px] p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
+                        className={`min-h-[42px] p-2 hairline-all text-xs uppercase font-bold flex items-center justify-center gap-1.5 transition-all ${
                           deliveryMethod === 'ukrposhta'
-                            ? 'border-brand-600 bg-brand-50 text-brand-800 shadow-sm'
-                            : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                            ? 'bg-black text-white'
+                            : 'bg-white text-neutral-600 hover:text-black'
                         }`}
                       >
-                        <Truck className="w-4 h-4 text-brand-600" />
-                        <span>Укрпошта (3-5 днів)</span>
+                        <Truck className="w-3.5 h-3.5" />
+                        <span>УКРПОШТА</span>
                       </button>
                     </div>
                   </div>
 
                   {/* City */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 mb-1">
-                      Місто / Населений пункт *
+                    <label className="block text-[11px] font-bold text-black uppercase mb-1">
+                      МІСТО ДОСТАВКИ *
                     </label>
                     <input
                       type="text"
@@ -315,18 +307,16 @@ export const CheckoutModal: React.FC = () => {
                       placeholder="Київ, Львів, Одеса..."
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      className="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 mb-1.5 shadow-sm"
+                      className="w-full min-h-[44px] px-3 py-2 bg-white hairline-all text-xs text-black focus:outline-none focus:border-black mb-1.5"
                     />
-                    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px]">
-                      <span className="text-slate-500 flex items-center gap-0.5 shrink-0 font-medium">
-                        <MapPin className="w-3 h-3 text-brand-600" /> Популярні:
-                      </span>
+                    <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[10px]">
+                      <span className="text-neutral-400 shrink-0">ПОПУЛЯРНІ:</span>
                       {POPULAR_UA_CITIES.slice(0, 5).map((c) => (
                         <button
                           key={c}
                           type="button"
                           onClick={() => setCity(c)}
-                          className="min-h-[32px] px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 shrink-0 font-medium transition-colors active:scale-95"
+                          className="px-2 py-0.5 bg-neutral-100 hover:bg-neutral-200 text-black shrink-0 transition-colors"
                         >
                           {c}
                         </button>
@@ -336,62 +326,62 @@ export const CheckoutModal: React.FC = () => {
 
                   {/* Branch */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 mb-1">
-                      Відділення або поштомат
+                    <label className="block text-[11px] font-bold text-black uppercase mb-1">
+                      ВІДДІЛЕННЯ АБО ПОШТОМАТ
                     </label>
                     <input
                       type="text"
                       placeholder="Відділення №12 / Поштомат №5432"
                       value={warehouse}
                       onChange={(e) => setWarehouse(e.target.value)}
-                      className="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-500 shadow-sm"
+                      className="w-full min-h-[44px] px-3 py-2 bg-white hairline-all text-xs text-black focus:outline-none focus:border-black"
                     />
                   </div>
 
                   {/* Payment */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 mb-1.5">
-                      Спосіб оплати
+                    <label className="block text-[11px] font-bold text-black uppercase mb-1.5">
+                      СПОСІБ ОПЛАТИ
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('cash_on_delivery')}
-                        className={`min-h-[46px] p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
+                        className={`min-h-[42px] p-2 hairline-all text-xs uppercase font-bold flex items-center justify-center gap-1.5 transition-all ${
                           paymentMethod === 'cash_on_delivery'
-                            ? 'border-brand-600 bg-brand-50 text-brand-800 shadow-sm'
-                            : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                            ? 'bg-black text-white'
+                            : 'bg-white text-neutral-600 hover:text-black'
                         }`}
                       >
-                        <Banknote className="w-4 h-4 text-emerald-600" />
-                        <span>При отриманні</span>
+                        <Banknote className="w-3.5 h-3.5" />
+                        <span>ПРИ ОТРИМАННІ</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('card')}
-                        className={`min-h-[46px] p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
+                        className={`min-h-[42px] p-2 hairline-all text-xs uppercase font-bold flex items-center justify-center gap-1.5 transition-all ${
                           paymentMethod === 'card'
-                            ? 'border-brand-600 bg-brand-50 text-brand-800 shadow-sm'
-                            : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                            ? 'bg-black text-white'
+                            : 'bg-white text-neutral-600 hover:text-black'
                         }`}
                       >
-                        <CreditCard className="w-4 h-4 text-blue-600" />
-                        <span>Оплата карткою</span>
+                        <CreditCard className="w-3.5 h-3.5" />
+                        <span>КАРТКОЮ</span>
                       </button>
                     </div>
                   </div>
 
                   {/* Notes */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 mb-1">
-                      Коментар до замовлення (необов’язково)
+                    <label className="block text-[11px] font-bold text-black uppercase mb-1">
+                      КОМЕНТАР ДО ЗАМОВЛЕННЯ
                     </label>
                     <input
                       type="text"
-                      placeholder="Зателефонувати після 14:00..."
+                      placeholder="Уточнення або побажання щодо замовлення..."
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      className="w-full min-h-[42px] px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-brand-500 shadow-sm"
+                      className="w-full min-h-[44px] px-3 py-2 bg-white hairline-all text-xs text-black focus:outline-none focus:border-black"
                     />
                   </div>
                 </>
@@ -402,24 +392,17 @@ export const CheckoutModal: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full min-h-[50px] py-3.5 px-6 rounded-2xl bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 active:scale-[0.97] text-white font-extrabold text-base shadow-lg shadow-accent-500/25 hover:shadow-glow-accent flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                  className="w-full min-h-[48px] py-3.5 px-6 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest transition-all disabled:opacity-50 active:scale-[0.98]"
                 >
-                  <CheckCircle className="w-5 h-5 text-amber-200" />
-                  <span>
-                    {isSubmitting
-                      ? 'Оформлення...'
-                      : `Замовити зараз • ${total.toLocaleString('uk-UA')} ₴`}
-                  </span>
+                  {isSubmitting
+                    ? 'ОФОРМЛЕННЯ...'
+                    : `ЗАМОВИТИ ЗАРАЗ • ${total.toLocaleString('uk-UA')} ₴`}
                 </button>
               </div>
 
-              <div className="flex items-center justify-center gap-2 text-[11px] text-slate-600 text-center">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>
-                  {isQuick
-                    ? 'Менеджер зателефонує протягом 10 хв і уточнить адресу доставки'
-                    : 'Оплата при отриманні • Огляд перед оплатою на пошті'}
-                </span>
+              <div className="flex items-center justify-center gap-1.5 text-[10px] text-neutral-500 text-center uppercase">
+                <ShieldCheck className="w-3.5 h-3.5 text-dune-ochre" />
+                <span>ОПЛАТА ПРИ ОТРИМАННІ • ОГЛЯД У ВІДДІЛЕННІ</span>
               </div>
             </form>
           </div>

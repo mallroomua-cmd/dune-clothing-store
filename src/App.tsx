@@ -14,7 +14,7 @@ import { Footer } from './components/Footer';
 
 export const AppContent: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-brand-600 selection:text-white pb-20 sm:pb-0">
+    <div className="min-h-screen flex flex-col bg-white text-dune-black selection:bg-black selection:text-white pb-20 sm:pb-0">
       <Header />
       <main className="flex-1">
         <Hero />

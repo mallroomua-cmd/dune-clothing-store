@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck, CheckCircle2 } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { findVariant } from '../lib/ids';
 import { useModal } from '../hooks/useModal';
@@ -37,7 +37,7 @@ export const CartDrawer: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-hidden bg-slate-900/60 backdrop-blur-md flex justify-end animate-fade-in"
+      className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm flex justify-end animate-fade-in"
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
@@ -46,63 +46,55 @@ export const CartDrawer: React.FC = () => {
         className="w-full max-w-md bg-white h-full shadow-2xl flex flex-col transform transition-transform"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-white">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
-              <ShoppingBag className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-black font-heading text-slate-900">
-                Кошик покупок
-              </h2>
-              <span className="text-xs text-slate-500 font-medium">
-                {totalCount} {totalCount === 1 ? 'товар' : 'товари(-ів)'}
-              </span>
-            </div>
+        {/* Header - Stiletto Monospace Style */}
+        <div className="p-4 sm:p-5 hairline-b flex items-center justify-between bg-white">
+          <div className="flex items-center gap-2">
+            <ShoppingBag className="w-4 h-4 text-dune-ochre" />
+            <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-black">
+              BAG [{totalCount}]
+            </h2>
           </div>
           <button
             onClick={handleClose}
-            className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors active:scale-90"
+            className="w-8 h-8 font-mono text-sm text-neutral-400 hover:text-black flex items-center justify-center transition-colors"
             aria-label="Закрити кошик"
           >
-            <X className="w-5 h-5" />
+            ✕
           </button>
         </div>
 
-        {/* Free Shipping Progress Bar (CRO Booster) */}
-        <div className="bg-slate-50/90 border-b border-slate-100 px-5 py-3.5">
-          <div className="flex items-center justify-between text-xs font-semibold mb-2">
-            <span className="flex items-center gap-1.5 text-slate-700">
-              <Truck className="w-4 h-4 text-brand-600" />
+        {/* Free Shipping Progress Bar (Stiletto Mono Style) */}
+        <div className="bg-neutral-50 hairline-b px-5 py-3">
+          <div className="flex items-center justify-between font-mono text-xs mb-2">
+            <span className="flex items-center gap-1.5 text-neutral-700">
+              <Truck className="w-3.5 h-3.5 text-dune-ochre" />
               {amountToFreeShipping === 0 ? (
-                <span className="text-emerald-700 font-bold flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  Безкоштовна доставка активована!
+                <span className="text-dune-ochre font-bold">
+                  ★ БЕЗКОШТОВНА ДОСТАВКА АКТИВОВАНА
                 </span>
               ) : (
                 <span>
-                  До безкоштовної доставки ще{' '}
-                  <strong className="text-brand-600 tabular-nums">
+                  ДО БЕЗКОШТОВНОЇ ДОСТАВКИ:{' '}
+                  <strong className="text-black tabular-nums">
                     {amountToFreeShipping.toLocaleString('uk-UA')} ₴
                   </strong>
                 </span>
               )}
             </span>
-            <span className="text-[11px] font-bold text-slate-500 tabular-nums">
+            <span className="text-[11px] font-mono text-neutral-400 tabular-nums">
               {Math.round(freeShippingProgress)}%
             </span>
           </div>
-          <div className="w-full h-2 bg-slate-200/80 rounded-full overflow-hidden">
+          <div className="w-full h-1.5 bg-neutral-200 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-brand-500 via-emerald-500 to-teal-500 rounded-full transition-all duration-500 ease-out"
+              className="h-full bg-black transition-all duration-500 ease-out"
               style={{ width: `${freeShippingProgress}%` }}
             />
           </div>
         </div>
 
         {/* Items List */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-3.5">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3">
           {cart.length > 0 ? (
             <>
               {cart.map((item) => {
@@ -111,13 +103,13 @@ export const CartDrawer: React.FC = () => {
                 return (
                   <div
                     key={`${item.product.id}__${item.selectedVariant || 'default'}`}
-                    className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-white border border-slate-200/80 hover:border-slate-300 shadow-sm transition-all"
+                    className="flex items-center gap-3 p-3 bg-white hairline-all"
                   >
-                    <div className="w-18 h-18 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200/60 img-optical-outline">
+                    <div className="w-16 h-16 bg-[#f6f6f6] shrink-0 overflow-hidden">
                       <img
                         src={item.product.featuredImage}
                         alt={item.product.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover mix-blend-multiply"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src =
                             'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80';
@@ -125,21 +117,21 @@ export const CartDrawer: React.FC = () => {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-slate-900 text-xs sm:text-sm line-clamp-1 mb-0.5 leading-snug">
+                      <h4 className="font-sans font-medium text-xs text-black uppercase line-clamp-1 mb-0.5 leading-snug">
                         {item.product.title}
-                      </h3>
+                      </h4>
                       {item.selectedVariant && item.selectedVariant !== 'Default Title' && (
-                        <p className="text-[11px] text-slate-500 mb-1">
-                          Варіант: <span className="font-semibold">{item.selectedVariant}</span>
+                        <p className="font-mono text-[10px] text-neutral-400 uppercase mb-1">
+                          VAR: {item.selectedVariant}
                         </p>
                       )}
-                      <div className="text-brand-600 font-black text-sm mb-2.5 tabular-nums">
+                      <div className="font-mono font-bold text-xs text-black mb-2 tabular-nums">
                         {price.toLocaleString('uk-UA')} ₴
                       </div>
 
                       {/* Quantity controls */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center border border-slate-200 rounded-xl bg-slate-50/70 p-0.5">
+                      <div className="flex items-center justify-between font-mono">
+                        <div className="flex items-center hairline-all bg-white">
                           <button
                             onClick={() =>
                               updateCartQuantity(
@@ -148,12 +140,12 @@ export const CartDrawer: React.FC = () => {
                                 item.selectedVariant
                               )
                             }
-                            className="w-7 h-7 flex items-center justify-center hover:bg-white text-slate-600 rounded-lg transition-colors active:scale-90"
+                            className="w-6 h-6 flex items-center justify-center hover:bg-neutral-100 text-neutral-600 transition-colors"
                             title="Зменшити кількість"
                           >
-                            <Minus className="w-3.5 h-3.5" />
+                            <Minus className="w-3 h-3" />
                           </button>
-                          <span className="w-8 text-center text-xs font-bold text-slate-900 tabular-nums">
+                          <span className="w-6 text-center text-xs font-bold text-black tabular-nums">
                             {item.quantity}
                           </span>
                           <button
@@ -164,19 +156,19 @@ export const CartDrawer: React.FC = () => {
                                 item.selectedVariant
                               )
                             }
-                            className="w-7 h-7 flex items-center justify-center hover:bg-white text-slate-600 rounded-lg transition-colors active:scale-90"
+                            className="w-6 h-6 flex items-center justify-center hover:bg-neutral-100 text-neutral-600 transition-colors"
                             title="Збільшити кількість"
                           >
-                            <Plus className="w-3.5 h-3.5" />
+                            <Plus className="w-3 h-3" />
                           </button>
                         </div>
 
                         <button
                           onClick={() => removeFromCart(item.product.id, item.selectedVariant)}
-                          className="text-slate-400 hover:text-rose-600 p-2 rounded-lg hover:bg-rose-50 transition-colors"
-                          title="Видалити з кошика"
+                          className="text-neutral-400 hover:text-black p-1 transition-colors"
+                          title="Видалити"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
@@ -186,30 +178,31 @@ export const CartDrawer: React.FC = () => {
 
               {/* In-Cart Cross-sell block */}
               {crossSell.length > 0 && (
-                <div className="pt-2 border-t border-slate-100">
-                  <p className="font-bold text-xs text-slate-700 uppercase tracking-wider mb-2.5">
-                    Додайте до замовлення:
+                <div className="pt-4 hairline-t">
+                  <p className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest mb-2.5">
+                    // РЕКОМЕНДОВАНО ДО ЗАМОВЛЕННЯ:
                   </p>
                   <div className="space-y-2">
                     {crossSell.map((rel) => (
                       <div
                         key={rel.id}
-                        className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/60 text-xs"
+                        className="flex items-center justify-between p-2 bg-neutral-50 hairline-all text-xs"
                       >
                         <div className="flex items-center gap-2 min-w-0">
                           <img
                             src={rel.featuredImage}
                             alt=""
-                            className="w-8 h-8 rounded-lg object-cover shrink-0"
+                            className="w-8 h-8 object-cover bg-white shrink-0"
                           />
-                          <span className="font-bold text-slate-800 truncate">{rel.title}</span>
+                          <span className="font-sans font-medium text-black truncate uppercase text-[11px]">
+                            {rel.title}
+                          </span>
                         </div>
                         <button
                           onClick={() => addToCart(rel, 1)}
-                          className="min-h-[36px] inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-brand-50 hover:text-brand-800 font-bold text-slate-700 shrink-0 ml-2 active:scale-95 transition-all"
+                          className="min-h-[30px] inline-flex items-center gap-1 px-2.5 py-1 bg-black text-white font-mono text-[10px] uppercase font-bold shrink-0 ml-2 hover:bg-neutral-800 transition-all"
                         >
-                          <Plus className="w-3 h-3 text-brand-600" />
-                          <span className="tabular-nums">{rel.price} ₴</span>
+                          <span>+ {rel.price} ₴</span>
                         </button>
                       </div>
                     ))}
@@ -218,19 +211,17 @@ export const CartDrawer: React.FC = () => {
               )}
             </>
           ) : (
-            <div className="text-center py-20 px-4">
-              <div className="w-16 h-16 rounded-3xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4">
-                <ShoppingBag className="w-8 h-8" />
-              </div>
-              <p className="font-bold text-slate-800 text-base mb-1">Ваш кошик порожній</p>
-              <p className="text-slate-500 text-xs mb-6 max-w-xs mx-auto">
-                Оберіть якісні товари з каталогу, щоб скористатися знижками та швидкою відправкою
+            <div className="text-center py-20 px-4 font-mono">
+              <ShoppingBag className="w-10 h-10 text-neutral-300 mx-auto mb-3" />
+              <p className="font-bold text-black text-sm uppercase mb-1">Кошик порожній</p>
+              <p className="text-neutral-400 text-xs uppercase mb-6 max-w-xs mx-auto">
+                Оберіть товари в каталозі для оформлення замовлення
               </p>
               <button
                 onClick={handleClose}
-                className="px-6 py-3 rounded-xl bg-brand-50 text-brand-700 font-bold text-sm hover:bg-brand-100 transition-colors active:scale-95"
+                className="px-6 py-2.5 bg-black text-white font-mono text-xs uppercase font-bold hover:bg-neutral-800 transition-colors"
               >
-                Перейти до каталогу
+                [ ДО КАТАЛОГУ ]
               </button>
             </div>
           )}
@@ -238,27 +229,27 @@ export const CartDrawer: React.FC = () => {
 
         {/* Footer & Checkout CTA */}
         {cart.length > 0 && (
-          <div className="p-5 border-t border-slate-100 bg-slate-50/80 space-y-3.5">
-            <div className="flex justify-between items-center text-xs sm:text-sm text-slate-600 font-medium">
-              <span>Доставка:</span>
-              <span className={amountToFreeShipping === 0 ? 'text-emerald-700 font-bold' : 'text-slate-700 font-semibold'}>
-                {amountToFreeShipping === 0 ? 'Безкоштовно 🎉' : 'За тарифами пошти'}
+          <div className="p-4 sm:p-5 hairline-t bg-neutral-50 space-y-3 font-mono">
+            <div className="flex justify-between items-center text-xs text-neutral-600">
+              <span className="uppercase">Доставка:</span>
+              <span className={amountToFreeShipping === 0 ? 'text-dune-ochre font-bold' : 'text-neutral-800'}>
+                {amountToFreeShipping === 0 ? 'БЕЗКОШТОВНО' : 'ЗА ТАРИФАМИ ПОШТИ'}
               </span>
             </div>
 
-            <div className="flex justify-between items-center text-lg font-black text-slate-900 border-t border-slate-200/80 pt-3">
-              <span>Всього до сплати:</span>
-              <span className="text-brand-600 text-xl font-heading tabular-nums">
+            <div className="flex justify-between items-center text-sm font-bold text-black hairline-t pt-2.5">
+              <span className="uppercase">РАЗОМ:</span>
+              <span className="text-base text-black font-bold tabular-nums">
                 {total.toLocaleString('uk-UA')} ₴
               </span>
             </div>
 
             <button
               onClick={openCartCheckout}
-              className="w-full min-h-[48px] py-3.5 px-4 rounded-2xl bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-accent-500/25 hover:shadow-glow-accent flex items-center justify-center gap-2 active:scale-[0.97] transition-all"
+              className="w-full min-h-[46px] py-3 px-4 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
             >
-              <span>Оформити замовлення</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>ОФОРМИТИ ЗАМОВЛЕННЯ</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         )}

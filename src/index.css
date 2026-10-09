@@ -5,50 +5,76 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    color: #111111;
+    background-color: #ffffff;
   }
+  
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Unbounded', sans-serif;
     text-wrap: balance;
+    letter-spacing: -0.02em;
   }
+  
   p, li {
     text-wrap: pretty;
   }
+  
   /* Tabular numbers for all currencies and prices */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
+    font-family: 'IBM Plex Mono', monospace;
   }
 }
 
-/* Subtle dot mesh background for Hero & premium sections */
-.bg-mesh-grid {
-  background-image: radial-gradient(rgba(16, 185, 129, 0.08) 1.5px, transparent 1.5px),
-                    radial-gradient(rgba(249, 115, 22, 0.05) 1.5px, transparent 1.5px);
-  background-size: 28px 28px;
-  background-position: 0 0, 14px 14px;
+/* Stiletto / DUNE technical architectural grid borders */
+.hairline-b {
+  border-bottom: 1px solid #e5e5e5;
 }
 
-/* Subtle image optical outline as recommended in make-interfaces-feel-better */
+.hairline-t {
+  border-top: 1px solid #e5e5e5;
+}
+
+.hairline-r {
+  border-right: 1px solid #e5e5e5;
+}
+
+.hairline-all {
+  border: 1px solid #e5e5e5;
+}
+
+/* Subtle image optical outline */
 .img-optical-outline {
-  outline: 1px solid rgba(15, 23, 42, 0.06);
+  outline: 1px solid rgba(17, 17, 17, 0.06);
   outline-offset: -1px;
+}
+
+/* Marquee track animation */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
 }
 
 /* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f5f5f5;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
+  background: #111111;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #444444;
 }

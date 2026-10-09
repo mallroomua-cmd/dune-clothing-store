@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ShoppingCart, Zap, CheckCircle2, ShieldCheck, Truck, Plus, Star } from 'lucide-react';
+import { ShoppingBag, Zap, CheckCircle2, Star } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { useStore } from '../context/StoreContext';
 import { ProductJsonLd } from './ProductJsonLd';
@@ -55,7 +55,7 @@ export const ProductDetailModal: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-md flex items-end sm:items-center justify-center sm:p-4 md:p-6 animate-fade-in"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 md:p-6 animate-fade-in"
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
@@ -64,35 +64,35 @@ export const ProductDetailModal: React.FC = () => {
       <ProductJsonLd product={selectedProduct} />
 
       <div
-        className="relative bg-white rounded-t-3xl sm:rounded-3xl max-w-3xl w-full shadow-2xl border border-slate-100 flex flex-col md:flex-row max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto md:overflow-hidden overscroll-contain"
+        className="relative bg-white max-w-3xl w-full hairline-all flex flex-col md:flex-row max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto md:overflow-hidden overscroll-contain"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Mobile bottom-sheet handle */}
-        <div className="w-12 h-1.5 bg-slate-300 rounded-full mx-auto my-2.5 sm:hidden shrink-0" />
+        {/* Mobile top handle */}
+        <div className="w-10 h-1 bg-neutral-300 mx-auto my-2 sm:hidden shrink-0" />
 
-        {/* Close Button - 44px hit-target */}
+        {/* Close Button */}
         <button
           onClick={handleClose}
           aria-label="Закрити вікно товару"
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-11 h-11 rounded-full bg-slate-100/90 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors shadow-sm active:scale-90"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-8 h-8 font-mono text-neutral-400 hover:text-black flex items-center justify-center transition-colors"
         >
-          <X className="w-5 h-5" />
+          ✕
         </button>
 
-        {/* Left Column: Image Gallery */}
-        <div className="md:w-1/2 p-5 sm:p-6 bg-slate-50 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-100">
-          <div className="relative aspect-square w-full max-w-xs sm:max-w-sm rounded-2xl overflow-hidden bg-white shadow-sm border border-slate-200/60 mb-3 sm:mb-4 img-optical-outline">
+        {/* Left Column: Image Gallery with #F6F6F6 background */}
+        <div className="md:w-1/2 p-5 sm:p-6 bg-[#f6f6f6] flex flex-col items-center justify-center hairline-b md:hairline-b-0 md:hairline-r">
+          <div className="relative aspect-square w-full max-w-xs sm:max-w-sm overflow-hidden mb-3 sm:mb-4">
             <img
               src={activeImage}
               alt={selectedProduct.title}
-              className="w-full h-full object-cover object-center"
+              className="w-full h-full object-cover object-center mix-blend-multiply"
               onError={(e) => {
                 (e.target as HTMLImageElement).src =
                   'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80';
               }}
             />
             {discountPercent && (
-              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-xl text-xs font-black bg-gradient-to-r from-accent-600 to-rose-500 text-white shadow-md">
+              <span className="absolute top-2 left-2 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider bg-black text-white">
                 -{discountPercent}%
               </span>
             )}
@@ -105,13 +105,13 @@ export const ProductDetailModal: React.FC = () => {
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(img)}
-                  className={`w-14 h-14 rounded-xl overflow-hidden border-2 shrink-0 transition-all ${
+                  className={`w-12 h-12 overflow-hidden shrink-0 transition-all ${
                     activeImage === img
-                      ? 'border-brand-600 scale-105 shadow-sm'
-                      : 'border-transparent opacity-70 hover:opacity-100'
+                      ? 'border-2 border-black'
+                      : 'border border-neutral-200 opacity-60 hover:opacity-100'
                   }`}
                 >
-                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  <img src={img} alt="" className="w-full h-full object-cover mix-blend-multiply" />
                 </button>
               ))}
             </div>
@@ -119,67 +119,62 @@ export const ProductDetailModal: React.FC = () => {
         </div>
 
         {/* Right Column: Details & Order CTA */}
-        <div className="md:w-1/2 p-5 sm:p-8 overflow-y-auto flex flex-col">
-          <div className="flex items-center gap-2 text-xs font-bold text-brand-700 uppercase tracking-wider mb-2">
-            <span>{selectedProduct.productType || 'Товар'}</span>
-            {selectedProduct.vendor && (
-              <>
-                <span>•</span>
-                <span className="text-slate-500">{selectedProduct.vendor}</span>
-              </>
-            )}
+        <div className="md:w-1/2 p-5 sm:p-7 overflow-y-auto flex flex-col font-sans">
+          <div className="flex items-center gap-2 font-mono text-[11px] text-neutral-500 uppercase tracking-wider mb-2">
+            <span>{selectedProduct.productType || 'ITEM'}</span>
+            <span>//</span>
+            <span className="text-black font-semibold">{selectedProduct.vendor || 'CONCEPT'}</span>
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-black font-heading text-slate-900 mb-2 leading-snug">
+          <h2 className="text-lg sm:text-xl font-medium text-black uppercase mb-2 leading-snug">
             {selectedProduct.title}
           </h2>
 
           {/* Rating */}
-          <div className="flex items-center gap-2 mb-3 text-xs text-amber-500 font-bold">
-            <div className="flex items-center gap-0.5">
-              <Star className="w-3.5 h-3.5 fill-amber-400" />
-              <Star className="w-3.5 h-3.5 fill-amber-400" />
-              <Star className="w-3.5 h-3.5 fill-amber-400" />
-              <Star className="w-3.5 h-3.5 fill-amber-400" />
-              <Star className="w-3.5 h-3.5 fill-amber-400" />
+          <div className="flex items-center gap-2 mb-3 font-mono text-xs">
+            <div className="flex items-center gap-0.5 text-dune-ochre">
+              <Star className="w-3.5 h-3.5 fill-current" />
+              <Star className="w-3.5 h-3.5 fill-current" />
+              <Star className="w-3.5 h-3.5 fill-current" />
+              <Star className="w-3.5 h-3.5 fill-current" />
+              <Star className="w-3.5 h-3.5 fill-current" />
             </div>
-            <span className="text-slate-800">4.9</span>
-            <span className="text-slate-500 font-normal">• 98% задоволених покупців</span>
+            <span className="text-neutral-500 text-[11px] uppercase">4.9 / 5 (ВІДГУКИ)</span>
           </div>
 
           {/* Pricing */}
-          <div className="flex items-baseline gap-3 mb-4">
-            <span className="text-2xl sm:text-3xl font-black font-heading text-slate-900 tabular-nums">
-              {activePrice.toLocaleString('uk-UA')} <span className="text-base font-bold text-slate-800">₴</span>
+          <div className="flex items-baseline gap-3 mb-4 font-mono">
+            <span className="text-2xl font-bold text-black tabular-nums">
+              {activePrice.toLocaleString('uk-UA')} ₴
             </span>
             {activeComparePrice && activeComparePrice > activePrice && (
-              <span className="text-base text-slate-400 line-through font-semibold tabular-nums">
+              <span className="text-sm text-neutral-400 line-through tabular-nums">
                 {activeComparePrice.toLocaleString('uk-UA')} ₴
               </span>
             )}
           </div>
 
           {/* Stock state */}
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl w-fit mb-5 border border-emerald-200/60">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>В наявності на складі • Відправка сьогодні</span>
+          <div className="flex items-center gap-2 font-mono text-[11px] text-dune-ochre uppercase border border-dune-ochre/30 px-2.5 py-1 w-fit mb-5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-dune-ochre" />
+            <span>В НАЯВНОСТІ • ВІДПРАВКА СЬОГОДНІ</span>
           </div>
 
           {/* Variants Selector */}
           {selectedProduct.variants && selectedProduct.variants.length > 1 && (
-            <div className="mb-5">
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
-                Оберіть варіант / колір:
+            <div className="mb-5 font-mono">
+              <label className="block text-[11px] text-neutral-500 uppercase tracking-wider mb-2">
+                // ВАРІАНТ / РОЗМІР / КОЛІР:
               </label>
               <div className="flex flex-wrap gap-2">
                 {selectedProduct.variants.map((v) => (
                   <button
                     key={v.id}
                     onClick={() => setSelectedVariant(v.title)}
-                    className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-bold border transition-all active:scale-95 ${
+                    className={`min-h-[38px] px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all ${
                       (selectedVariant || selectedProduct.variants[0].title) === v.title
-                        ? 'border-brand-600 bg-brand-50 text-brand-800 shadow-sm'
-                        : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                        ? 'bg-black text-white hairline-all'
+                        : 'bg-white text-neutral-700 hover:text-black hairline-all'
                     }`}
                   >
                     {v.title} — {v.price} ₴
@@ -189,49 +184,50 @@ export const ProductDetailModal: React.FC = () => {
             </div>
           )}
 
-          {/* Sanitized HTML Description (Fixes XSS) */}
-          <div className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 space-y-2 border-t border-slate-100 pt-4">
-            <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider">
-              Опис товару
+          {/* Sanitized HTML Description */}
+          <div className="text-xs text-neutral-600 leading-relaxed mb-6 space-y-2 hairline-t pt-4">
+            <h4 className="font-mono font-bold text-black text-xs uppercase tracking-wider">
+              // ОПИС ТА ХАРАКТЕРИСТИКИ
             </h4>
             {selectedProduct.bodyHtml ? (
               <div
-                className="prose prose-sm max-w-none text-slate-600 line-clamp-5 text-xs sm:text-sm"
+                className="prose prose-sm max-w-none text-neutral-600 line-clamp-5 text-xs"
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(selectedProduct.bodyHtml),
                 }}
               />
             ) : (
-              <p>Якісний товар, перевірений перед відправкою. Офіційна гарантія.</p>
+              <p>Оригінальний товар, перевірений перед відправкою. Офіційна гарантія 14 днів.</p>
             )}
           </div>
 
           {/* Cross-Sell Recommendations */}
           {related.length > 0 && (
-            <div className="border-t border-slate-100 pt-4 mb-6">
-              <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2">
-                Часто замовляють разом:
+            <div className="hairline-t pt-4 mb-6">
+              <h4 className="font-mono text-neutral-500 text-[10px] uppercase tracking-wider mb-2">
+                // ЧАСТО ЗАМОВЛЯЮТЬ РАЗОМ:
               </h4>
               <div className="space-y-2">
                 {related.map((rel) => (
                   <div
                     key={rel.id}
-                    className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/60 text-xs"
+                    className="flex items-center justify-between p-2 bg-neutral-50 hairline-all text-xs"
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <img
                         src={rel.featuredImage}
                         alt=""
-                        className="w-8 h-8 rounded-lg object-cover shrink-0"
+                        className="w-8 h-8 object-cover bg-white shrink-0"
                       />
-                      <span className="font-bold text-slate-800 truncate">{rel.title}</span>
+                      <span className="font-sans font-medium text-black truncate uppercase text-[11px]">
+                        {rel.title}
+                      </span>
                     </div>
                     <button
                       onClick={() => addToCart(rel, 1)}
-                      className="min-h-[36px] inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-brand-50 hover:text-brand-800 font-bold text-slate-700 shrink-0 ml-2 active:scale-95 transition-all"
+                      className="min-h-[30px] inline-flex items-center gap-1 px-2.5 py-1 bg-black text-white font-mono text-[10px] uppercase font-bold shrink-0 ml-2 hover:bg-neutral-800 transition-all"
                     >
-                      <Plus className="w-3.5 h-3.5 text-brand-600" />
-                      <span className="tabular-nums">{rel.price} ₴</span>
+                      <span>+ {rel.price} ₴</span>
                     </button>
                   </div>
                 ))}
@@ -239,53 +235,37 @@ export const ProductDetailModal: React.FC = () => {
             </div>
           )}
 
-          {/* CTAs with 44px+ hit targets & tactile feedback */}
-          <div className="mt-auto space-y-2.5 pt-4 border-t border-slate-100">
+          {/* CTAs */}
+          <div className="mt-auto space-y-2 pt-4 hairline-t font-mono">
             <button
               onClick={() => {
                 openQuickOrder(selectedProduct, selectedVariant || currentVariant?.title);
                 handleClose();
               }}
-              className="w-full min-h-[48px] py-3.5 px-4 rounded-2xl bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 active:scale-[0.97] text-white font-extrabold text-sm sm:text-base shadow-lg shadow-accent-500/25 hover:shadow-glow-accent flex items-center justify-center gap-2 transition-all"
+              className="w-full min-h-[46px] py-3 px-4 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
             >
-              <Zap className="w-4 h-4 fill-current" />
-              <span>Швидке замовлення в 1 клік</span>
+              <Zap className="w-3.5 h-3.5 text-dune-ochre fill-current" />
+              <span>ШВИДКЕ ЗАМОВЛЕННЯ В 1 КЛІК</span>
             </button>
 
             <button
               onClick={handleAddAndClose}
-              className="w-full min-h-[48px] py-3.5 px-4 rounded-2xl bg-brand-50 hover:bg-brand-100 active:scale-[0.97] text-brand-800 border border-brand-200/90 font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 transition-all"
+              className="w-full min-h-[44px] py-2.5 px-4 bg-white hover:bg-neutral-100 text-black hairline-all font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
             >
-              <ShoppingCart className="w-4 h-4" />
-              <span>{added ? 'Додано до кошика!' : 'Додати в кошик'}</span>
+              <ShoppingBag className="w-3.5 h-3.5" />
+              <span>{added ? 'ДОДАНО ДО КОШИКА!' : 'ДОДАТИ В КОШИК'}</span>
             </button>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-600">
-            <div className="flex items-center gap-1.5">
-              <Truck className="w-3.5 h-3.5 text-brand-600" />
-              <span>Доставка 1-2 дні</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-brand-600" />
-              <span>Оплата при отриманні</span>
-            </div>
           </div>
         </div>
 
         {/* Sticky Mobile Quick Order Bar */}
-        <div className="sticky bottom-0 left-0 right-0 p-3.5 bg-white/95 backdrop-blur-md border-t border-slate-200/80 flex items-center justify-between gap-3 md:hidden z-20 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+        <div className="sticky bottom-0 left-0 right-0 p-3 bg-white hairline-t flex items-center justify-between gap-3 md:hidden z-20 font-mono">
           <div className="min-w-0">
-            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Ціна:</div>
+            <div className="text-[10px] text-neutral-400 uppercase">ЦІНА:</div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-lg font-black text-slate-900 tabular-nums">
+              <span className="text-base font-bold text-black tabular-nums">
                 {activePrice.toLocaleString('uk-UA')} ₴
               </span>
-              {activeComparePrice && activeComparePrice > activePrice && (
-                <span className="text-xs text-slate-400 line-through tabular-nums">
-                  {activeComparePrice.toLocaleString('uk-UA')} ₴
-                </span>
-              )}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -294,20 +274,19 @@ export const ProductDetailModal: React.FC = () => {
                 addToCart(selectedProduct, 1, selectedVariant || currentVariant?.title);
                 handleClose();
               }}
-              aria-label="Додати в кошик"
-              className="min-h-[44px] min-w-[44px] p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 active:scale-95 transition-all flex items-center justify-center"
+              className="min-h-[40px] px-3 bg-white hairline-all text-black font-bold text-xs uppercase flex items-center justify-center"
             >
-              <ShoppingCart className="w-5 h-5" />
+              <ShoppingBag className="w-4 h-4" />
             </button>
             <button
               onClick={() => {
                 openQuickOrder(selectedProduct, selectedVariant || currentVariant?.title);
                 handleClose();
               }}
-              className="min-h-[44px] py-2.5 px-4 rounded-xl bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 active:scale-95 text-white font-black text-xs shadow-md shadow-accent-500/20 flex items-center gap-1.5 transition-all whitespace-nowrap"
+              className="min-h-[40px] py-2 px-4 bg-black text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5"
             >
-              <Zap className="w-3.5 h-3.5 fill-current" />
-              <span>В 1 клік</span>
+              <Zap className="w-3.5 h-3.5 text-dune-ochre fill-current" />
+              <span>В 1 КЛІК</span>
             </button>
           </div>
         </div>
