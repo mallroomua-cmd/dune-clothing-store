@@ -18,11 +18,9 @@ import { SocialProofToast } from './components/SocialProofToast';
 import { ToastContainer } from './components/ToastContainer';
 import { RecentlyViewed } from './components/RecentlyViewed';
 import { ScrollToTop } from './components/ScrollToTop';
-import { RoutineQuizModal } from './components/RoutineQuizModal';
-import { OrderTrackingModal } from './components/OrderTrackingModal';
 import { FaqSection } from './components/FaqSection';
 
-// Code-splitting heavy components (Admin Hub: 2400+ LOC & Policy docs)
+// Code-splitting heavy components (Admin Hub: 2400+ LOC, Policy docs, Quiz & Tracking modals)
 // This cuts initial bundle size drastically for storefront visitors
 const AdminControlHub = lazy(() =>
   import('./components/AdminControlHub').then((m) => ({ default: m.AdminControlHub }))
@@ -30,9 +28,22 @@ const AdminControlHub = lazy(() =>
 const PolicyModal = lazy(() =>
   import('./components/PolicyModal').then((m) => ({ default: m.PolicyModal }))
 );
+const RoutineQuizModal = lazy(() =>
+  import('./components/RoutineQuizModal').then((m) => ({ default: m.RoutineQuizModal }))
+);
+const OrderTrackingModal = lazy(() =>
+  import('./components/OrderTrackingModal').then((m) => ({ default: m.OrderTrackingModal }))
+);
 
 export const AppContent: React.FC = () => {
-  const { isPolicyModalOpen, policyModalTab, closePolicyModal, isAdminOpen } = useStore();
+  const {
+    isPolicyModalOpen,
+    policyModalTab,
+    closePolicyModal,
+    isAdminOpen,
+    isQuizOpen,
+    isTrackingOpen,
+  } = useStore();
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-dune-black selection:bg-black selection:text-white pb-20 sm:pb-0">
@@ -56,16 +67,26 @@ export const AppContent: React.FC = () => {
       {/* Sticky Mobile Floating Quick Bar */}
       <MobileFloatingBar />
 
-      {/* Modals and Drawers */}
+      {/* Core Modals and Drawers */}
       <ProductDetailModal />
       <CheckoutModal />
       <CartDrawer />
       <WishlistModal />
       <SearchModal />
-      <RoutineQuizModal />
-      <OrderTrackingModal />
 
-      {/* Lazy Modals loaded only on demand */}
+      {/* Lazy Modals loaded strictly on demand */}
+      {isQuizOpen && (
+        <Suspense fallback={null}>
+          <RoutineQuizModal />
+        </Suspense>
+      )}
+
+      {isTrackingOpen && (
+        <Suspense fallback={null}>
+          <OrderTrackingModal />
+        </Suspense>
+      )}
+
       {isPolicyModalOpen && (
         <Suspense fallback={null}>
           <PolicyModal
