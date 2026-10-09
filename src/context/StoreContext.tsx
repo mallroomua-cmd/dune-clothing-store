@@ -140,6 +140,12 @@ interface StoreContextType {
   policyModalTab: PolicyTabKey;
   openPolicyModal: (tab?: PolicyTabKey) => void;
   closePolicyModal: () => void;
+  selectedCategory: string;
+  setSelectedCategory: (cat: string) => void;
+  selectedBrand: string;
+  setSelectedBrand: (brand: string) => void;
+  filterByBrand: (brand: string) => void;
+  filterByCategory: (category: string) => void;
   setSelectedProduct: (p: Product | null) => void;
   setSelectedVariant: (v: string) => void;
   setIsCheckoutOpen: (open: boolean) => void;
@@ -375,6 +381,24 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isTrackingOpen, setIsTrackingOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedBrand, setSelectedBrand] = useState<string>('all');
+
+  const filterByBrand = (brand: string) => {
+    setSelectedBrand(brand);
+    setSelectedCategory('all');
+    if (typeof document !== 'undefined') {
+      document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const filterByCategory = (category: string) => {
+    setSelectedCategory(category);
+    setSelectedBrand('all');
+    if (typeof document !== 'undefined') {
+      document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   // Product Reviews system
   const [reviews, setReviews] = useState<ProductReview[]>(() => {
@@ -970,6 +994,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         policyModalTab,
         openPolicyModal,
         closePolicyModal,
+        selectedCategory,
+        setSelectedCategory,
+        selectedBrand,
+        setSelectedBrand,
+        filterByBrand,
+        filterByCategory,
         setSelectedProduct,
         setSelectedVariant,
         setIsCheckoutOpen,

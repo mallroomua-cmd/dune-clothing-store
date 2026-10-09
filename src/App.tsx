@@ -1,6 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Header } from './components/Header';
+import { PromoBanner } from './components/PromoBanner';
+import { BrandLogoSlider } from './components/BrandLogoSlider';
 import { Hero } from './components/Hero';
 import { TrustBadges } from './components/TrustBadges';
 import { ProductGrid } from './components/ProductGrid';
@@ -49,6 +51,12 @@ export const AppContent: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-white text-dune-black selection:bg-black selection:text-white pb-20 sm:pb-0">
       <Header />
       <main className="flex-1">
+        {/* Under navigation: Promo Banner with user-provided deals */}
+        <PromoBanner />
+
+        {/* Under banner: Horizontal scrolling brand logos (Cosibella style) */}
+        <BrandLogoSlider />
+
         <Hero />
         <TrustBadges />
         <ProductGrid />

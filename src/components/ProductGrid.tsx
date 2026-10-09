@@ -22,9 +22,14 @@ export const SKIN_CONCERNS: SkinConcern[] = [
 ];
 
 export const ProductGrid: React.FC = () => {
-  const { products } = useStore();
+  const {
+    products,
+    selectedCategory,
+    setSelectedCategory,
+    selectedBrand,
+    setSelectedBrand,
+  } = useStore();
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedConcern, setSelectedConcern] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price_asc' | 'price_desc' | 'discount'>('popular');
   const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
@@ -60,8 +65,23 @@ export const ProductGrid: React.FC = () => {
       );
     }
 
-    if (selectedCategory !== 'all') {
-      result = result.filter((p) => (p.productType || 'Інше') === selectedCategory);
+    // Filter by Brand (e.g. from brand slider or menu)
+    if (selectedBrand && selectedBrand !== 'all') {
+      const bLower = selectedBrand.toLowerCase().trim();
+      result = result.filter(
+        (p) => (p.vendor || '').toLowerCase().trim().includes(bLower) || bLower.includes((p.vendor || '').toLowerCase().trim())
+      );
+    }
+
+    // Filter by Category (from menu or category buttons)
+    if (selectedCategory && selectedCategory !== 'all') {
+      const cLower = selectedCategory.toLowerCase().trim();
+      result = result.filter((p) => {
+        const typeLower = (p.productType || 'Інше').toLowerCase();
+        const titleLower = p.title.toLowerCase();
+        const tagMatch = p.tags.some((t) => t.toLowerCase().includes(cLower));
+        return typeLower.includes(cLower) || cLower.includes(typeLower) || tagMatch || titleLower.includes(cLower);
+      });
     }
 
     if (selectedConcern !== 'all') {
@@ -87,7 +107,7 @@ export const ProductGrid: React.FC = () => {
     }
 
     return result;
-  }, [products, search, selectedCategory, selectedConcern, sortBy]);
+  }, [products, search, selectedCategory, selectedBrand, selectedConcern, sortBy]);
 
   const displayedProducts = filteredProducts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProducts.length;
@@ -192,12 +212,44 @@ export const ProductGrid: React.FC = () => {
 
           {/* Skincare Concern Filter Pills */}
           <div className="space-y-1.5 pt-1 hairline-t">
+            {/* Active filter badges */}
+            {(selectedBrand !== 'all' || (selectedCategory !== 'all' && !categories.includes(selectedCategory))) && (
+              <div className="flex flex-wrap items-center gap-2 py-1">
+                <span className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest">АКТИВНИЙ ФІЛЬТР:</span>
+                {selectedBrand !== 'all' && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black text-white font-mono text-xs font-bold uppercase">
+                    БРЕНД: {selectedBrand}
+                    <button
+                      onClick={() => setSelectedBrand('all')}
+                      className="text-dune-ochre hover:text-white ml-1 font-mono font-bold"
+                      title="Скинути фільтр за брендом"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
+                {selectedCategory !== 'all' && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black text-white font-mono text-xs font-bold uppercase">
+                    КАТЕГОРІЯ: {selectedCategory}
+                    <button
+                      onClick={() => setSelectedCategory('all')}
+                      className="text-dune-ochre hover:text-white ml-1 font-mono font-bold"
+                      title="Скинути фільтр за категорією"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
+              </div>
+            )}
+
             <div className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest flex items-center justify-between">
               <span>// ПІДБІР ЗА ПОТРЕБОЮ ШКІРИ:</span>
-              {(selectedConcern !== 'all' || selectedCategory !== 'all' || search) && (
+              {(selectedConcern !== 'all' || selectedCategory !== 'all' || selectedBrand !== 'all' || search) && (
                 <button
                   onClick={() => {
                     setSelectedCategory('all');
+                    setSelectedBrand('all');
                     setSelectedConcern('all');
                     setSearch('');
                     setVisibleCount(PAGE_SIZE);
