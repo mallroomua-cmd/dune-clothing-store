@@ -112,7 +112,12 @@ export const Footer: React.FC = () => {
 
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setIsAdminOpen(true)}
+              onClick={() => {
+                setIsAdminOpen(true);
+                if (typeof window !== 'undefined') {
+                  window.location.hash = '#admin';
+                }
+              }}
               className="inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors"
             >
               <Settings className="w-3 h-3 text-[#dec400]" />

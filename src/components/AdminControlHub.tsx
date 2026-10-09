@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+
 import {
   X,
   Upload,
@@ -72,7 +73,12 @@ export const AdminControlHub: React.FC = () => {
     updateAnalyticsConfig,
   } = useStore();
 
-  const handleClose = () => setIsAdminOpen(false);
+  const handleClose = useCallback(() => {
+    setIsAdminOpen(false);
+    if (typeof window !== 'undefined' && window.location.hash === '#admin') {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }, [setIsAdminOpen]);
   useModal(isAdminOpen, handleClose);
 
   // Active Hub Tab
@@ -206,8 +212,6 @@ export const AdminControlHub: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isAdminOpen, activeTab]);
-
-  if (!isAdminOpen) return null;
 
   // --- Auth Handlers ---
   const handlePinSubmit = (e: React.FormEvent) => {
@@ -683,6 +687,8 @@ export const AdminControlHub: React.FC = () => {
         return <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-300">Скасовано</span>;
     }
   };
+
+  if (!isAdminOpen) return null;
 
   return (
     <div

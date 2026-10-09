@@ -118,7 +118,15 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutProduct, setCheckoutProduct] = useState<Product | null>(null);
   const [checkoutVariant, setCheckoutVariant] = useState<string>('');
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return (
+        window.location.hash === '#admin' ||
+        window.location.search.includes('admin')
+      );
+    }
+    return false;
+  });
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
 
   // Background retry worker for offline/failed orders & outbox listener

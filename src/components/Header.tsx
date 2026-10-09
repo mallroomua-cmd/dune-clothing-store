@@ -4,11 +4,20 @@ import { useStore } from '../context/StoreContext';
 import { getDispatchStatus } from '../lib/related';
 
 export const Header: React.FC = () => {
-  const { cart, setIsAdminOpen, setIsCartDrawerOpen } = useStore();
+  const { cart, setIsAdminOpen, setIsCartDrawerOpen, isAdminOpen } = useStore();
   const totalCartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const dispatch = getDispatchStatus();
 
-  const [isAdminVisible, setIsAdminVisible] = useState(false);
+  const [isAdminVisible, setIsAdminVisible] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return (
+        import.meta.env.DEV ||
+        window.location.hash === '#admin' ||
+        window.location.search.includes('admin')
+      );
+    }
+    return false;
+  });
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -95,9 +104,14 @@ export const Header: React.FC = () => {
           {/* Right Action Utilities */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Discreet Admin Toggle */}
-            {isAdminVisible && (
+            {(isAdminVisible || isAdminOpen) && (
               <button
-                onClick={() => setIsAdminOpen(true)}
+                onClick={() => {
+                  setIsAdminOpen(true);
+                  if (typeof window !== 'undefined') {
+                    window.location.hash = '#admin';
+                  }
+                }}
                 className="inline-flex items-center min-h-[40px] gap-1 px-3 py-2 text-xs font-mono font-semibold uppercase text-neutral-600 bg-neutral-100 hover:bg-neutral-200 hairline-all transition-all"
                 title="Панель керування: CSV фід, Google Ads, Telegram"
               >
