@@ -1,5 +1,5 @@
 import React from 'react';
-import { StoreProvider } from './context/StoreContext';
+import { StoreProvider, useStore } from './context/StoreContext';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { TrustBadges } from './components/TrustBadges';
@@ -10,9 +10,12 @@ import { ProductDetailModal } from './components/ProductDetailModal';
 import { CheckoutModal } from './components/CheckoutModal';
 import { CartDrawer } from './components/CartDrawer';
 import { AdminControlHub } from './components/AdminControlHub';
+import { PolicyModal } from './components/PolicyModal';
 import { Footer } from './components/Footer';
 
 export const AppContent: React.FC = () => {
+  const { isPolicyModalOpen, policyModalTab, closePolicyModal } = useStore();
+
   return (
     <div className="min-h-screen flex flex-col bg-white text-dune-black selection:bg-black selection:text-white pb-20 sm:pb-0">
       <Header />
@@ -31,6 +34,11 @@ export const AppContent: React.FC = () => {
       <ProductDetailModal />
       <CheckoutModal />
       <CartDrawer />
+      <PolicyModal
+        isOpen={isPolicyModalOpen}
+        initialTab={policyModalTab}
+        onClose={closePolicyModal}
+      />
       <AdminControlHub />
     </div>
   );

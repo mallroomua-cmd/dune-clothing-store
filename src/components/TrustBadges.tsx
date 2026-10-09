@@ -1,5 +1,5 @@
 import React from 'react';
-import { Truck, ShieldCheck, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Truck, ShieldCheck, RefreshCw, CheckCircle2, Sparkles } from 'lucide-react';
 
 export const TrustBadges: React.FC = () => {
   return (
@@ -16,7 +16,7 @@ export const TrustBadges: React.FC = () => {
             </h2>
           </div>
           <p className="font-mono text-xs text-neutral-500 uppercase tracking-wider max-w-md">
-            Ми усунули всі бар'єри та ризики: огляд перед оплатою, прямий зв'язок та швидка логістика.
+            Ми усунули всі бар'єри та ризики: огляд перед оплатою, оригінальна якість та щоденна відправка Новою Поштою.
           </p>
         </div>
 
@@ -35,12 +35,12 @@ export const TrustBadges: React.FC = () => {
                 Оплата при отриманні
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                Жодних передоплат. Оглядайте та тестуйте товар у відділенні Нової Пошти. Розраховуйтесь карткою або готівкою тільки після повної перевірки.
+                Жодних передоплат. Оглядайте цілісність пакування у відділенні або поштоматі Нової Пошти. Розраховуйтесь карткою або готівкою тільки після повної перевірки.
               </p>
             </div>
             <div className="pt-4 mt-6 hairline-t font-mono text-[11px] text-neutral-500 uppercase flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-dune-ochre" />
-              <span>Без ризиків для вас</span>
+              <span>Безпечний розрахунок</span>
             </div>
           </div>
 
@@ -57,7 +57,7 @@ export const TrustBadges: React.FC = () => {
                 Нова Пошта 1-2 дні
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                Щоденні відправлення замовлень до 18:00. Доставка у поштомати, відділення або адресна доставка кур'єром у будь-який куточок України.
+                Щоденні відправлення замовлень до 18:00 зі складу в Києві. Замовлення від 2 000 ₴ доставляються повністю безкоштовно у відділення та поштомати.
               </p>
             </div>
             <div className="pt-4 mt-6 hairline-t font-mono text-[11px] text-neutral-500 uppercase flex items-center gap-1.5">
@@ -66,44 +66,42 @@ export const TrustBadges: React.FC = () => {
             </div>
           </div>
 
-          {/* Card 3: 14 Day Warranty */}
+          {/* Card 3: 100% Protection & Exchange */}
           <div className="bg-white p-6 sm:p-7 hairline-all flex flex-col justify-between hover:border-black transition-colors group">
             <div>
               <div className="flex items-center justify-between mb-6">
                 <span className="font-mono text-xs font-bold text-dune-ochre uppercase">
-                  // 03. WARRANTY
+                  // 03. PROTECTION
                 </span>
                 <RefreshCw className="w-5 h-5 text-black" />
               </div>
               <h3 className="font-display font-bold text-lg text-black uppercase mb-3">
-                14 днів гарантії
+                Гарантія цілісності
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                Офіційний обмін або повернення коштів згідно із Законом України про захист прав споживачів. Проста та прозора процедура без зайвих бюрократій.
+                Гарантований обмін або повернення 100% коштів у разі виробничого дефекту дозатора чи пошкодження під час доставки. Швидкий розгляд за 1–3 дні.
               </p>
             </div>
             <div className="pt-4 mt-6 hairline-t font-mono text-[11px] text-neutral-500 uppercase flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-dune-ochre" />
-              <span>Повернення без питань</span>
+              <span>Захист покупця 100%</span>
             </div>
           </div>
 
-          {/* Card 4: Curated Selection */}
+          {/* Card 4: Authentic Korean Skincare */}
           <div className="bg-white p-6 sm:p-7 hairline-all flex flex-col justify-between hover:border-black transition-colors group">
             <div>
               <div className="flex items-center justify-between mb-6">
                 <span className="font-mono text-xs font-bold text-dune-ochre uppercase">
-                  // 04. QUALITY
+                  // 04. ORIGIN
                 </span>
-                <span className="font-mono text-xs text-black border border-black px-1.5 py-0.5">
-                  100%
-                </span>
+                <Sparkles className="w-5 h-5 text-black" />
               </div>
               <h3 className="font-display font-bold text-lg text-black uppercase mb-3">
-                Оригінальна якість
+                100% Оригінал
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                Кожна одиниця проходить подвійний візуальний та технічний контроль перед формуванням посилки. Повний заводський комплект та маркування.
+                Офіційний імпорт брендів COSRX, Beauty of Joseon, Round Lab, Skin1004. Свіжі терміни придатності, сертифікати якості та контроль температурного режиму зберігання.
               </p>
             </div>
             <div className="pt-4 mt-6 hairline-t font-mono text-[11px] text-dune-ochre uppercase flex items-center gap-1.5">

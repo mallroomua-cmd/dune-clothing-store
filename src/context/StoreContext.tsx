@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product, AnalyticsConfig, CartItem, OrderDetails, StoredOrder, OrderStatus } from '../types';
+import { PolicyTabKey } from '../components/PolicyModal';
 
 import { SAMPLE_PRODUCTS } from '../lib/sample-data';
 import { parseShopifyCsv } from '../lib/shopify-parser';
@@ -35,6 +36,10 @@ interface StoreContextType {
   checkoutVariant: string;
   isAdminOpen: boolean;
   isCartDrawerOpen: boolean;
+  isPolicyModalOpen: boolean;
+  policyModalTab: PolicyTabKey;
+  openPolicyModal: (tab?: PolicyTabKey) => void;
+  closePolicyModal: () => void;
   setSelectedProduct: (p: Product | null) => void;
   setSelectedVariant: (v: string) => void;
   setIsCheckoutOpen: (open: boolean) => void;
@@ -129,6 +134,46 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
 
+  // Policy Modal state (Privacy, Refund, Shipping, Terms, About, Contacts)
+  const [isPolicyModalOpen, setIsPolicyModalOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const h = window.location.hash.toLowerCase();
+      return (
+        h.includes('privacy') ||
+        h.includes('refund') ||
+        h.includes('shipping') ||
+        h.includes('terms') ||
+        h.includes('about') ||
+        h.includes('contact')
+      );
+    }
+    return false;
+  });
+
+  const [policyModalTab, setPolicyModalTab] = useState<PolicyTabKey>(() => {
+    if (typeof window !== 'undefined') {
+      const h = window.location.hash.toLowerCase();
+      if (h.includes('privacy')) return 'privacy';
+      if (h.includes('refund')) return 'refund';
+      if (h.includes('terms')) return 'terms';
+      if (h.includes('about')) return 'about';
+      if (h.includes('contact')) return 'contacts';
+    }
+    return 'shipping';
+  });
+
+  const openPolicyModal = (tab: PolicyTabKey = 'shipping') => {
+    setPolicyModalTab(tab);
+    setIsPolicyModalOpen(true);
+    if (typeof window !== 'undefined') {
+      window.location.hash = `#${tab}`;
+    }
+  };
+
+  const closePolicyModal = () => {
+    setIsPolicyModalOpen(false);
+  };
+
   // Background retry worker for offline/failed orders & outbox listener
   useEffect(() => {
     const cleanupWorker = startOutboxWorker();
@@ -139,14 +184,32 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
   }, []);
 
-  // Auto-open on #admin hash, query param, or Ctrl+Shift+A / Cmd+Shift+A shortcut
+  // Auto-open on #admin hash, query param, policy hashes, or Ctrl+Shift+A / Cmd+Shift+A shortcut
   useEffect(() => {
+    const getPolicyTabFromHash = (hash: string): PolicyTabKey | null => {
+      const clean = hash.toLowerCase();
+      if (clean === '#privacy' || clean === '#privacy-policy' || clean.includes('privacy')) return 'privacy';
+      if (clean === '#refund' || clean === '#refund-policy' || clean.includes('refund')) return 'refund';
+      if (clean === '#shipping' || clean === '#shipping-policy' || clean.includes('shipping')) return 'shipping';
+      if (clean === '#terms' || clean === '#terms-of-service' || clean.includes('terms') || clean.includes('offer')) return 'terms';
+      if (clean === '#about' || clean === '#about-us' || clean.includes('about')) return 'about';
+      if (clean === '#contacts' || clean === '#contact-information' || clean.includes('contact')) return 'contacts';
+      return null;
+    };
+
     const checkHash = () => {
       if (
         window.location.hash === '#admin' ||
         window.location.search.includes('admin')
       ) {
         setIsAdminOpen(true);
+        return;
+      }
+
+      const policyTab = getPolicyTabFromHash(window.location.hash);
+      if (policyTab) {
+        setPolicyModalTab(policyTab);
+        setIsPolicyModalOpen(true);
       }
     };
     checkHash();
@@ -166,16 +229,25 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
   }, []);
 
-
-  // Load products asynchronously from IndexedDB
+  // Load products asynchronously from IndexedDB with cosmetics catalog migration
   useEffect(() => {
     dbGet<Product[]>('shopify_store_products')
       .then((saved) => {
-        if (saved && saved.length > 0) {
+        const hasLegacy = saved && saved.some((p) => p.vendor === 'TechPro' || p.handle.includes('smart-watch'));
+        const nicheVersion = localStorage.getItem('mallroom_catalog_niche');
+
+        if (!saved || saved.length === 0 || hasLegacy || nicheVersion !== 'cosmetics_v2') {
+          setProducts(SAMPLE_PRODUCTS);
+          void dbSet('shopify_store_products', SAMPLE_PRODUCTS);
+          localStorage.setItem('mallroom_catalog_niche', 'cosmetics_v2');
+        } else {
           setProducts(saved);
         }
       })
-      .catch((e) => console.warn('Failed to load products from IndexedDB', e))
+      .catch((e) => {
+        console.warn('Failed to load products from IndexedDB', e);
+        setProducts(SAMPLE_PRODUCTS);
+      })
       .finally(() => {
         setHydrated(true);
       });
@@ -551,6 +623,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         checkoutVariant,
         isAdminOpen,
         isCartDrawerOpen,
+        isPolicyModalOpen,
+        policyModalTab,
+        openPolicyModal,
+        closePolicyModal,
         setSelectedProduct,
         setSelectedVariant,
         setIsCheckoutOpen,

@@ -78,7 +78,7 @@ export const ProductGrid: React.FC = () => {
               Каталог товарів
             </h2>
             <p className="font-mono text-xs text-neutral-500 uppercase tracking-wider mt-1">
-              ДОСТУПНО ДО ВІДПРАВКИ: {filteredProducts.length} ОДИНИЦЬ
+              ДОСТУПНО ДО ВІДПРАВКИ: {filteredProducts.length} ЗАСОБІВ
             </p>
           </div>
 
@@ -108,7 +108,7 @@ export const ProductGrid: React.FC = () => {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
             <input
               type="text"
-              placeholder="ПОШУК ЗА НАЗВОЮ, БРЕНДОМ АБО МОДЕЛЛЮ..."
+              placeholder="ПОШУК: COSRX, SPF, МУЦИН, КРЕМ, СИРОВАТКА, ЦЕНТЕЛЛА..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
