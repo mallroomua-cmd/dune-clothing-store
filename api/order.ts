@@ -66,9 +66,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ success: true, orderId: o.orderId }); // Silently drop instant bot
   }
 
-  const cleanDigits = String(o.phone || '').replace(/\D/g, '');
-  if (cleanDigits.length < 10 || !o.orderId) {
+  let cleanDigits = String(o.phone || '').replace(/\D/g, '');
+  if (cleanDigits.length < 9 || !o.orderId) {
     return res.status(400).json({ error: 'Некоректний номер телефону або ID замовлення' });
+  }
+
+  // Normalize phone for international tel: click-to-call link
+  let normalizedDial = cleanDigits;
+  if (cleanDigits.startsWith('0') && cleanDigits.length === 10) {
+    normalizedDial = '38' + cleanDigits;
+  } else if (!cleanDigits.startsWith('380') && cleanDigits.length === 9) {
+    normalizedDial = '380' + cleanDigits;
   }
 
   const items = (Array.isArray(o.items) ? o.items : [])
@@ -94,15 +102,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? '💵 Накладений платіж'
       : '💳 Оплата карткою';
 
+  const promoInfo = o.promoCode
+    ? `🎟 <b>Промокод:</b> <code>${esc(clip(o.promoCode, 20))}</code> (-${Number(o.discountAmount || 0).toLocaleString('uk-UA')} ₴)\n`
+    : '';
+
+  const ttnInfo = o.ttn
+    ? `📮 <b>ТТН:</b> <code>${esc(clip(o.ttn, 30))}</code>\n`
+    : '';
+
   const text =
     `🔥 <b>НОВЕ ЗАМОВЛЕННЯ #${esc(o.orderId)}</b>\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
     `👤 <b>Клієнт:</b> ${esc(clip(o.name, 80)) || 'Клієнт'}\n` +
-    `📞 <b>Телефон:</b> <a href="tel:+${cleanDigits}">+${cleanDigits}</a>\n` +
+    `📞 <b>Телефон:</b> <a href="tel:+${normalizedDial}">${esc(clip(o.phone || `+${normalizedDial}`, 30))}</a>\n` +
     `📍 <b>Місто:</b> ${esc(clip(o.city, 80))}\n` +
     `🏢 <b>Відділення:</b> ${esc(clip(o.warehouse, 120)) || 'Уточнюється'}\n` +
     `🚚 <b>Доставка:</b> ${deliveryName}\n` +
     `💳 <b>Оплата:</b> ${paymentName}\n` +
+    promoInfo +
+    ttnInfo +
     (o.notes ? `💬 <b>Коментар:</b> <i>${esc(clip(o.notes, 300))}</i>\n` : '') +
     `━━━━━━━━━━━━━━━━━━━━\n` +
     `🛍 <b>ТОВАРИ:</b>\n\n${items}\n` +
