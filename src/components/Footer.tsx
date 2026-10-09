@@ -13,15 +13,15 @@ export const Footer: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <span className="text-2xl font-black font-heading tracking-tight text-white">
-                Шопінг<span className="text-brand-500">Маркет</span>
+                Шопінг<span className="text-brand-400">Маркет</span>
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
               Офіційний онлайн-магазин трендових товарів в Україні. Швидка логістика, чесні ціни та турбота про кожного покупця.
             </p>
-            <div className="flex items-center gap-2 text-xs text-slate-400 pt-2">
+            <div className="flex items-center gap-2 text-xs text-emerald-400 font-semibold pt-1">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>100% безпечні покупки без ризику</span>
+              <span>100% безпечні покупки з оглядом перед оплатою</span>
             </div>
           </div>
 

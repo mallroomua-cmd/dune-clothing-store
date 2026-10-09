@@ -5,24 +5,49 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Rubik', sans-serif;
+    text-wrap: balance;
   }
+  p, li {
+    text-wrap: pretty;
+  }
+  /* Tabular numbers for all currencies and prices */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Subtle dot mesh background for Hero & premium sections */
+.bg-mesh-grid {
+  background-image: radial-gradient(rgba(16, 185, 129, 0.08) 1.5px, transparent 1.5px),
+                    radial-gradient(rgba(249, 115, 22, 0.05) 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0, 14px 14px;
+}
+
+/* Subtle image optical outline as recommended in make-interfaces-feel-better */
+.img-optical-outline {
+  outline: 1px solid rgba(15, 23, 42, 0.06);
+  outline-offset: -1px;
 }
 
 /* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 4px;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
