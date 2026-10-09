@@ -8,6 +8,10 @@ import {
   Share2,
   Eye,
   Sparkles,
+  Sun,
+  Moon,
+  ShieldAlert,
+  ArrowRight,
 } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { useStore } from '../context/StoreContext';
@@ -16,7 +20,7 @@ import { findVariant } from '../lib/ids';
 import { useModal } from '../hooks/useModal';
 import { getRelatedProducts } from '../lib/related';
 
-type DetailTab = 'desc' | 'actives' | 'usage' | 'reviews';
+type DetailTab = 'desc' | 'actives' | 'synergy' | 'usage' | 'reviews';
 
 export const ProductDetailModal: React.FC = () => {
   const {
@@ -83,6 +87,65 @@ export const ProductDetailModal: React.FC = () => {
     if (text.includes('пробіотик') || text.includes('рис') || text.includes('rice'))
       badges.push('🌾 Екстракт рису + Пробіотики');
     return badges;
+  }, [selectedProduct]);
+
+  // Routine AM/PM Protocol & Synergy Rules
+  const routineProtocol = useMemo(() => {
+    if (!selectedProduct) return null;
+    const type = (selectedProduct.productType || '').toLowerCase();
+    const title = selectedProduct.title.toLowerCase();
+
+    if (type.includes('сонцезах') || title.includes('spf') || title.includes('sun')) {
+      return {
+        step: 'КРОК 5: ЗАХИСТ ВІД UV',
+        time: 'morning' as const,
+        timeLabel: 'ТІЛЬКИ ВРАНЦІ (☀️ AM)',
+        synergyWith: 'Гіалуронова кислота, центелла, ніацинамід. Наносити за 15 хвилин до виходу на сонце.',
+        conflictWith: 'Не конфліктує. Є обов’язковим завершенням будь-якої ранкової рутини.',
+      };
+    }
+    if (type.includes('крем') || title.includes('cream')) {
+      return {
+        step: 'КРОК 4: БАР’ЄРНЕ ЗВОЛОЖЕННЯ',
+        time: 'both' as const,
+        timeLabel: 'РАНОК ТА ВЕЧІР (☀️ AM / 🌙 PM)',
+        synergyWith: 'Ідеально «закриває» сироватки з центеллою або муцином, утримуючи вологу та ліпіди.',
+        conflictWith: 'Уникайте нанесення занадто щільних шарів перед нанесенням макіяжу.',
+      };
+    }
+    if (
+      type.includes('сироват') ||
+      type.includes('есенц') ||
+      type.includes('ампул') ||
+      title.includes('serum') ||
+      title.includes('ampoule') ||
+      title.includes('essence') ||
+      title.includes('муцин')
+    ) {
+      return {
+        step: 'КРОК 3: ТАРГЕТНИЙ АКТИВ',
+        time: 'both' as const,
+        timeLabel: 'РАНОК ТА ВЕЧІР (☀️ AM / 🌙 PM)',
+        synergyWith: 'Центелла, пептиди, пантенол, ніацинамід, гіалуронова кислота.',
+        conflictWith: 'Не поєднувати високі концентрації AHA/BHA з чистим ретинолом в одному вечірньому нанесенні.',
+      };
+    }
+    if (type.includes('тонер') || type.includes('тонік') || title.includes('toner')) {
+      return {
+        step: 'КРОК 2: ТОНІЗУВАННЯ ТА ГІДРАТАЦІЯ',
+        time: 'both' as const,
+        timeLabel: 'РАНОК ТА ВЕЧІР (☀️ AM / 🌙 PM)',
+        synergyWith: 'Готує шкіру до проникнення концентрованих сироваток, нормалізує фізіологічний pH 5.5.',
+        conflictWith: 'Не змивати водою після нанесення.',
+      };
+    }
+    return {
+      step: 'КРОК 1: ДЕЛІКАТНЕ ОЧИЩЕННЯ',
+      time: 'both' as const,
+      timeLabel: 'РАНОК ТА ВЕЧІР (☀️ AM / 🌙 PM)',
+      synergyWith: 'Наступне зволоження тонером або сироваткою протягом перших 60 секунд після вмивання.',
+      conflictWith: 'Не використовувати гарячу воду, щоб не пошкодити гідроліпідну мантію.',
+    };
   }, [selectedProduct]);
 
   // Product reviews
@@ -244,19 +307,27 @@ export const ProductDetailModal: React.FC = () => {
             {selectedProduct.title}
           </h2>
 
-          {/* Active Derm Ingredients */}
-          {dermBadges.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {dermBadges.map((b) => (
-                <span
-                  key={b}
-                  className="font-mono text-[10px] font-bold px-2 py-0.5 bg-neutral-100 text-black border border-neutral-200 uppercase tracking-wider"
-                >
-                  {b}
-                </span>
-              ))}
-            </div>
-          )}
+          {/* Active Derm Ingredients & AM/PM Protocol */}
+          <div className="flex flex-wrap items-center gap-1.5 mb-3">
+            {routineProtocol && (
+              <span className="font-mono text-[10px] font-bold px-2 py-0.5 bg-black text-white uppercase tracking-wider flex items-center gap-1">
+                {routineProtocol.time === 'morning' ? (
+                  <Sun className="w-3 h-3 text-dune-ochre" />
+                ) : (
+                  <Moon className="w-3 h-3 text-dune-ochre" />
+                )}
+                <span>{routineProtocol.step}</span>
+              </span>
+            )}
+            {dermBadges.map((b) => (
+              <span
+                key={b}
+                className="font-mono text-[10px] font-bold px-2 py-0.5 bg-neutral-100 text-black border border-neutral-200 uppercase tracking-wider"
+              >
+                {b}
+              </span>
+            ))}
+          </div>
 
           {/* Rating */}
           <div className="flex items-center gap-2 mb-3 font-mono text-xs">
@@ -320,6 +391,7 @@ export const ProductDetailModal: React.FC = () => {
               {[
                 { key: 'desc', label: 'Опис' },
                 { key: 'actives', label: 'Активи' },
+                { key: 'synergy', label: '⚡ Сумісність' },
                 { key: 'usage', label: 'Застосування' },
                 { key: 'reviews', label: `Відгуки (${productReviews.length})` },
               ].map((tab) => (
@@ -374,6 +446,75 @@ export const ProductDetailModal: React.FC = () => {
                     <span className="text-neutral-500">Щоденний</span>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {activeTab === 'synergy' && (
+              <div className="space-y-3 text-xs animate-fade-in font-mono">
+                <div className="p-3 bg-neutral-50 hairline-all space-y-1.5">
+                  <div className="font-bold text-black text-[11px] flex items-center gap-1.5 uppercase">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Ідеально поєднується з:</span>
+                  </div>
+                  <p className="text-[11px] text-neutral-600 font-sans leading-relaxed">
+                    {routineProtocol?.synergyWith ||
+                      'Гіалуронова кислота, пантенол, центелла та цераміди для максимального зміцнення захисного бар’єру.'}
+                  </p>
+                </div>
+
+                <div className="p-3 bg-amber-50/70 hairline-all border-amber-200 space-y-1.5">
+                  <div className="font-bold text-amber-900 text-[11px] flex items-center gap-1.5 uppercase">
+                    <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Застереження дерматолога:</span>
+                  </div>
+                  <p className="text-[11px] text-amber-950 font-sans leading-relaxed">
+                    {routineProtocol?.conflictWith ||
+                      'Уникайте одночасного нанесення з агресивними кислотними концентратами без бар’єрного крему.'}
+                  </p>
+                </div>
+
+                {/* Synergistic Companion Upsell */}
+                {related[0] && (
+                  <div className="p-3 bg-black text-white hairline-all space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] uppercase font-bold text-dune-ochre">
+                        // ІДЕАЛЬНИЙ ТАНДЕМ У РУТИНУ:
+                      </span>
+                      <span className="text-[9px] px-1.5 py-0.5 bg-dune-ochre text-black font-bold">
+                        -10% НА ДУЕТ
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src={related[0].featuredImage}
+                        alt=""
+                        className="w-10 h-10 object-cover bg-white shrink-0"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="font-sans text-[11px] font-bold truncate text-white">
+                          {related[0].title}
+                        </div>
+                        <div className="text-[10px] text-neutral-400">
+                          {related[0].price} ₴
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        addToCart(selectedProduct, 1);
+                        addToCart(related[0], 1);
+                        addToast(`Ідеальний тандем додано до кошика зі знижкою!`, 'success');
+                        handleClose();
+                      }}
+                      className="w-full py-2 bg-white hover:bg-neutral-100 text-black font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors"
+                    >
+                      <ShoppingBag className="w-3 h-3" />
+                      <span>ДОДАТИ ДУЕТ У КОШИК</span>
+                      <ArrowRight className="w-3 h-3 ml-0.5 text-dune-ochre" />
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 

@@ -1,11 +1,10 @@
 import React from 'react';
 import { ArrowDown, Sparkles, ShieldCheck } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { getDispatchStatus } from '../lib/related';
+import { DispatchCountdown } from './DispatchCountdown';
 
 export const Hero: React.FC = () => {
   const { products, setIsQuizOpen } = useStore();
-  const dispatch = getDispatchStatus();
 
   const scrollToCatalog = () => {
     document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
@@ -15,12 +14,13 @@ export const Hero: React.FC = () => {
     <section className="relative overflow-hidden bg-white hairline-b pt-10 pb-12 sm:pt-16 sm:pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Top Editorial Monospace Tag */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 mb-6 text-[11px] font-mono uppercase tracking-widest text-neutral-700 bg-neutral-100 hairline-all">
-            <span className="w-2 h-2 rounded-full bg-dune-ochre animate-pulse" />
-            <span>KOREAN SKINCARE 2026</span>
-            <span className="text-neutral-400">//</span>
-            <span>{dispatch.text}</span>
+          {/* Top Editorial Monospace Tag & Live Countdown */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-mono uppercase tracking-widest text-neutral-700 bg-neutral-100 hairline-all">
+              <span className="w-2 h-2 rounded-full bg-dune-ochre animate-pulse" />
+              <span>KOREAN SKINCARE 2026</span>
+            </div>
+            <DispatchCountdown variant="hero" />
           </div>
 
           {/* Large Unbounded Headline */}

@@ -4,6 +4,7 @@ import { useStore } from '../context/StoreContext';
 import { findVariant } from '../lib/ids';
 import { useModal } from '../hooks/useModal';
 import { getRelatedProducts } from '../lib/related';
+import { DispatchCountdown } from './DispatchCountdown';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -116,12 +117,13 @@ export const CartDrawer: React.FC = () => {
               {Math.round(freeShippingProgress)}%
             </span>
           </div>
-          <div className="w-full h-1.5 bg-neutral-200 overflow-hidden">
+          <div className="w-full h-1.5 bg-neutral-200 overflow-hidden mb-2.5">
             <div
               className="h-full bg-black transition-all duration-500 ease-out"
               style={{ width: `${freeShippingProgress}%` }}
             />
           </div>
+          <DispatchCountdown variant="cart" />
         </div>
 
         {/* Items List */}

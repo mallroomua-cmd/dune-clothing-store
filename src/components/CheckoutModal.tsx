@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle, ShieldCheck, Truck, CreditCard, Banknote } from 'lucide-react';
+import { CheckCircle, ShieldCheck, Truck, CreditCard, Banknote, Copy, ExternalLink } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { formatUaPhone } from '../lib/formatters';
 import { findVariant } from '../lib/ids';
@@ -18,6 +18,7 @@ export const CheckoutModal: React.FC = () => {
     applyPromoCode,
     removePromoCode,
     setIsTrackingOpen,
+    addToast,
   } = useStore();
 
   const isQuick = !!checkoutProduct;
@@ -194,6 +195,76 @@ export const CheckoutModal: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {paymentMethod === 'card' && (
+              <div className="bg-neutral-900 text-white p-4 text-left hairline-all text-xs space-y-3 mb-6 font-mono">
+                <div className="flex items-center justify-between border-b border-neutral-700 pb-2">
+                  <span className="font-bold text-dune-ochre text-[11px] uppercase tracking-wider">
+                    // ОФІЦІЙНІ РЕКВІЗИТИ IBAN (MONOBANK)
+                  </span>
+                  <span className="text-[9px] bg-dune-ochre text-black px-1.5 py-0.5 font-bold">
+                    0% КОМІСІЇ
+                  </span>
+                </div>
+
+                <div className="space-y-1.5 text-[11px]">
+                  <div className="flex justify-between items-center">
+                    <span className="text-neutral-400">Одержувач:</span>
+                    <span className="font-bold">ФОП Шулім Е. О.</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-neutral-400">ЄДРПОУ:</span>
+                    <span className="font-bold">3344556677</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-neutral-400">IBAN:</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (typeof navigator !== 'undefined') {
+                          navigator.clipboard.writeText('UA213220010000026001234567890');
+                          addToast('IBAN скопійовано в буфер обміну!', 'success');
+                        }
+                      }}
+                      className="font-bold text-dune-ochre hover:underline flex items-center gap-1"
+                      title="Скопіювати IBAN"
+                    >
+                      <span>UA21322001...7890</span>
+                      <Copy className="w-3 h-3" />
+                    </button>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-neutral-400">Призначення:</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (typeof navigator !== 'undefined') {
+                          navigator.clipboard.writeText(`Оплата замовлення ${orderNumber}`);
+                          addToast('Призначення платежу скопійовано!', 'success');
+                        }
+                      }}
+                      className="font-bold hover:underline flex items-center gap-1 text-white"
+                      title="Скопіювати призначення"
+                    >
+                      <span>Оплата {orderNumber}</span>
+                      <Copy className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-1">
+                  <a
+                    href="https://send.monobank.ua/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2 bg-dune-ochre hover:bg-[#ebd500] text-black font-bold text-center uppercase tracking-wider text-[10px] flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <span>🐱 ВІДКРИТИ ЗАСТОСУНОК MONOBANK</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+            )}
 
             <div className="flex flex-col sm:flex-row gap-2">
               <button
@@ -454,28 +525,43 @@ export const CheckoutModal: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('cash_on_delivery')}
-                        className={`min-h-[42px] p-2 hairline-all text-xs uppercase font-bold flex items-center justify-center gap-1.5 transition-all ${
+                        className={`min-h-[46px] p-2 hairline-all text-xs uppercase font-bold flex flex-col items-center justify-center gap-0.5 transition-all ${
                           paymentMethod === 'cash_on_delivery'
                             ? 'bg-black text-white'
                             : 'bg-white text-neutral-600 hover:text-black'
                         }`}
                       >
-                        <Banknote className="w-3.5 h-3.5" />
-                        <span>ПРИ ОТРИМАННІ</span>
+                        <div className="flex items-center gap-1.5">
+                          <Banknote className="w-3.5 h-3.5" />
+                          <span>ПРИ ОТРИМАННІ</span>
+                        </div>
+                        <span className="text-[9px] font-normal text-neutral-400">0% передоплати</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('card')}
-                        className={`min-h-[42px] p-2 hairline-all text-xs uppercase font-bold flex items-center justify-center gap-1.5 transition-all ${
+                        className={`min-h-[46px] p-2 hairline-all text-xs uppercase font-bold flex flex-col items-center justify-center gap-0.5 transition-all ${
                           paymentMethod === 'card'
                             ? 'bg-black text-white'
                             : 'bg-white text-neutral-600 hover:text-black'
                         }`}
                       >
-                        <CreditCard className="w-3.5 h-3.5" />
-                        <span>КАРТКОЮ</span>
+                        <div className="flex items-center gap-1.5">
+                          <CreditCard className="w-3.5 h-3.5" />
+                          <span>MONOBANK / IBAN</span>
+                        </div>
+                        <span className="text-[9px] font-normal text-dune-ochre">0% комісії</span>
                       </button>
                     </div>
+
+                    {paymentMethod === 'card' && (
+                      <div className="mt-2 p-2.5 bg-neutral-50 hairline-all text-[11px] text-neutral-600 font-sans leading-relaxed flex items-start gap-2">
+                        <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>
+                          Офіційні реквізити IBAN з можливістю швидкої оплати через <strong>Monobank</strong> або <strong>Приват24</strong> відобразяться одразу на наступному екрані.
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Notes */}

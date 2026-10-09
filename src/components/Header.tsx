@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Settings, Phone, Sparkles, Truck, Search, Heart } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { getDispatchStatus } from '../lib/related';
+import { DispatchCountdown } from './DispatchCountdown';
 
 export const Header: React.FC = () => {
   const {
@@ -135,6 +136,9 @@ export const Header: React.FC = () => {
               <Phone className="w-3.5 h-3.5 text-[#dec400]" />
               <span>{phoneFormatted}</span>
             </a>
+            <div className="hidden xl:flex items-center pl-3 border-l border-neutral-200">
+              <DispatchCountdown variant="banner" />
+            </div>
           </nav>
 
           {/* Right Action Utilities */}
