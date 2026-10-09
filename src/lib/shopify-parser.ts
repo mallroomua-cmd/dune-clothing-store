@@ -40,6 +40,7 @@ export function parseShopifyCsv(csvString: string): Promise<Product[]> {
     Papa.parse<Record<string, string>>(csvString, {
       header: true,
       skipEmptyLines: 'greedy',
+      transformHeader: (header) => header.replace(/^\uFEFF/, '').trim(),
       complete: (results) => {
         try {
           const productsMap = new Map<string, Product>();
@@ -69,7 +70,13 @@ export function parseShopifyCsv(csvString: string): Promise<Product[]> {
 
             const sku = (row['Variant SKU'] || row['SKU'] || '').trim();
             const barcode = (row['Variant Barcode'] || '').trim();
-            const variantTitle = (row['Option1 Value'] || row['Variant Title'] || 'Default Title').trim();
+
+            // Multi-option support: Option1 Value, Option2 Value, Option3 Value
+            const opt1 = (row['Option1 Value'] || '').trim();
+            const opt2 = (row['Option2 Value'] || '').trim();
+            const opt3 = (row['Option3 Value'] || '').trim();
+            const combinedOptions = [opt1, opt2, opt3].filter(Boolean).join(' / ');
+            const variantTitle = combinedOptions || (row['Variant Title'] || 'Default Title').trim();
 
             if (!productsMap.has(productKey)) {
               const tagsRaw = (row['Tags'] || row['tags'] || '').trim();
@@ -135,12 +142,14 @@ export function parseShopifyCsv(csvString: string): Promise<Product[]> {
             }
           });
 
-          const finalProducts = Array.from(productsMap.values()).map((p) => {
-            if (p.images.length === 0) {
-              p.images = [p.featuredImage];
-            }
-            return p;
-          });
+          const finalProducts = Array.from(productsMap.values())
+            .filter((p) => p.price > 0 && p.title.trim().length > 0)
+            .map((p) => {
+              if (p.images.length === 0) {
+                p.images = [p.featuredImage];
+              }
+              return p;
+            });
 
           resolve(finalProducts);
         } catch (err) {

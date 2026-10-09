@@ -54,13 +54,14 @@ export const ProductDetailModal: React.FC = () => {
       <ProductJsonLd product={selectedProduct} />
 
       <div
-        className="relative bg-white rounded-3xl max-w-3xl w-full shadow-2xl overflow-hidden border border-slate-100 my-8 flex flex-col md:flex-row max-h-[90vh]"
+        className="relative bg-white rounded-t-3xl sm:rounded-3xl max-w-3xl w-full shadow-2xl border border-slate-100 my-auto flex flex-col md:flex-row max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto md:overflow-hidden overscroll-contain"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors"
+          aria-label="Закрити вікно товару"
+          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-slate-100/90 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors shadow-sm"
         >
           <X className="w-5 h-5" />
         </button>
@@ -246,6 +247,45 @@ export const ProductDetailModal: React.FC = () => {
               <ShieldCheck className="w-3.5 h-3.5 text-brand-600" />
               <span>Оплата при отриманні</span>
             </div>
+          </div>
+        </div>
+
+        {/* Sticky Mobile Quick Order Bar */}
+        <div className="sticky bottom-0 left-0 right-0 p-3.5 bg-white/95 backdrop-blur-md border-t border-slate-200/80 flex items-center justify-between gap-3 md:hidden z-20 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+          <div className="min-w-0">
+            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Ціна:</div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-lg font-black text-slate-900">
+                {activePrice.toLocaleString('uk-UA')} ₴
+              </span>
+              {activeComparePrice && activeComparePrice > activePrice && (
+                <span className="text-xs text-slate-400 line-through">
+                  {activeComparePrice.toLocaleString('uk-UA')} ₴
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                addToCart(selectedProduct, 1, selectedVariant || currentVariant?.title);
+                handleClose();
+              }}
+              aria-label="Додати в кошик"
+              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 active:scale-95 transition-all"
+            >
+              <ShoppingCart className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => {
+                openQuickOrder(selectedProduct, selectedVariant || currentVariant?.title);
+                handleClose();
+              }}
+              className="py-2.5 px-4 rounded-xl bg-accent-500 hover:bg-accent-600 active:scale-95 text-white font-black text-xs shadow-md shadow-accent-500/20 flex items-center gap-1.5 transition-all whitespace-nowrap"
+            >
+              <Zap className="w-3.5 h-3.5 fill-current" />
+              <span>В 1 клік</span>
+            </button>
           </div>
         </div>
       </div>

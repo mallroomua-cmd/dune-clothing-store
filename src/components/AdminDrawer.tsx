@@ -62,6 +62,40 @@ export const AdminDrawer: React.FC = () => {
   const [savedNotice, setSavedNotice] = useState(false);
   const [tgTestResult, setTgTestResult] = useState<string | null>(null);
 
+  // PIN Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem('shopify_admin_authed') === 'true';
+  });
+  const [pinInput, setPinInput] = useState('');
+  const [pinError, setPinError] = useState(false);
+  const [storedPin, setStoredPin] = useState(() => {
+    return localStorage.getItem('shopify_admin_pin') || (import.meta.env.VITE_ADMIN_PIN as string) || '1234';
+  });
+  const [newPin, setNewPin] = useState('');
+  const [pinNotice, setPinNotice] = useState(false);
+
+  const handlePinSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pinInput.trim() === storedPin.trim()) {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('shopify_admin_authed', 'true');
+      setPinError(false);
+      setPinInput('');
+    } else {
+      setPinError(true);
+    }
+  };
+
+  const handleUpdatePin = () => {
+    if (newPin.trim().length >= 4) {
+      localStorage.setItem('shopify_admin_pin', newPin.trim());
+      setStoredPin(newPin.trim());
+      setNewPin('');
+      setPinNotice(true);
+      setTimeout(() => setPinNotice(false), 2500);
+    }
+  };
+
   // Live debug events
   const [logs, setLogs] = useState<AnalyticsEventLog[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
@@ -258,27 +292,89 @@ export const AdminDrawer: React.FC = () => {
               CSV фід, Google Ads, Telegram бот та Google Merchant Center
             </p>
           </div>
-          <button
-            onClick={handleClose}
-            className="w-8 h-8 rounded-full bg-white border border-slate-200 hover:bg-slate-100 text-slate-500 flex items-center justify-center transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {isAuthenticated && (
+              <button
+                onClick={() => {
+                  sessionStorage.removeItem('shopify_admin_authed');
+                  setIsAuthenticated(false);
+                }}
+                className="text-xs text-slate-500 hover:text-rose-600 font-semibold transition-colors px-2.5 py-1 rounded-lg hover:bg-slate-100"
+              >
+                Вийти
+              </button>
+            )}
+            <button
+              onClick={handleClose}
+              aria-label="Закрити панель керування"
+              className="w-8 h-8 rounded-full bg-white border border-slate-200 hover:bg-slate-100 text-slate-500 flex items-center justify-center transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex border-b border-slate-200 px-4 sm:px-8 bg-white gap-2 overflow-x-auto scrollbar-none">
-          <button
-            onClick={() => setActiveTab('csv')}
-            className={`py-3.5 px-3 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
-              activeTab === 'csv'
-                ? 'border-brand-600 text-brand-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            <FileSpreadsheet className="w-4 h-4" />
-            <span>Товари з CSV ({products.length})</span>
-          </button>
+        {!isAuthenticated ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50/50">
+            <div className="w-16 h-16 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center mb-4 shadow-sm">
+              <ShieldCheck className="w-8 h-8" />
+            </div>
+            <h3 className="text-xl font-black font-heading text-slate-900 mb-2">
+              Вхід до панелі керування
+            </h3>
+            <p className="text-xs text-slate-500 max-w-xs mb-6">
+              Введіть PIN-код адміністратора для доступу до налаштувань, бази замовлень та імпорту товарів (за замовчуванням: 1234).
+            </p>
+
+            <form onSubmit={handlePinSubmit} className="w-full max-w-xs space-y-4">
+              <div>
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  maxLength={10}
+                  autoFocus
+                  placeholder="Введіть PIN"
+                  value={pinInput}
+                  onChange={(e) => {
+                    setPinInput(e.target.value);
+                    setPinError(false);
+                  }}
+                  className={`w-full px-4 py-3 rounded-xl border text-center text-lg font-mono tracking-widest focus:outline-none ${
+                    pinError
+                      ? 'border-rose-400 bg-rose-50 text-rose-700 focus:ring-2 focus:ring-rose-400'
+                      : 'border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 shadow-sm'
+                  }`}
+                />
+                {pinError && (
+                  <p className="text-xs text-rose-600 font-semibold mt-2">
+                    Невірний PIN-код. Спробуйте ще раз.
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-bold text-sm shadow-md transition-all"
+              >
+                Увійти
+              </button>
+            </form>
+          </div>
+        ) : (
+          <>
+            {/* Navigation Tabs */}
+            <div className="flex border-b border-slate-200 px-4 sm:px-8 bg-white gap-2 overflow-x-auto scrollbar-none">
+              <button
+                onClick={() => setActiveTab('csv')}
+                className={`py-3.5 px-3 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
+                  activeTab === 'csv'
+                    ? 'border-brand-600 text-brand-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                }`}
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                <span>Товари з CSV ({products.length})</span>
+              </button>
 
           <button
             onClick={() => setActiveTab('analytics')}
@@ -557,6 +653,38 @@ export const AdminDrawer: React.FC = () => {
                   ✅ Налаштування успішно збережено!
                 </div>
               )}
+
+              {/* Security: Admin PIN Change */}
+              <div className="pt-6 border-t border-slate-200 space-y-2">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                  Безпека: PIN-код адміністратора
+                </label>
+                <p className="text-xs text-slate-500">
+                  Встановіть власний PIN для захисту адмін-панелі (за замовчуванням: 1234).
+                </p>
+                <div className="flex gap-2">
+                  <input
+                    type="password"
+                    maxLength={10}
+                    placeholder="Новий PIN (мін. 4 знаки)"
+                    value={newPin}
+                    onChange={(e) => setNewPin(e.target.value)}
+                    className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:border-brand-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleUpdatePin}
+                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs whitespace-nowrap transition-all active:scale-95"
+                  >
+                    Змінити PIN
+                  </button>
+                </div>
+                {pinNotice && (
+                  <p className="text-xs text-emerald-600 font-bold mt-1">
+                    ✓ PIN-код успішно змінено!
+                  </p>
+                )}
+              </div>
             </form>
           )}
 
@@ -732,6 +860,8 @@ export const AdminDrawer: React.FC = () => {
             </div>
           )}
         </div>
+      </>
+    )}
       </div>
     </div>
   );

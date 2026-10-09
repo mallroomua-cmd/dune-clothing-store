@@ -24,6 +24,8 @@ export const CheckoutModal: React.FC = () => {
   const [deliveryMethod, setDeliveryMethod] = useState<'nova_poshta' | 'ukrposhta' | 'courier'>('nova_poshta');
   const [paymentMethod, setPaymentMethod] = useState<'cash_on_delivery' | 'card'>('cash_on_delivery');
   const [notes, setNotes] = useState('');
+  const [website, setWebsite] = useState(''); // Anti-bot honeypot
+  const [openedAt] = useState(() => Date.now()); // Time trap
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
@@ -57,7 +59,7 @@ export const CheckoutModal: React.FC = () => {
     e.preventDefault();
     setErrorMessage(null);
 
-    // Validate phone: must contain 9 digits in UA local format
+    // Validate phone: must contain 12 digits in UA international format
     const cleanDigits = phone.replace(/\D/g, '');
     if (cleanDigits.length < 12) {
       setErrorMessage('Будь ласка, введіть повний номер телефону: +380 (XX) XXX-XX-XX');
@@ -71,6 +73,7 @@ export const CheckoutModal: React.FC = () => {
 
     setIsSubmitting(true);
     try {
+      const elapsedMs = Date.now() - openedAt;
       const res = await submitOrder({
         name: name.trim() || (isQuick ? 'Клієнт (В 1 клік)' : 'Клієнт'),
         phone: phone.trim(),
@@ -79,6 +82,8 @@ export const CheckoutModal: React.FC = () => {
         deliveryMethod,
         paymentMethod,
         notes: notes.trim(),
+        website,
+        elapsedMs,
       });
 
       setOrderNumber(res.orderId);
@@ -92,17 +97,19 @@ export const CheckoutModal: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 overscroll-contain animate-fade-in"
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
+      aria-labelledby="checkout-title"
     >
       <div
-        className="relative bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 my-8 p-6 sm:p-8"
+        className="relative bg-white rounded-t-3xl sm:rounded-3xl max-w-lg w-full shadow-2xl max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto border border-slate-100 p-5 sm:p-8 overscroll-contain"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={handleClose}
+          aria-label="Закрити вікно замовлення"
           className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors"
         >
           <X className="w-5 h-5" />
@@ -162,7 +169,7 @@ export const CheckoutModal: React.FC = () => {
               </span>
             </div>
 
-            <h2 className="text-2xl font-black font-heading text-slate-900 mb-1">
+            <h2 id="checkout-title" className="text-2xl font-black font-heading text-slate-900 mb-1">
               {isQuick ? 'Замовлення в 1 клік' : 'Ваше замовлення'}
             </h2>
             <p className="text-xs text-slate-500 mb-5">
@@ -207,12 +214,24 @@ export const CheckoutModal: React.FC = () => {
             </div>
 
             {errorMessage && (
-              <div className="p-3 mb-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
+              <div role="alert" className="p-3 mb-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
                 {errorMessage}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Hidden Honeypot Field */}
+              <input
+                type="text"
+                name="website"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
+
               {/* Phone Input (Primary conversion driver) */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
@@ -223,7 +242,6 @@ export const CheckoutModal: React.FC = () => {
                   required
                   inputMode="tel"
                   autoComplete="tel"
-                  autoFocus
                   placeholder="+380 (99) 000-00-00"
                   value={phone}
                   onChange={handlePhoneChange}

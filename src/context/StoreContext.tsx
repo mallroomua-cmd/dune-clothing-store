@@ -13,6 +13,8 @@ import {
   trackViewItem,
 } from '../lib/analytics';
 import { sendTelegramOrderNotification } from '../lib/telegram';
+import { sendOrderPayload, enqueuePendingOrder, startOutboxWorker } from '../lib/outbox';
+
 
 interface StoreContextType {
   products: Product[];
@@ -47,6 +49,8 @@ interface StoreContextType {
     deliveryMethod: 'nova_poshta' | 'ukrposhta' | 'courier';
     paymentMethod: 'cash_on_delivery' | 'card';
     notes?: string;
+    website?: string;
+    elapsedMs?: number;
   }) => Promise<{ success: boolean; orderId: string }>;
 }
 
@@ -57,7 +61,7 @@ const DEFAULT_ANALYTICS: AnalyticsConfig = {
   googleAdsConversionLabel: (import.meta.env.VITE_ADS_LABEL as string) || '',
   merchantCenterTag: (import.meta.env.VITE_GMC_TAG as string) || '',
   gtmId: (import.meta.env.VITE_GTM_ID as string) || '',
-  telegramBotToken: (import.meta.env.VITE_TG_BOT_TOKEN as string) || '',
+  telegramBotToken: '', // Token is strictly kept on server to prevent leakage; set in Admin UI only for local sandbox testing
   telegramChatId: (import.meta.env.VITE_TG_CHAT_ID as string) || '',
   novaPoshtaApiKey: (import.meta.env.VITE_NP_KEY as string) || '',
   debugMode: import.meta.env.DEV,
@@ -67,6 +71,7 @@ const StoreContext = createContext<StoreContextType | null>(null);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>(SAMPLE_PRODUCTS);
+  const [hydrated, setHydrated] = useState(false);
 
   const [analyticsConfig, setAnalyticsConfig] = useState<AnalyticsConfig>(() => {
     try {
@@ -94,19 +99,33 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
 
-  // Load products asynchronously from IndexedDB
+  // Background retry worker for offline/failed orders
   useEffect(() => {
-    dbGet<Product[]>('shopify_store_products').then((saved) => {
-      if (saved && saved.length > 0) {
-        setProducts(saved);
-      }
-    });
+    const cleanup = startOutboxWorker();
+    return cleanup;
   }, []);
 
-  // Save products asynchronously to IndexedDB
+  // Load products asynchronously from IndexedDB
   useEffect(() => {
-    dbSet('shopify_store_products', products);
-  }, [products]);
+    dbGet<Product[]>('shopify_store_products')
+      .then((saved) => {
+        if (saved && saved.length > 0) {
+          setProducts(saved);
+        }
+      })
+      .catch((e) => console.warn('Failed to load products from IndexedDB', e))
+      .finally(() => {
+        setHydrated(true);
+      });
+  }, []);
+
+  // Save products asynchronously to IndexedDB ONLY after initial hydration
+  useEffect(() => {
+    if (!hydrated) return;
+    dbSet('shopify_store_products', products).catch((e) =>
+      console.warn('Failed to save products to IndexedDB', e)
+    );
+  }, [products, hydrated]);
 
   // Sync analytics config and initialize tracking once
   useEffect(() => {
@@ -127,12 +146,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [cart]);
 
-  // Track product view when detail modal opens
+  // Track product view only when selected product changes (not on every variant switch)
   useEffect(() => {
     if (selectedProduct) {
       trackViewItem(selectedProduct, selectedVariant);
     }
-  }, [selectedProduct, selectedVariant]);
+  }, [selectedProduct?.id]);
 
   const uploadCsv = async (csvContent: string): Promise<{ count: number }> => {
     const parsed = await parseShopifyCsv(csvContent);
@@ -177,17 +196,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const removeFromCart = (productId: string, variantTitle?: string) => {
-    const item = cart.find(
-      (i) => i.product.id === productId && i.selectedVariant === variantTitle
-    );
-    if (item) {
-      trackRemoveFromCart(item.product, item.quantity, item.selectedVariant);
-    }
-    setCart((prev) =>
-      prev.filter(
-        (item) => !(item.product.id === productId && item.selectedVariant === variantTitle)
-      )
-    );
+    setCart((prev) => {
+      const item = prev.find(
+        (i) => i.product.id === productId && i.selectedVariant === variantTitle
+      );
+      if (item) {
+        trackRemoveFromCart(item.product, item.quantity, item.selectedVariant);
+      }
+      return prev.filter(
+        (i) => !(i.product.id === productId && i.selectedVariant === variantTitle)
+      );
+    });
   };
 
   const updateCartQuantity = (productId: string, quantity: number, variantTitle?: string) => {
@@ -238,6 +257,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     deliveryMethod: 'nova_poshta' | 'ukrposhta' | 'courier';
     paymentMethod: 'cash_on_delivery' | 'card';
     notes?: string;
+    website?: string;
+    elapsedMs?: number;
   }): Promise<{ success: boolean; orderId: string }> => {
     // Generate unified Order ID
     const orderId = newOrderId();
@@ -259,27 +280,33 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const fullOrder: OrderDetails = {
       ...details,
+      orderId,
       items: itemsToOrder,
       total,
     };
 
-    // 1. Dispatch notification to Telegram
-    const tgToken = analyticsConfig.telegramBotToken || (import.meta.env.VITE_TG_BOT_TOKEN as string);
-    const tgChat = analyticsConfig.telegramChatId || (import.meta.env.VITE_TG_CHAT_ID as string);
-    if (tgToken && tgChat) {
-      sendTelegramOrderNotification(fullOrder, tgToken, tgChat).catch((err) =>
-        console.warn('Telegram notification failed:', err)
-      );
+    // 1. Direct Telegram dispatch ONLY if merchant explicitly set token in admin drawer
+    if (analyticsConfig.telegramBotToken && analyticsConfig.telegramChatId) {
+      sendTelegramOrderNotification(
+        fullOrder,
+        analyticsConfig.telegramBotToken,
+        analyticsConfig.telegramChatId
+      ).catch((err) => console.warn('Direct Telegram notification failed:', err));
     }
 
-    // 2. Dispatch to Serverless API if configured
-    fetch('/api/order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...fullOrder, orderId }),
-    }).catch(() => {
-      // Offline fallback: order is stored in history and sent to TG
-    });
+    // 2. Dispatch to Serverless API with Outbox fallback
+    const payload = {
+      ...fullOrder,
+      orderId,
+      website: details.website || '',
+      elapsedMs: details.elapsedMs,
+    };
+
+    const sent = await sendOrderPayload(payload);
+    if (!sent) {
+      // Offline fallback: enqueue to IndexedDB outbox for automatic background retry
+      await enqueuePendingOrder(payload);
+    }
 
     // 3. Save order history
     try {

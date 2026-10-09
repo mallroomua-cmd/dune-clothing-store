@@ -41,6 +41,7 @@ export interface CartItem {
 }
 
 export interface OrderDetails {
+  orderId?: string;
   name: string;
   phone: string;
   city: string;
@@ -50,4 +51,7 @@ export interface OrderDetails {
   notes?: string;
   items: CartItem[];
   total: number;
+  website?: string;
+  elapsedMs?: number;
 }
+
