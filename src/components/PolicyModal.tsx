@@ -98,13 +98,13 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
         <header className="px-5 py-4 border-b border-neutral-200 bg-neutral-900 text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-[#dec400] text-black flex items-center justify-center font-bold text-xs">
-              MR
+              DN
             </div>
             <div>
               <h2 className="text-sm sm:text-base font-bold font-display uppercase tracking-wide text-white flex items-center gap-2">
                 Інформаційний центр & Політики
                 <span className="text-[10px] font-mono text-[#dec400] bg-[#dec400]/10 px-2 py-0.5 rounded border border-[#dec400]/30 hidden sm:inline-block">
-                  MALLROOM Skincare
+                  DUNE Concept Store
                 </span>
               </h2>
               <p className="text-[11px] text-neutral-400 font-mono">
@@ -207,10 +207,10 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                   // CONCEPT STORE // PHILOSOPHY
                 </span>
                 <h3 className="text-xl sm:text-2xl font-black font-display text-black uppercase mt-1">
-                  Про простір MALLROOM Skincare
+                  Про концепт-стор DUNE
                 </h3>
                 <p className="text-neutral-600 mt-2 font-normal leading-relaxed">
-                  <strong>MALLROOM</strong> — концептуальний мультибрендовий простір оригінальної доглядової та функціональної косметики з Південної Кореї, Японії та Європи. Ми об’єднали дерматологічні інновації, робочі формули активних компонентів та чесний сервіс без компромісів.
+                  <strong>DUNE</strong> — концептуальний мультибрендовий простір у Києві, присвячений сучасній моді, снікер-культурі та утилітарному streetwear. Ми зібрали культові релізи світових брендів: Jordan, Nike, New Balance, Stüssy, Carhartt WIP, Salomon, Supreme, Stone Island.
                 </p>
               </div>
 
@@ -223,7 +223,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                     100% Оригінальність
                   </h4>
                   <p className="text-xs text-neutral-500 leading-normal">
-                    Прямі поставки від офіційних імпортерів брендів COSRX, Beauty of Joseon, Round Lab, Skin1004. Кожна партія має діючі сертифікати відповідності.
+                    Поставки від офіційних реселерів та дистриб'юторів брендів. Кожна пара кросівок та одиниця одягу проходить ретельний Legit Check.
                   </p>
                 </div>
 
@@ -232,10 +232,10 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                     <Clock className="w-4 h-4" />
                   </div>
                   <h4 className="font-bold text-xs uppercase tracking-wide text-black mb-1">
-                    Свіжі терміни & Склад
+                    Швидка відправка
                   </h4>
                   <p className="text-xs text-neutral-500 leading-normal">
-                    Суворий контроль термінів придатності. Складське зберігання в умовах стабільної температури (+18°C) без доступу ультрафіолету.
+                    Всі позиції в наявності на складі в Києві. Замовлення до 18:00 відправляються Новою Поштою день у день.
                   </p>
                 </div>
 
@@ -387,21 +387,24 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                   // CONSUMER RIGHTS // UKRAINE LAW
                 </span>
                 <h3 className="text-xl sm:text-2xl font-black font-display text-black uppercase mt-1">
-                  Політика повернення та обміну
+                  Політика повернення та обміну (14 днів)
                 </h3>
                 <p className="text-neutral-600 mt-2 font-normal">
-                  Відповідно до законодавства України та високих стандартів клієнтського сервісу MALLROOM.
+                  Відповідно до статті 9 Закону України «Про захист прав споживачів» та стандартів концепт-стору DUNE.
                 </p>
               </div>
 
-              {/* Legal Notice on Cosmetics */}
+              {/* Legal Notice on Apparel & Footwear */}
               <div className="p-4 bg-neutral-100 rounded-xl border border-neutral-300 text-xs text-neutral-800 space-y-2">
                 <div className="flex items-center gap-2 font-bold text-black uppercase font-mono">
-                  <AlertCircle className="w-4 h-4 text-amber-600" />
-                  <span>Законодавча норма для косметичних засобів</span>
+                  <AlertCircle className="w-4 h-4 text-emerald-600" />
+                  <span>Гарантоване право на обмін та повернення 14 днів</span>
                 </div>
                 <p className="leading-relaxed">
-                  Згідно з <strong>Постановою Кабінету Міністрів України від 19.03.1994 року № 172</strong> «Про реалізацію окремих положень Закону України "Про захист прав споживачів"», <strong>парфумерно-косметичні товари належної якості обміну та поверненню не підлягають</strong> з міркувань санітарно-гігієнічної безпеки.
+                  Згідно зі <strong>статтею 9 Закону України «Про захист прав споживачів»</strong>, споживач має право обміняти або повернути непродовольчий товар (одяг, взуття, аксесуари) належної якості протягом <strong>14 днів</strong>, не рахуючи дня купівлі, якщо товар не задовольнив його за формою, габаритами, фасоном, кольором, розміром або з інших причин не може бути ним використаний за призначенням.
+                </p>
+                <p className="leading-relaxed text-neutral-600">
+                  Обмін та повернення здійснюється, якщо товар <strong>не використовувався</strong> і якщо збережено його товарний вигляд, споживчі властивості, пломби, фабричні ярлики, фірмова коробка взуття та розрахунковий документ (ТТН або чек).
                 </p>
               </div>
 

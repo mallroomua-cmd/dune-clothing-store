@@ -1,25 +1,27 @@
 import assert from 'node:assert';
-import { KOREAN_BRANDS } from '../src/lib/brands.ts';
+import { STREETWEAR_BRANDS, KOREAN_BRANDS } from '../src/lib/brands.ts';
 
-console.log('Testing Brand Logos and Cosibella Navigation...');
+console.log('Testing Brand Logos and Streetwear Navigation...');
 
 // Test 1: Brand list coverage
-assert.ok(KOREAN_BRANDS.length >= 10, 'Expected at least 10 Korean skincare brands');
-const brandNames = KOREAN_BRANDS.map((b) => b.name);
-assert.ok(brandNames.includes('COSRX'), 'COSRX must be in brand list');
-assert.ok(brandNames.includes('Beauty of Joseon'), 'Beauty of Joseon must be in brand list');
-assert.ok(brandNames.includes('Round Lab'), 'Round Lab must be in brand list');
-assert.ok(brandNames.includes('SKIN1004'), 'SKIN1004 must be in brand list');
-assert.ok(brandNames.includes('Dr. Althea'), 'Dr. Althea must be in brand list');
-assert.ok(brandNames.includes('Anua'), 'Anua must be in brand list');
-console.log('✓ Brand logos inventory verification passed!');
+assert.ok(STREETWEAR_BRANDS.length >= 10, 'Expected at least 10 streetwear brands');
+assert.strictEqual(KOREAN_BRANDS, STREETWEAR_BRANDS, 'KOREAN_BRANDS must alias STREETWEAR_BRANDS for backwards compatibility');
+const brandNames = STREETWEAR_BRANDS.map((b) => b.name);
+assert.ok(brandNames.includes('Nike'), 'Nike must be in brand list');
+assert.ok(brandNames.includes('Jordan'), 'Jordan must be in brand list');
+assert.ok(brandNames.includes('New Balance'), 'New Balance must be in brand list');
+assert.ok(brandNames.includes('Stüssy'), 'Stüssy must be in brand list');
+assert.ok(brandNames.includes('Carhartt WIP'), 'Carhartt WIP must be in brand list');
+assert.ok(brandNames.includes('Salomon'), 'Salomon must be in brand list');
+assert.ok(brandNames.includes('Stone Island'), 'Stone Island must be in brand list');
+console.log('✓ Streetwear brand inventory verification passed!');
 
 // Test 2: Filter matching logic test
 const sampleProducts = [
-  { id: '1', title: 'COSRX Snail Essence', vendor: 'COSRX', productType: 'Тонери & Есенції', tags: ['Хіт', 'Зволоження'] },
-  { id: '2', title: 'Beauty of Joseon Sun Relief', vendor: 'Beauty of Joseon', productType: 'Сонцезахист (SPF)', tags: ['SPF 50+'] },
-  { id: '3', title: 'Round Lab Dokdo Toner', vendor: 'Round Lab', productType: 'Тонери & Есенції', tags: ['Очищення'] },
-  { id: '4', title: 'SKIN1004 Centella Ampoule', vendor: 'SKIN1004', productType: 'Сироватки & Ампули', tags: ['Центелла'] },
+  { id: '1', title: 'Air Jordan 1 Retro High OG Chicago', vendor: 'Jordan', productType: 'Взуття', tags: ['Снікери', 'Deadstock'] },
+  { id: '2', title: 'Stüssy Basic Applique Hoodie', vendor: 'Stüssy', productType: 'Одяг', tags: ['Худі', 'Streetwear'] },
+  { id: '3', title: 'New Balance 1906R Protection Pack', vendor: 'New Balance', productType: 'Взуття', tags: ['Снікери', 'Хіт'] },
+  { id: '4', title: 'Carhartt WIP Double Knee Pant', vendor: 'Carhartt WIP', productType: 'Одяг', tags: ['Штани', 'Workwear'] },
 ];
 
 function filterBySelectedBrand(products: typeof sampleProducts, selectedBrand: string) {
@@ -39,20 +41,20 @@ function filterBySelectedCategory(products: typeof sampleProducts, selectedCateg
 }
 
 // Brand filter check
-const cosrxItems = filterBySelectedBrand(sampleProducts, 'COSRX');
-assert.strictEqual(cosrxItems.length, 1);
-assert.strictEqual(cosrxItems[0].vendor, 'COSRX');
+const jordanItems = filterBySelectedBrand(sampleProducts, 'Jordan');
+assert.strictEqual(jordanItems.length, 1);
+assert.strictEqual(jordanItems[0].vendor, 'Jordan');
 
-const bojItems = filterBySelectedBrand(sampleProducts, 'Beauty of Joseon');
-assert.strictEqual(bojItems.length, 1);
-assert.strictEqual(bojItems[0].vendor, 'Beauty of Joseon');
+const stussyItems = filterBySelectedBrand(sampleProducts, 'Stüssy');
+assert.strictEqual(stussyItems.length, 1);
+assert.strictEqual(stussyItems[0].vendor, 'Stüssy');
 
 // Category filter check
-const tonerItems = filterBySelectedCategory(sampleProducts, 'Тонери');
-assert.strictEqual(tonerItems.length, 2);
+const shoesItems = filterBySelectedCategory(sampleProducts, 'Взуття');
+assert.strictEqual(shoesItems.length, 2);
 
-const spfItems = filterBySelectedCategory(sampleProducts, 'Сонцезахист');
-assert.strictEqual(spfItems.length, 1);
+const clothesItems = filterBySelectedCategory(sampleProducts, 'Одяг');
+assert.strictEqual(clothesItems.length, 2);
 
 console.log('✓ Brand and Category filter algorithm tests passed!');
 console.log('✓ ALL WAVE 4 NAVIGATION & BANNER TESTS PASSED PERFECTLY!');

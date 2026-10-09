@@ -5,21 +5,25 @@ import { ProductCard } from './ProductCard';
 
 const PAGE_SIZE = 12;
 
-export interface SkinConcern {
+export interface FashionFilter {
   id: string;
   label: string;
   keywords: string[];
 }
 
-export const SKIN_CONCERNS: SkinConcern[] = [
-  { id: 'all', label: 'УСІ ПОТРЕБИ', keywords: [] },
-  { id: 'acne', label: '🔴 ПРОТИ АКНЕ & ПОР', keywords: ['акне', 'bha', 'чайне дерево', 'пори', 'саліцил', 'себум'] },
-  { id: 'hydration', label: '💧 ЗВОЛОЖЕННЯ & БАР’ЄР', keywords: ['зволоження', 'гіалурон', 'муцин', 'бар’єр', 'суха', 'зневодн'] },
-  { id: 'spf', label: '☀️ SPF ЗАХИСТ 50+', keywords: ['spf', 'сонцезах', 'уф', 'uv'] },
-  { id: 'calming', label: '🌿 ЧУТЛИВІСТЬ & ЦЕНТЕЛЛА', keywords: ['центел', 'заспокоєння', 'чутлив', 'cica', 'пантенол'] },
-  { id: 'brightening', label: '✨ СЯЙВО & ОСВІТЛЕННЯ', keywords: ['сяйво', 'ніацинамід', 'вітамін с', 'освітлення', 'пробіотик'] },
-  { id: 'antiage', label: '⏳ ВІДНОВЛЕННЯ & ANTI-AGE', keywords: ['регенерат', 'антивік', 'пружність', 'колаген', 'пептид'] },
+export const FASHION_COLLECTIONS: FashionFilter[] = [
+  { id: 'all', label: 'УСІ РЕЧІ', keywords: [] },
+  { id: 'sneakers', label: '👟 КРОСІВКИ & СНІКЕРИ', keywords: ['кросів', 'sneaker', 'jordan', 'dunk', 'new balance', 'salomon'] },
+  { id: 'hoodies', label: '👕 ХУДІ ТА СВІТШОТИ', keywords: ['худі', 'hoodie', 'crewneck', 'світшот', 'fleece'] },
+  { id: 'tees', label: '⚡ ФУТБОЛКИ', keywords: ['футболк', 'tee', 't-shirt', 'лонгслів'] },
+  { id: 'pants', label: '👖 ШТАНИ ТА КАРГО', keywords: ['штани', 'pant', 'cargo', 'double knee', 'джинси'] },
+  { id: 'jackets', label: '🧥 КУРТКИ & ВЕРХНІЙ ОДЯГ', keywords: ['куртк', 'jacket', 'soft shell', 'gore-tex', 'верхній'] },
+  { id: 'accessories', label: '🧢 АКСЕСУАРИ ТА КЕПКИ', keywords: ['кепк', 'шапк', 'сумк', 'рюкзак', 'аксесуар', 'догляд'] },
+  { id: 'deadstock', label: '🔥 DEADSTOCK & ДРОПИ', keywords: ['deadstock', 'хіт', 'дроп', 'box logo', 'обмежен'] },
 ];
+
+export const SKIN_CONCERNS = FASHION_COLLECTIONS;
+export type SkinConcern = FashionFilter;
 
 export const ProductGrid: React.FC = () => {
   const {
@@ -155,7 +159,7 @@ export const ProductGrid: React.FC = () => {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
             <input
               type="text"
-              placeholder="ПОШУК: COSRX, SPF, МУЦИН, КРЕМ, СИРОВАТКА, ЦЕНТЕЛЛА..."
+              placeholder="ПОШУК: NIKE, JORDAN, NEW BALANCE, STÜSSY, КРОСІВКИ, ХУДІ..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -244,7 +248,7 @@ export const ProductGrid: React.FC = () => {
             )}
 
             <div className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest flex items-center justify-between">
-              <span>// ПІДБІР ЗА ПОТРЕБОЮ ШКІРИ:</span>
+              <span>// ШВИДКИЙ ФІЛЬТР ЗА СТИЛЕМ ТА КАТЕГОРІЄЮ:</span>
               {(selectedConcern !== 'all' || selectedCategory !== 'all' || selectedBrand !== 'all' || search) && (
                 <button
                   onClick={() => {

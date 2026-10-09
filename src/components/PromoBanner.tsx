@@ -30,7 +30,7 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
           <div className="relative w-full aspect-[21/9] sm:aspect-[24/9] md:aspect-[28/9] min-h-[170px] sm:min-h-[220px] md:min-h-[260px] overflow-hidden bg-neutral-950 flex items-center justify-center">
             <img
               src={birthdayBannerImg}
-              alt="Birthday Deals - Знижки до -50% на культову корейську косметику"
+              alt="New Season Drops - Знижки до -50% на культовий одяг та снікери"
               className="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               loading="eager"
             />
@@ -42,7 +42,7 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
             <div className="absolute top-3 left-3 sm:top-5 sm:left-5 flex flex-wrap items-center gap-2 pointer-events-none">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-black/85 backdrop-blur-md text-white font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-white/20 rounded shadow-sm">
                 <Sparkles className="w-3 h-3 text-[#dec400] animate-pulse" />
-                <span>BIRTHDAY SALE</span>
+                <span>NEW SEASON DROPS</span>
               </span>
               <span className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 bg-[#dec400] text-black font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider rounded">
                 <Tag className="w-2.5 h-2.5" />
@@ -53,7 +53,7 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
             {/* Bottom Floating CTA Bar */}
             <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white text-black font-mono text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg group-hover:bg-[#dec400] group-hover:text-black transition-all transform group-hover:translate-x-0.5">
-                <span>ПЕРЕЙТИ ДО ЗНИЖОК</span>
+                <span>ПЕРЕЙТИ ДО ДРОПІВ</span>
                 <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
               </div>
             </div>

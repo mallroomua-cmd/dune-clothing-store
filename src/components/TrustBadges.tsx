@@ -88,7 +88,7 @@ export const TrustBadges: React.FC = () => {
             </div>
           </div>
 
-          {/* Card 4: Authentic Korean Skincare */}
+          {/* Card 4: Authentic Streetwear & Sneakers */}
           <div className="bg-white p-6 sm:p-7 hairline-all flex flex-col justify-between hover:border-black transition-colors group">
             <div>
               <div className="flex items-center justify-between mb-6">
@@ -98,15 +98,15 @@ export const TrustBadges: React.FC = () => {
                 <Sparkles className="w-5 h-5 text-black" />
               </div>
               <h3 className="font-display font-bold text-lg text-black uppercase mb-3">
-                100% Оригінал
+                100% Оригінал (Legit Check)
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                Офіційний імпорт брендів COSRX, Beauty of Joseon, Round Lab, Skin1004. Свіжі терміни придатності, сертифікати якості та контроль температурного режиму зберігання.
+                Тільки оригінальні снікери та одяг від офіційних реселерів та брендів: Jordan, Nike, New Balance, Stüssy, Salomon, Carhartt WIP, Stone Island. Перевірка кожної деталі (Legit Check).
               </p>
             </div>
             <div className="pt-4 mt-6 hairline-t font-mono text-[11px] text-dune-ochre uppercase flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-dune-ochre" />
-              <span>Сертифікований імпорт</span>
+              <span>Verified Legit Check</span>
             </div>
           </div>
         </div>

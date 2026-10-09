@@ -27,75 +27,67 @@ interface NavCategory {
 
 const NAV_CATEGORIES: NavCategory[] = [
   {
-    id: 'face',
-    label: 'ДОГЛЯД ЗА ОБЛИЧЧЯМ',
+    id: 'footwear',
+    label: 'ВЗУТТЯ',
     subcategories: [
-      { title: 'Всі засоби для обличчя', categoryKey: 'all' },
-      { title: 'Очищення & Демакіяж', categoryKey: 'Очищення' },
-      { title: 'Тонери & Есенції', categoryKey: 'Тонери & Есенції' },
-      { title: 'Сироватки & Ампули', categoryKey: 'Сироватки & Ампули' },
-      { title: 'Креми & Емульсії', categoryKey: 'Креми & Гелі' },
-      { title: 'Сонцезахист (SPF 50+)', categoryKey: 'Сонцезахист (SPF)' },
-      { title: 'Маски & Патчі', categoryKey: 'Маски' },
+      { title: 'Всі кросівки та снікери', categoryKey: 'all' },
+      { title: 'Кросівки & Снікери', categoryKey: 'Кросівки' },
+      { title: 'Air Jordan & Retro', categoryKey: 'Jordan' },
+      { title: 'New Balance (1906R / 2002R)', categoryKey: 'New Balance' },
+      { title: 'Salomon & Gorpcore', categoryKey: 'Salomon' },
+      { title: 'Nike Classics & Dunks', categoryKey: 'Nike' },
     ],
   },
   {
-    id: 'hair',
-    label: 'ВОЛОССЯ',
+    id: 'apparel',
+    label: 'ОДЯГ',
     subcategories: [
-      { title: 'Шампуні для шкіри голови', categoryKey: 'Шампуні' },
-      { title: 'Кондиціонери & Маски', categoryKey: 'Кондиціонери' },
-      { title: 'Незмивний догляд & Олії', categoryKey: 'Незмивний догляд' },
-      { title: 'Філлери та термозахист', categoryKey: 'Термозахист' },
+      { title: 'Весь одяг', categoryKey: 'all' },
+      { title: 'Худі та світшоти', categoryKey: 'Худі' },
+      { title: 'Футболки та лонгсліви', categoryKey: 'Футболки' },
+      { title: 'Штани та джинси', categoryKey: 'Штани' },
+      { title: 'Куртки та верхній одяг', categoryKey: 'Куртки' },
+      { title: 'Шорти та карго', categoryKey: 'Шорти' },
     ],
   },
   {
-    id: 'body',
-    label: 'ТІЛО',
+    id: 'accessories',
+    label: 'АКСЕСУАРИ',
     subcategories: [
-      { title: 'Гелі для душу', categoryKey: 'Гелі для душу' },
-      { title: 'Креми & Лосьйони для тіла', categoryKey: 'Креми для тіла' },
-      { title: 'Скраби & Ексфоліанти', categoryKey: 'Скраби' },
-      { title: 'Догляд за руками & стопами', categoryKey: 'Догляд за руками' },
-    ],
-  },
-  {
-    id: 'makeup',
-    label: 'МАКІЯЖ',
-    subcategories: [
-      { title: 'BB & CC креми', categoryKey: 'BB креми' },
-      { title: 'Кушони з SPF', categoryKey: 'Кушони' },
-      { title: 'Тінти та бальзами для губ', categoryKey: 'Тінти' },
-      { title: 'Пудри для фіксації', categoryKey: 'Пудри' },
+      { title: 'Всі аксесуари', categoryKey: 'all' },
+      { title: 'Кепки та панами (New Era)', categoryKey: 'Кепки' },
+      { title: 'Сумки та рюкзаки', categoryKey: 'Сумки' },
+      { title: 'Догляд за взуттям (Crep Protect)', categoryKey: 'Догляд' },
+      { title: 'Шкарпетки та дрібниці', categoryKey: 'Шкарпетки' },
     ],
   },
   {
     id: 'brands',
     label: 'БРЕНДИ',
-    badge: '14+',
+    badge: '12+',
     subcategories: [
-      { title: 'COSRX', categoryKey: 'COSRX' },
-      { title: 'Beauty of Joseon', categoryKey: 'Beauty of Joseon' },
-      { title: 'Round Lab', categoryKey: 'Round Lab' },
-      { title: 'SKIN1004', categoryKey: 'SKIN1004' },
-      { title: 'Dr. Althea', categoryKey: 'Dr. Althea' },
-      { title: 'Anua', categoryKey: 'Anua' },
-      { title: 'Torriden', categoryKey: 'Torriden' },
-      { title: 'Manyo', categoryKey: 'Manyo' },
-      { title: 'Medi-Peel', categoryKey: 'Medi-Peel' },
-      { title: 'Haruharu Wonder', categoryKey: 'Haruharu Wonder' },
+      { title: 'Jordan', categoryKey: 'Jordan' },
+      { title: 'Nike', categoryKey: 'Nike' },
+      { title: 'New Balance', categoryKey: 'New Balance' },
+      { title: 'Stüssy', categoryKey: 'Stüssy' },
+      { title: 'Carhartt WIP', categoryKey: 'Carhartt WIP' },
+      { title: 'Salomon', categoryKey: 'Salomon' },
+      { title: 'Supreme', categoryKey: 'Supreme' },
+      { title: 'Stone Island', categoryKey: 'Stone Island' },
+      { title: 'adidas Originals', categoryKey: 'adidas Originals' },
+      { title: "Arc'teryx", categoryKey: "Arc'teryx" },
     ],
   },
   {
     id: 'sale',
-    label: 'АКЦІЇ ДО -50%',
+    label: 'SALE ДО -50%',
     badge: 'SALE',
     highlight: true,
   },
   {
     id: 'quiz',
-    label: 'ПІДБІР ДОГЛЯДУ',
-    badge: '-15%',
+    label: 'ПІДБІР РОЗМІРУ',
+    badge: 'FIT GUIDE',
   },
 ];
 
@@ -254,12 +246,12 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-2">
             <a href="#" className="flex flex-col group">
               <span className="text-2xl sm:text-3xl font-black font-display tracking-tight text-black group-hover:text-neutral-800 transition-colors">
-                {storeSettings.storeName || 'MALLROOM'}
+                {storeSettings.storeName || 'DUNE'}
               </span>
               <span className="text-[9px] sm:text-[10px] font-mono font-medium tracking-widest text-neutral-500 uppercase -mt-1 flex items-center gap-1">
-                <span>K-BEAUTY CONCEPT</span>
+                <span>STREETWEAR & SNEAKERS</span>
                 <span className="text-[#dec400]">//</span>
-                <span>ORIGINAL</span>
+                <span>CONCEPT STORE</span>
               </span>
             </a>
           </div>
@@ -272,7 +264,7 @@ export const Header: React.FC = () => {
             >
               <Search className="w-4 h-4 text-neutral-500 group-hover:text-black mr-2.5 transition-colors" />
               <span className="font-mono text-xs text-neutral-500 group-hover:text-neutral-700 select-none">
-                Пошук за назвою, брендом (COSRX, Round Lab), потребою...
+                Пошук за назвою, брендом (Nike, Jordan, Stüssy, Salomon)...
               </span>
               <kbd className="ml-auto hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-white border border-neutral-200 rounded">
                 ⌘K
@@ -440,7 +432,7 @@ export const Header: React.FC = () => {
             <div className="flex items-center justify-between p-4 border-b border-neutral-200 bg-neutral-900 text-white">
               <div>
                 <span className="font-display font-black text-xl tracking-tight">
-                  {storeSettings.storeName || 'MALLROOM'}
+                  {storeSettings.storeName || 'DUNE'}
                 </span>
                 <span className="block text-[10px] font-mono text-neutral-400">
                   МЕНЮ КАТЕГОРІЙ & БРЕНДІВ

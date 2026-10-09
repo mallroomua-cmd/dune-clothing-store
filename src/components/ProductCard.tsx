@@ -35,18 +35,27 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
     toggleWishlist(product.id);
   };
 
-  const dermBadges = React.useMemo(() => {
-    const text = `${product.title} ${(product.tags || []).join(' ')}`.toLowerCase();
+  const streetwearBadges = React.useMemo(() => {
+    const text = `${product.title} ${(product.tags || []).join(' ')} ${product.productType || ''}`.toLowerCase();
     const badges: string[] = [];
-    if (text.includes('центел') || text.includes('centella') || text.includes('cica')) badges.push('🌿 ЦЕНТЕЛЛА');
-    if (text.includes('муцин') || text.includes('snail')) badges.push('🐌 МУЦИН 96%');
-    if (text.includes('spf') || text.includes('сонцезах')) badges.push('☀️ SPF 50+');
-    if (text.includes('ніацинамід') || text.includes('niacinamide')) badges.push('✨ НІАЦИНАМІД');
-    if (text.includes('гіалурон') || text.includes('hyaluron')) badges.push('💧 ГІАЛУРОН');
-    if (text.includes('bha') || text.includes('чайне дерево') || text.includes('salicylic')) badges.push('🍃 BHA + TEA TREE');
-    if (text.includes('пробіотик') || text.includes('рис') || text.includes('rice')) badges.push('🌾 ПРОБІОТИКИ');
+    if (text.includes('кросів') || text.includes('sneaker') || text.includes('jordan') || text.includes('dunk')) badges.push('👟 SNEAKERS');
+    if (text.includes('худі') || text.includes('hoodie')) badges.push('👕 FLEECE HOODIE');
+    if (text.includes('oversize') || text.includes('вільн')) badges.push('⚡ OVERSIZE FIT');
+    if (text.includes('deadstock') || text.includes('бокс') || text.includes('коробк')) badges.push('📦 DEADSTOCK');
+    if (text.includes('хіт') || text.includes('топ')) badges.push('🔥 TOP SELLER');
+    if (text.includes('куртк') || text.includes('soft shell') || text.includes('gore-tex')) badges.push('🧥 TECHWEAR');
+    if (text.includes('штани') || text.includes('pant') || text.includes('cargo')) badges.push('👖 WORKWEAR');
+    if (badges.length === 0) badges.push('✨ 100% ORIGINAL');
     return badges.slice(0, 2);
-  }, [product.title, product.tags]);
+  }, [product.title, product.tags, product.productType]);
+
+  const sizesSummary = React.useMemo(() => {
+    if (!product.variants || product.variants.length <= 1) return null;
+    const sizeLabels = product.variants
+      .map((v) => v.title.split(' ')[0].replace('(', ''))
+      .filter((s) => s && s !== 'Default');
+    return sizeLabels.slice(0, 5).join(' · ') + (sizeLabels.length > 5 ? ' +' : '');
+  }, [product.variants]);
 
   return (
     <div
@@ -111,10 +120,10 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           <span className="text-neutral-400">{product.productType || 'ITEM'}</span>
         </div>
 
-        {/* Active Derm Ingredients */}
-        {dermBadges.length > 0 && (
+        {/* Streetwear Category Badges */}
+        {streetwearBadges.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-1.5">
-            {dermBadges.map((badge) => (
+            {streetwearBadges.map((badge) => (
               <span
                 key={badge}
                 className="font-mono text-[9px] font-bold px-1.5 py-0.5 bg-neutral-100 text-neutral-800 tracking-wider uppercase border border-neutral-200"
@@ -125,11 +134,19 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           </div>
         )}
 
-        {/* Star Rating Badge */}
+        {/* Sizes summary pill */}
+        {sizesSummary && (
+          <div className="font-mono text-[10px] text-neutral-500 mb-1 flex items-center gap-1">
+            <span className="text-black font-semibold">Розміри:</span>
+            <span className="truncate">{sizesSummary}</span>
+          </div>
+        )}
+
+        {/* Legit Check Verified Badge */}
         <div className="flex items-center gap-1 font-mono text-[10px] text-neutral-400 mb-1">
           <span className="text-dune-ochre">★ 5.0</span>
           <span>•</span>
-          <span>ПЕРЕВІРЕНО</span>
+          <span>LEGIT CHECK ✓</span>
         </div>
 
         {/* Title */}

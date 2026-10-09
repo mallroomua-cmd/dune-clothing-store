@@ -13,14 +13,14 @@ export const Footer: React.FC = () => {
           <div className="space-y-4">
             <div className="flex flex-col">
               <span className="text-2xl font-black font-display tracking-tight text-white uppercase">
-                MALLROOM
+                DUNE
               </span>
               <span className="text-[10px] text-neutral-400 uppercase tracking-widest mt-0.5">
-                SKINCARE CONCEPT STORE // KYIV
+                STREETWEAR & SNEAKER CONCEPT STORE // KYIV
               </span>
             </div>
             <p className="text-neutral-400 text-xs leading-relaxed font-sans font-normal">
-              Мультибрендовий простір оригінальної доглядової косметики з Південної Кореї та Європи. 100% перевірені формули (COSRX, Beauty of Joseon, Round Lab, Skin1004), сертифіковані партії та свіжі терміни придатності.
+              Мультибрендовий простір моди, спорту та снікер-культури. Культові релізи Jordan, Nike, New Balance, Stüssy, Carhartt WIP, Salomon, Supreme, Stone Island. 100% оригінал, швидка доставка Новою Поштою.
             </p>
             <div className="text-[11px] text-[#dec400] pt-1 font-bold">
               ★ ВІДПРАВКА СЬОГОДНІ НОВОЮ ПОШТОЮ ДО 18:00
@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
                   className="hover:text-white transition-colors flex items-center gap-1.5 text-left"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-[#dec400]" />
-                  <span>[ 01 ] Про бренд MALLROOM</span>
+                  <span>[ 01 ] Про концепт-стор DUNE</span>
                 </button>
               </li>
               <li>
@@ -172,9 +172,9 @@ export const Footer: React.FC = () => {
         {/* Bottom bar with payment badges and sys admin */}
         <div className="hairline-t border-neutral-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-neutral-500">
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
-            <span>© {new Date().getFullYear()} MALLROOM // SKINCARE CONCEPT STORE. ВСІ ПРАВА ЗАХИЩЕНІ.</span>
+            <span>© {new Date().getFullYear()} DUNE // STREETWEAR & SNEAKERS CONCEPT STORE. ВСІ ПРАВА ЗАХИЩЕНІ.</span>
             <span className="hidden sm:inline text-neutral-700">|</span>
-            <span className="text-neutral-400">100% ОРИГІНАЛ · НОВА ПОШТА · ПІСЛЯПЛАТА</span>
+            <span className="text-neutral-400">100% ОРИГІНАЛ · НОВА ПОШТА · ОПЛАТА ПРИ ОТРИМАННІ</span>
           </div>
 
           <div className="flex items-center gap-4">

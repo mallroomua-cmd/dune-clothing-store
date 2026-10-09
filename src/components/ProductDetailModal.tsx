@@ -10,8 +10,6 @@ import {
   Sparkles,
   Sun,
   Moon,
-  ShieldAlert,
-  ArrowRight,
 } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { useStore } from '../context/StoreContext';
@@ -20,7 +18,7 @@ import { findVariant } from '../lib/ids';
 import { useModal } from '../hooks/useModal';
 import { getRelatedProducts } from '../lib/related';
 
-type DetailTab = 'desc' | 'actives' | 'synergy' | 'usage' | 'reviews';
+type DetailTab = 'desc' | 'sizing' | 'materials' | 'delivery' | 'reviews';
 
 export const ProductDetailModal: React.FC = () => {
   const {
@@ -73,20 +71,22 @@ export const ProductDetailModal: React.FC = () => {
 
   const dermBadges = useMemo(() => {
     if (!selectedProduct) return [];
-    const text = `${selectedProduct.title} ${(selectedProduct.tags || []).join(' ')}`.toLowerCase();
+    const text = `${selectedProduct.title} ${(selectedProduct.tags || []).join(' ')} ${selectedProduct.productType || ''}`.toLowerCase();
     const badges: string[] = [];
-    if (text.includes('центел') || text.includes('centella') || text.includes('cica'))
-      badges.push('🌿 100% Центелла азіатська');
-    if (text.includes('муцин') || text.includes('snail')) badges.push('🐌 96% Муцин равлика');
-    if (text.includes('spf') || text.includes('сонцезах'))
-      badges.push('☀️ SPF 50+ PA++++ фотостабільні фільтри');
-    if (text.includes('ніацинамід') || text.includes('niacinamide')) badges.push('✨ Ніацинамід + Цинк');
-    if (text.includes('гіалурон') || text.includes('hyaluron')) badges.push('💧 8 видів гіалуронової к-ти');
-    if (text.includes('bha') || text.includes('чайне дерево') || text.includes('salicylic'))
-      badges.push('🍃 BHA + Олія чайного дерева');
-    if (text.includes('пробіотик') || text.includes('рис') || text.includes('rice'))
-      badges.push('🌾 Екстракт рису + Пробіотики');
-    return badges;
+    if (text.includes('кросів') || text.includes('sneaker') || text.includes('jordan') || text.includes('dunk'))
+      badges.push('👟 Кросівки & Снікери');
+    if (text.includes('худі') || text.includes('hoodie'))
+      badges.push('👕 Heavyweight Fleece');
+    if (text.includes('oversize') || text.includes('вільн'))
+      badges.push('⚡ Relaxed Oversize Fit');
+    if (text.includes('deadstock') || text.includes('box logo'))
+      badges.push('📦 Limited Drop / Deadstock');
+    if (text.includes('штани') || text.includes('pant') || text.includes('cargo'))
+      badges.push('👖 Workwear Canvas');
+    if (text.includes('куртк') || text.includes('soft shell') || text.includes('gore-tex'))
+      badges.push('🧥 Технічний захист');
+    badges.push('✨ Verified Legit Check');
+    return badges.slice(0, 3);
   }, [selectedProduct]);
 
   // Routine AM/PM Protocol & Synergy Rules
@@ -390,9 +390,9 @@ export const ProductDetailModal: React.FC = () => {
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-none border-b border-neutral-200 pb-2 mb-3 font-mono text-[11px] uppercase tracking-wider">
               {[
                 { key: 'desc', label: 'Опис' },
-                { key: 'actives', label: 'Активи' },
-                { key: 'synergy', label: '⚡ Сумісність' },
-                { key: 'usage', label: 'Застосування' },
+                { key: 'sizing', label: '📐 Розмірна сітка' },
+                { key: 'materials', label: 'Склад & Догляд' },
+                { key: 'delivery', label: 'Доставка & 14 днів' },
                 { key: 'reviews', label: `Відгуки (${productReviews.length})` },
               ].map((tab) => (
                 <button
@@ -420,117 +420,137 @@ export const ProductDetailModal: React.FC = () => {
                     }}
                   />
                 ) : (
-                  <p>Оригінальний сертифікований засіб з Кореї. Перевіряється перед відправкою. Офіційна гарантія 14 днів.</p>
+                  <p>100% оригінальний айтем від офіційних дистриб'юторів. Повна перевірка (Legit Check) перед відправкою клієнту.</p>
+                )}
+                {/* Related drop accompaniment */}
+                {related[0] && (
+                  <div className="mt-3 p-3 bg-neutral-50 hairline-all">
+                    <span className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest block mb-1">
+                      // РЕКОМЕНДОВАНИЙ АУТФІТ:
+                    </span>
+                    <div className="flex items-center justify-between text-xs font-mono">
+                      <span className="font-bold text-black truncate mr-2">{related[0].title}</span>
+                      <span className="text-black font-bold whitespace-nowrap">{related[0].price} ₴</span>
+                    </div>
+                  </div>
                 )}
               </div>
             )}
 
-            {activeTab === 'actives' && (
-              <div className="space-y-2.5 text-xs text-neutral-700 animate-fade-in">
-                <div className="p-3 bg-neutral-50 hairline-all space-y-1">
-                  <div className="font-mono font-bold text-black text-[11px] uppercase flex items-center gap-1.5">
-                    <Sparkles className="w-3 h-3 text-dune-ochre" />
-                    <span>Чиста K-Beauty Формула</span>
-                  </div>
-                  <p className="text-[11px] text-neutral-500 leading-relaxed font-sans">
-                    Створено без парабенів, штучних барвників та мінеральних олій. Не тестується на тваринах (Cruelty-Free).
-                  </p>
-                </div>
-                <div className="grid grid-cols-2 gap-2 font-mono text-[10px]">
-                  <div className="p-2 bg-neutral-50 hairline-all">
-                    <strong className="block text-black">ФІЗІОЛОГІЧНИЙ pH:</strong>
-                    <span className="text-neutral-500">5.5 – 6.0</span>
-                  </div>
-                  <div className="p-2 bg-neutral-50 hairline-all">
-                    <strong className="block text-black">ТИП ДОГЛЯДУ:</strong>
-                    <span className="text-neutral-500">Щоденний</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'synergy' && (
+            {activeTab === 'sizing' && (
               <div className="space-y-3 text-xs animate-fade-in font-mono">
-                <div className="p-3 bg-neutral-50 hairline-all space-y-1.5">
-                  <div className="font-bold text-black text-[11px] flex items-center gap-1.5 uppercase">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Ідеально поєднується з:</span>
-                  </div>
-                  <p className="text-[11px] text-neutral-600 font-sans leading-relaxed">
-                    {routineProtocol?.synergyWith ||
-                      'Гіалуронова кислота, пантенол, центелла та цераміди для максимального зміцнення захисного бар’єру.'}
-                  </p>
-                </div>
-
-                <div className="p-3 bg-amber-50/70 hairline-all border-amber-200 space-y-1.5">
-                  <div className="font-bold text-amber-900 text-[11px] flex items-center gap-1.5 uppercase">
-                    <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
-                    <span>Застереження дерматолога:</span>
-                  </div>
-                  <p className="text-[11px] text-amber-950 font-sans leading-relaxed">
-                    {routineProtocol?.conflictWith ||
-                      'Уникайте одночасного нанесення з агресивними кислотними концентратами без бар’єрного крему.'}
-                  </p>
-                </div>
-
-                {/* Synergistic Companion Upsell */}
-                {related[0] && (
-                  <div className="p-3 bg-black text-white hairline-all space-y-2.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] uppercase font-bold text-dune-ochre">
-                        // ІДЕАЛЬНИЙ ТАНДЕМ У РУТИНУ:
-                      </span>
-                      <span className="text-[9px] px-1.5 py-0.5 bg-dune-ochre text-black font-bold">
-                        -10% НА ДУЕТ
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <img
-                        src={related[0].featuredImage}
-                        alt=""
-                        className="w-10 h-10 object-cover bg-white shrink-0"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <div className="font-sans text-[11px] font-bold truncate text-white">
-                          {related[0].title}
-                        </div>
-                        <div className="text-[10px] text-neutral-400">
-                          {related[0].price} ₴
-                        </div>
+                {selectedProduct.productType.toLowerCase().includes('взуття') ||
+                selectedProduct.productType.toLowerCase().includes('кросів') ? (
+                  <>
+                    <div className="p-2.5 bg-neutral-50 hairline-all">
+                      <div className="text-[10px] text-neutral-400 uppercase tracking-wider mb-2">
+                        ТАБЛИЦЯ РОЗМІРІВ ВЗУТТЯ (SNEAKERS)
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-[11px]">
+                          <thead>
+                            <tr className="border-b border-neutral-200 text-neutral-400">
+                              <th className="pb-1 font-bold">EU</th>
+                              <th className="pb-1 font-bold">US</th>
+                              <th className="pb-1 font-bold">UK</th>
+                              <th className="pb-1 font-bold">CM (СТОПА)</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-neutral-100 text-black">
+                            <tr><td className="py-1">40</td><td>7.0</td><td>6.0</td><td>25.0 см</td></tr>
+                            <tr><td className="py-1">41</td><td>8.0</td><td>7.0</td><td>26.0 см</td></tr>
+                            <tr><td className="py-1">42</td><td>8.5</td><td>7.5</td><td>26.5 см</td></tr>
+                            <tr><td className="py-1">42.5</td><td>9.0</td><td>8.0</td><td>27.0 см</td></tr>
+                            <tr><td className="py-1">43</td><td>9.5</td><td>8.5</td><td>27.5 см</td></tr>
+                            <tr><td className="py-1">44</td><td>10.0</td><td>9.0</td><td>28.0 см</td></tr>
+                            <tr><td className="py-1">44.5</td><td>10.5</td><td>9.5</td><td>28.5 см</td></tr>
+                            <tr><td className="py-1">45</td><td>11.0</td><td>10.0</td><td>29.0 см</td></tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        addToCart(selectedProduct, 1);
-                        addToCart(related[0], 1);
-                        addToast(`Ідеальний тандем додано до кошика зі знижкою!`, 'success');
-                        handleClose();
-                      }}
-                      className="w-full py-2 bg-white hover:bg-neutral-100 text-black font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors"
-                    >
-                      <ShoppingBag className="w-3 h-3" />
-                      <span>ДОДАТИ ДУЕТ У КОШИК</span>
-                      <ArrowRight className="w-3 h-3 ml-0.5 text-dune-ochre" />
-                    </button>
-                  </div>
+                    <p className="text-[11px] text-neutral-500 font-sans leading-relaxed">
+                      💡 <strong>Як виміряти:</strong> Поставте стопу на аркуш паперу, відмітьте п'яту та кінчик великого пальця. Виміряйте лінійкою відстань у сантиметрах. Якщо носите товстий носок або маєте широкий підйом — обирайте +0.5 EU.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="p-2.5 bg-neutral-50 hairline-all">
+                      <div className="text-[10px] text-neutral-400 uppercase tracking-wider mb-2">
+                        ТАБЛИЦЯ РОЗМІРІВ ОДЯГУ (APPAREL & HOODIES)
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-[11px]">
+                          <thead>
+                            <tr className="border-b border-neutral-200 text-neutral-400">
+                              <th className="pb-1 font-bold">РОЗМІР</th>
+                              <th className="pb-1 font-bold">ЗРІСТ (СМ)</th>
+                              <th className="pb-1 font-bold">ГРУДИ (СМ)</th>
+                              <th className="pb-1 font-bold">ДОВЖИНА (СМ)</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-neutral-100 text-black">
+                            <tr><td className="py-1 font-bold">S</td><td>165–175</td><td>92–98</td><td>68</td></tr>
+                            <tr><td className="py-1 font-bold">M</td><td>174–182</td><td>98–104</td><td>71</td></tr>
+                            <tr><td className="py-1 font-bold">L</td><td>180–188</td><td>106–112</td><td>74</td></tr>
+                            <tr><td className="py-1 font-bold">XL</td><td>186–195</td><td>114–120</td><td>77</td></tr>
+                            <tr><td className="py-1 font-bold">XXL</td><td>190+</td><td>122–128</td><td>80</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-neutral-500 font-sans leading-relaxed">
+                      💡 <strong>Посадка:</strong> Більшість моделей худі та футболок Stüssy і Supreme мають вільний крій (Relaxed / Oversize). Для класичної посадки обирайте свій звичний розмір.
+                    </p>
+                  </>
                 )}
               </div>
             )}
 
-            {activeTab === 'usage' && (
-              <div className="space-y-2 text-xs text-neutral-600 font-sans leading-relaxed animate-fade-in">
-                <div className="flex items-start gap-2">
-                  <span className="font-mono font-bold text-dune-ochre text-xs">01.</span>
-                  <span>Нанесіть необхідну кількість засобу на очищену та тонізовану шкіру обличчя.</span>
+            {activeTab === 'materials' && (
+              <div className="space-y-2.5 text-xs text-neutral-700 animate-fade-in font-mono">
+                <div className="p-3 bg-neutral-50 hairline-all space-y-1">
+                  <div className="font-bold text-black text-[11px] uppercase flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3 text-dune-ochre" />
+                    <span>Преміальні матеріали & Автентичність</span>
+                  </div>
+                  <p className="text-[11px] text-neutral-500 leading-relaxed font-sans">
+                    Вироби з натуральної щільної бавовни (Heavyweight Fleece до 380-420 GSM), посиленого канвасу Dearborn Canvas або зносостійких мембранних тканин Soft Shell / Gore-Tex.
+                  </p>
                 </div>
-                <div className="flex items-start gap-2">
-                  <span className="font-mono font-bold text-dune-ochre text-xs">02.</span>
-                  <span>Розподіліть легкими масажними рухами по масажних лініях до повного вбирання.</span>
+                <div className="p-3 bg-neutral-50 hairline-all space-y-1">
+                  <div className="font-bold text-black text-[11px] uppercase">
+                    // РЕКОМЕНДАЦІЇ З ДОГЛЯДУ
+                  </div>
+                  <ul className="text-[11px] text-neutral-600 font-sans list-disc list-inside space-y-1">
+                    <li>Прання при температурі не вище 30°C навиворіт.</li>
+                    <li>Не використовувати хлоровмісні відбілювачі.</li>
+                    <li>Сушити природним шляхом, уникаючи прямих обігрівачів.</li>
+                    <li>Кросівки чистити спеціалізованою піною (Crep Protect).</li>
+                  </ul>
                 </div>
-                <div className="flex items-start gap-2">
-                  <span className="font-mono font-bold text-dune-ochre text-xs">03.</span>
-                  <span>У ранковому догляді обов'язково закріпіть сонцезахисним кремом зі SPF 50+.</span>
+              </div>
+            )}
+
+            {activeTab === 'delivery' && (
+              <div className="space-y-2.5 text-xs text-neutral-700 animate-fade-in font-mono">
+                <div className="p-3 bg-neutral-50 hairline-all space-y-1">
+                  <div className="font-bold text-black text-[11px] uppercase flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Швидка доставка Новою Поштою (1-2 дні)</span>
+                  </div>
+                  <p className="text-[11px] text-neutral-600 leading-relaxed font-sans">
+                    Щоденні відправки замовлень до 18:00 зі складу в Києві. Отримання у будь-якому відділенні чи поштоматі України.
+                  </p>
+                </div>
+                <div className="p-3 bg-neutral-50 hairline-all space-y-1">
+                  <div className="font-bold text-black text-[11px] uppercase flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-dune-ochre" />
+                    <span>Оплата при отриманні & Обмін 14 днів</span>
+                  </div>
+                  <p className="text-[11px] text-neutral-600 leading-relaxed font-sans">
+                    Оглядайте та приміряйте речі у відділенні Нової Пошти перед оплатою. Гарантований обмін або повернення коштів протягом 14 днів згідно із Законом України «Про захист прав споживачів».
+                  </p>
                 </div>
               </div>
             )}
