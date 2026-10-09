@@ -1,9 +1,9 @@
-import React from 'react';
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck } from 'lucide-react';
+import React, { useState } from 'react';
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck, Tag } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { findVariant } from '../lib/ids';
 import { useModal } from '../hooks/useModal';
-import { FREE_SHIPPING_THRESHOLD, getRelatedProducts } from '../lib/related';
+import { getRelatedProducts } from '../lib/related';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -15,25 +15,56 @@ export const CartDrawer: React.FC = () => {
     removeFromCart,
     openCartCheckout,
     addToCart,
+    storeSettings,
+    appliedPromo,
+    applyPromoCode,
+    removePromoCode,
   } = useStore();
+
+  const [promoInput, setPromoInput] = useState('');
+  const [promoError, setPromoError] = useState<string | null>(null);
 
   const handleClose = () => setIsCartDrawerOpen(false);
   useModal(isCartDrawerOpen, handleClose);
 
   if (!isCartDrawerOpen) return null;
 
-  const total = cart.reduce((acc, item) => {
+  const subtotal = cart.reduce((acc, item) => {
     const v = findVariant(item.product, item.selectedVariant);
     return acc + (v?.price || item.product.price) * item.quantity;
   }, 0);
 
+  let discountAmount = 0;
+  if (appliedPromo) {
+    if (appliedPromo.discountType === 'percent') {
+      discountAmount = Math.round((subtotal * appliedPromo.discountValue) / 100);
+    } else {
+      discountAmount = Math.min(appliedPromo.discountValue, subtotal);
+    }
+  }
+
+  const finalTotal = Math.max(subtotal - discountAmount, 0);
+
+  const freeThreshold = storeSettings.freeShippingThreshold || 2000;
+  const amountToFreeShipping = Math.max(freeThreshold - subtotal, 0);
+  const freeShippingProgress = Math.min((subtotal / freeThreshold) * 100, 100);
+
   const totalCount = cart.reduce((a, b) => a + b.quantity, 0);
-  const amountToFreeShipping = Math.max(FREE_SHIPPING_THRESHOLD - total, 0);
-  const freeShippingProgress = Math.min((total / FREE_SHIPPING_THRESHOLD) * 100, 100);
 
   // Recommendations for items not in cart
   const cartProducts = cart.map((i) => i.product);
   const crossSell = getRelatedProducts(cartProducts, products, 2);
+
+  const handleApplyPromo = () => {
+    if (!promoInput.trim()) return;
+    const res = applyPromoCode(promoInput, subtotal);
+    if (!res.success) {
+      setPromoError(res.message);
+    } else {
+      setPromoError(null);
+      setPromoInput('');
+    }
+  };
 
   return (
     <div
@@ -176,36 +207,51 @@ export const CartDrawer: React.FC = () => {
                 );
               })}
 
-              {/* In-Cart Cross-sell block */}
+              {/* In-Cart Routine Upsell Bundle */}
               {crossSell.length > 0 && (
                 <div className="pt-4 hairline-t">
-                  <p className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest mb-2.5">
-                    // РЕКОМЕНДОВАНО ДО ЗАМОВЛЕННЯ:
-                  </p>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <p className="font-mono text-[10px] text-dune-ochre uppercase font-bold tracking-widest flex items-center gap-1">
+                      <span>⚡️ КОМПЛЕКСНА РУТИНА ДОГЛЯДУ</span>
+                    </p>
+                    <span className="font-mono text-[9px] uppercase px-1.5 py-0.5 bg-black text-white font-bold">
+                      -15% В КОМПЛЕКТІ
+                    </span>
+                  </div>
                   <div className="space-y-2">
-                    {crossSell.map((rel) => (
-                      <div
-                        key={rel.id}
-                        className="flex items-center justify-between p-2 bg-neutral-50 hairline-all text-xs"
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <img
-                            src={rel.featuredImage}
-                            alt=""
-                            className="w-8 h-8 object-cover bg-white shrink-0"
-                          />
-                          <span className="font-sans font-medium text-black truncate uppercase text-[11px]">
-                            {rel.title}
-                          </span>
-                        </div>
-                        <button
-                          onClick={() => addToCart(rel, 1)}
-                          className="min-h-[30px] inline-flex items-center gap-1 px-2.5 py-1 bg-black text-white font-mono text-[10px] uppercase font-bold shrink-0 ml-2 hover:bg-neutral-800 transition-all"
+                    {crossSell.map((rel) => {
+                      const bundlePrice = Math.round(rel.price * 0.85);
+                      return (
+                        <div
+                          key={rel.id}
+                          className="flex items-center justify-between p-2.5 bg-neutral-50 hairline-all text-xs group hover:border-black transition-colors"
                         >
-                          <span>+ {rel.price} ₴</span>
-                        </button>
-                      </div>
-                    ))}
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <img
+                              src={rel.featuredImage}
+                              alt=""
+                              className="w-10 h-10 object-cover bg-white shrink-0 mix-blend-multiply hairline-all"
+                            />
+                            <div className="truncate">
+                              <span className="font-sans font-medium text-black truncate uppercase text-[11px] block">
+                                {rel.title}
+                              </span>
+                              <div className="flex items-baseline gap-1.5 mt-0.5 font-mono text-[11px]">
+                                <span className="font-bold text-black tabular-nums">{bundlePrice} ₴</span>
+                                <span className="text-[10px] text-neutral-400 line-through tabular-nums">{rel.price} ₴</span>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => addToCart(rel, 1)}
+                            className="min-h-[32px] inline-flex items-center gap-1 px-3 py-1 bg-black text-white font-mono text-[10px] uppercase font-bold shrink-0 ml-2 hover:bg-neutral-800 active:scale-95 transition-all"
+                            title="Додати до комплекту"
+                          >
+                            <span>+ ДОДАТИ</span>
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -230,6 +276,72 @@ export const CartDrawer: React.FC = () => {
         {/* Footer & Checkout CTA */}
         {cart.length > 0 && (
           <div className="p-4 sm:p-5 hairline-t bg-neutral-50 space-y-3 font-mono">
+            {/* Promo Code Input or Active Promo Badge */}
+            <div className="pb-1">
+              {appliedPromo ? (
+                <div className="p-2.5 bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-1.5 text-emerald-800">
+                    <Tag className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>ПРОМОКОД: <strong>{appliedPromo.code}</strong></span>
+                    <span className="font-bold">(-{discountAmount.toLocaleString('uk-UA')} ₴)</span>
+                  </div>
+                  <button
+                    onClick={removePromoCode}
+                    className="text-neutral-400 hover:text-black p-0.5"
+                    title="Видалити промокод"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-1.5">
+                  <div className="flex gap-1.5">
+                    <input
+                      type="text"
+                      placeholder="ПРОМОКОД (НАПР. BEAUTY10)"
+                      value={promoInput}
+                      onChange={(e) => {
+                        setPromoInput(e.target.value.toUpperCase());
+                        setPromoError(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleApplyPromo();
+                        }
+                      }}
+                      className="flex-1 px-3 py-1.5 bg-white hairline-all text-xs uppercase focus:outline-none focus:border-black"
+                    />
+                    <button
+                      onClick={handleApplyPromo}
+                      className="px-3 py-1.5 bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase transition-colors shrink-0"
+                    >
+                      ЗАСТОСУВАТИ
+                    </button>
+                  </div>
+                  {promoError && (
+                    <p className="text-[10px] text-rose-600 font-mono">{promoError}</p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-between items-center text-xs text-neutral-600">
+              <span className="uppercase">Сума замовлення:</span>
+              <span className="text-black font-semibold tabular-nums">
+                {subtotal.toLocaleString('uk-UA')} ₴
+              </span>
+            </div>
+
+            {discountAmount > 0 && (
+              <div className="flex justify-between items-center text-xs text-emerald-600 font-bold">
+                <span className="uppercase">Знижка:</span>
+                <span className="tabular-nums">
+                  -{discountAmount.toLocaleString('uk-UA')} ₴
+                </span>
+              </div>
+            )}
+
             <div className="flex justify-between items-center text-xs text-neutral-600">
               <span className="uppercase">Доставка:</span>
               <span className={amountToFreeShipping === 0 ? 'text-dune-ochre font-bold' : 'text-neutral-800'}>
@@ -238,9 +350,9 @@ export const CartDrawer: React.FC = () => {
             </div>
 
             <div className="flex justify-between items-center text-sm font-bold text-black hairline-t pt-2.5">
-              <span className="uppercase">РАЗОМ:</span>
+              <span className="uppercase">РАЗОМ ДО СПЛАТИ:</span>
               <span className="text-base text-black font-bold tabular-nums">
-                {total.toLocaleString('uk-UA')} ₴
+                {finalTotal.toLocaleString('uk-UA')} ₴
               </span>
             </div>
 

@@ -11,6 +11,14 @@ import { CheckoutModal } from './components/CheckoutModal';
 import { CartDrawer } from './components/CartDrawer';
 import { Footer } from './components/Footer';
 
+import { ContactWidget } from './components/ContactWidget';
+import { WishlistModal } from './components/WishlistModal';
+import { SearchModal } from './components/SearchModal';
+import { SocialProofToast } from './components/SocialProofToast';
+import { ToastContainer } from './components/ToastContainer';
+import { RecentlyViewed } from './components/RecentlyViewed';
+import { ScrollToTop } from './components/ScrollToTop';
+
 // Code-splitting heavy components (Admin Hub: 2400+ LOC & Policy docs)
 // This cuts initial bundle size drastically for storefront visitors
 const AdminControlHub = lazy(() =>
@@ -31,8 +39,15 @@ export const AppContent: React.FC = () => {
         <TrustBadges />
         <ProductGrid />
         <ReviewsSection />
+        <RecentlyViewed />
       </main>
       <Footer />
+
+      {/* Floating Elements: Contact Button (Right), Social Proof (Left), Scroll to Top */}
+      <ContactWidget />
+      <SocialProofToast />
+      <ScrollToTop />
+      <ToastContainer />
 
       {/* Sticky Mobile Floating Quick Bar */}
       <MobileFloatingBar />
@@ -41,6 +56,8 @@ export const AppContent: React.FC = () => {
       <ProductDetailModal />
       <CheckoutModal />
       <CartDrawer />
+      <WishlistModal />
+      <SearchModal />
 
       {/* Lazy Modals loaded only on demand */}
       {isPolicyModalOpen && (

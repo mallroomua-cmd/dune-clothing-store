@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ShoppingBag, Zap, CheckCircle2, Star } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ShoppingBag, Zap, CheckCircle2, Star, Heart } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { useStore } from '../context/StoreContext';
 import { ProductJsonLd } from './ProductJsonLd';
@@ -16,10 +16,19 @@ export const ProductDetailModal: React.FC = () => {
     products,
     addToCart,
     openQuickOrder,
+    isInWishlist,
+    toggleWishlist,
+    addRecentlyViewed,
   } = useStore();
 
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [added, setAdded] = useState(false);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      addRecentlyViewed(selectedProduct.id);
+    }
+  }, [selectedProduct?.id]);
 
   const handleClose = () => {
     setSelectedProduct(null);
@@ -43,6 +52,20 @@ export const ProductDetailModal: React.FC = () => {
 
   // Cross-sell items
   const related = getRelatedProducts([selectedProduct], products, 2);
+
+  const dermBadges = React.useMemo(() => {
+    if (!selectedProduct) return [];
+    const text = `${selectedProduct.title} ${(selectedProduct.tags || []).join(' ')}`.toLowerCase();
+    const badges: string[] = [];
+    if (text.includes('центел') || text.includes('centella') || text.includes('cica')) badges.push('🌿 100% Центелла азіатська');
+    if (text.includes('муцин') || text.includes('snail')) badges.push('🐌 96% Муцин равлика');
+    if (text.includes('spf') || text.includes('сонцезах')) badges.push('☀️ SPF 50+ PA++++ фотостабільні фільтри');
+    if (text.includes('ніацинамід') || text.includes('niacinamide')) badges.push('✨ Ніацинамід + Цинк');
+    if (text.includes('гіалурон') || text.includes('hyaluron')) badges.push('💧 8 видів гіалуронової к-ти');
+    if (text.includes('bha') || text.includes('чайне дерево') || text.includes('salicylic')) badges.push('🍃 BHA + Олія чайного дерева');
+    if (text.includes('пробіотик') || text.includes('рис') || text.includes('rice')) badges.push('🌾 Екстракт рису + Пробіотики');
+    return badges;
+  }, [selectedProduct]);
 
   const handleAddAndClose = () => {
     addToCart(selectedProduct, 1, selectedVariant || currentVariant?.title);
@@ -69,6 +92,20 @@ export const ProductDetailModal: React.FC = () => {
       >
         {/* Mobile top handle */}
         <div className="w-10 h-1 bg-neutral-300 mx-auto my-2 sm:hidden shrink-0" />
+
+        {/* Wishlist toggle button */}
+        <button
+          onClick={() => toggleWishlist(selectedProduct.id)}
+          aria-label={isInWishlist(selectedProduct.id) ? 'У списку бажань' : 'Додати в список бажань'}
+          className="absolute top-3 right-12 sm:top-4 sm:right-14 z-20 w-8 h-8 font-mono text-neutral-400 hover:text-black flex items-center justify-center transition-colors"
+          title={isInWishlist(selectedProduct.id) ? 'У списку бажань' : 'Зберегти товар'}
+        >
+          <Heart
+            className={`w-4 h-4 ${
+              isInWishlist(selectedProduct.id) ? 'text-rose-500 fill-rose-500' : 'text-neutral-400 hover:text-rose-500'
+            }`}
+          />
+        </button>
 
         {/* Close Button */}
         <button
@@ -129,6 +166,20 @@ export const ProductDetailModal: React.FC = () => {
           <h2 className="text-lg sm:text-xl font-medium text-black uppercase mb-2 leading-snug">
             {selectedProduct.title}
           </h2>
+
+          {/* Active Derm Ingredients */}
+          {dermBadges.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {dermBadges.map((b) => (
+                <span
+                  key={b}
+                  className="font-mono text-[10px] font-bold px-2 py-0.5 bg-neutral-100 text-black border border-neutral-200 uppercase tracking-wider"
+                >
+                  {b}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Rating */}
           <div className="flex items-center gap-2 mb-3 font-mono text-xs">

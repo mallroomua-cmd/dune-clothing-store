@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Settings, Phone, Sparkles, Truck } from 'lucide-react';
+import { ShoppingBag, Settings, Phone, Sparkles, Truck, Search, Heart } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { getDispatchStatus } from '../lib/related';
 
 export const Header: React.FC = () => {
-  const { cart, setIsAdminOpen, setIsCartDrawerOpen, isAdminOpen, openPolicyModal } = useStore();
+  const {
+    cart,
+    wishlist,
+    setIsAdminOpen,
+    setIsCartDrawerOpen,
+    setIsWishlistOpen,
+    setIsSearchOpen,
+    isAdminOpen,
+    openPolicyModal,
+    storeSettings,
+  } = useStore();
   const totalCartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const totalWishlistCount = wishlist.length;
   const dispatch = getDispatchStatus();
 
   const [isAdminVisible, setIsAdminVisible] = useState<boolean>(() => {
@@ -34,12 +45,16 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener('hashchange', updateVisibility);
   }, []);
 
+  const freeThreshold = storeSettings.freeShippingThreshold || 2000;
+  const phoneFormatted = storeSettings.phone || '0 (800) 33-22-11';
+  const cleanPhoneLink = `tel:${phoneFormatted.replace(/[^\d+]/g, '')}`;
+
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md hairline-b transition-all">
       {/* Top DUNE / Stiletto Ticker Bar */}
       <div className="bg-black text-white py-1.5 px-4 overflow-hidden text-[11px] font-mono tracking-widest uppercase">
         <div className="marquee-track flex items-center gap-8 whitespace-nowrap">
-          <span>★ БЕЗКОШТОВНА ДОСТАВКА ВІД 2 000 ₴</span>
+          <span>★ БЕЗКОШТОВНА ДОСТАВКА ВІД {freeThreshold.toLocaleString('uk-UA')} ₴</span>
           <span className="text-dune-ochre">///</span>
           <span>ВІДПРАВКА СЬОГОДНІ: {dispatch.text}</span>
           <span className="text-dune-ochre">///</span>
@@ -47,7 +62,7 @@ export const Header: React.FC = () => {
           <span className="text-dune-ochre">///</span>
           <span>ОПЛАТА ПРИ ОТРИМАННІ БЕЗ ПЕРЕДОПЛАТИ</span>
           <span className="text-dune-ochre">///</span>
-          <span>★ ОФІЦІЙНИЙ ДИСТРИБ'ЮТОР COSRX & BEAUTY OF JOSEON</span>
+          <span>★ ОФІЦІЙНИЙ ДИСТРИБ'ЮТОР COSRX, ROUND LAB & BEAUTY OF JOSEON</span>
           <span className="text-dune-ochre">///</span>
           <span>ВІДПРАВКА СЬОГОДНІ: {dispatch.text}</span>
         </div>
@@ -59,7 +74,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-3">
             <a href="#" className="flex flex-col group">
               <span className="text-2xl sm:text-3xl font-black font-display tracking-tight text-black group-hover:text-dune-ochre transition-colors">
-                MALLROOM
+                {storeSettings.storeName || 'MALLROOM'}
               </span>
               <span className="text-[10px] font-mono font-medium tracking-widest text-neutral-500 uppercase -mt-1 flex items-center gap-1">
                 <span>SKINCARE CONCEPT STORE</span>
@@ -98,16 +113,39 @@ export const Header: React.FC = () => {
               <span>[ КОНТАКТИ ]</span>
             </button>
             <a
-              href="tel:+380800332211"
+              href={cleanPhoneLink}
               className="inline-flex items-center gap-1 text-neutral-500 hover:text-black transition-colors font-bold"
             >
               <Phone className="w-3.5 h-3.5 text-[#dec400]" />
-              <span>0 (800) 33-22-11</span>
+              <span>{phoneFormatted}</span>
             </a>
           </nav>
 
           {/* Right Action Utilities */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
+            {/* Quick Search Button */}
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="inline-flex items-center justify-center min-h-[40px] px-2.5 sm:px-3 py-2 text-xs font-mono font-semibold uppercase text-neutral-800 bg-neutral-100 hover:bg-neutral-200 hairline-all transition-all active:scale-95"
+              title="Швидкий пошук товарів"
+              aria-label="Пошук товарів"
+            >
+              <Search className="w-3.5 h-3.5 sm:mr-1 text-black" />
+              <span className="hidden sm:inline">ПОШУК</span>
+            </button>
+
+            {/* Wishlist Button */}
+            <button
+              onClick={() => setIsWishlistOpen(true)}
+              className="relative inline-flex items-center justify-center min-h-[40px] px-2.5 sm:px-3 py-2 text-xs font-mono font-semibold uppercase text-neutral-800 bg-neutral-100 hover:bg-neutral-200 hairline-all transition-all active:scale-95"
+              title="Збережені товари"
+              aria-label="Список бажань"
+            >
+              <Heart className={`w-3.5 h-3.5 ${totalWishlistCount > 0 ? 'text-rose-500 fill-current' : 'text-neutral-700'}`} />
+              <span className="hidden sm:inline ml-1.5">WISHLIST</span>
+              <span className="ml-1 text-dune-ochre">[{totalWishlistCount}]</span>
+            </button>
+
             {/* Quick Policies Icon Button for mobile & tablet */}
             <button
               onClick={() => openPolicyModal('shipping')}
@@ -138,12 +176,12 @@ export const Header: React.FC = () => {
             {/* Stiletto Cart Button: BAG [ 0 ] */}
             <button
               onClick={() => setIsCartDrawerOpen(true)}
-              className="relative inline-flex items-center justify-center min-h-[44px] px-4 py-2.5 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.98]"
+              className="relative inline-flex items-center justify-center min-h-[44px] px-3.5 sm:px-4 py-2.5 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.98]"
               aria-label="Кошик покупок"
             >
-              <ShoppingBag className="w-4 h-4 mr-2" />
+              <ShoppingBag className="w-4 h-4 mr-1.5 sm:mr-2" />
               <span>BAG</span>
-              <span className="ml-1.5 text-dune-ochre">[{totalCartCount}]</span>
+              <span className="ml-1 text-dune-ochre">[{totalCartCount}]</span>
             </button>
           </div>
         </div>

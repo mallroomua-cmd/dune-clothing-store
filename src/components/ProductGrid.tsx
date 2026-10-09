@@ -5,10 +5,27 @@ import { ProductCard } from './ProductCard';
 
 const PAGE_SIZE = 12;
 
+export interface SkinConcern {
+  id: string;
+  label: string;
+  keywords: string[];
+}
+
+export const SKIN_CONCERNS: SkinConcern[] = [
+  { id: 'all', label: 'УСІ ПОТРЕБИ', keywords: [] },
+  { id: 'acne', label: '🔴 ПРОТИ АКНЕ & ПОР', keywords: ['акне', 'bha', 'чайне дерево', 'пори', 'саліцил', 'себум'] },
+  { id: 'hydration', label: '💧 ЗВОЛОЖЕННЯ & БАР’ЄР', keywords: ['зволоження', 'гіалурон', 'муцин', 'бар’єр', 'суха', 'зневодн'] },
+  { id: 'spf', label: '☀️ SPF ЗАХИСТ 50+', keywords: ['spf', 'сонцезах', 'уф', 'uv'] },
+  { id: 'calming', label: '🌿 ЧУТЛИВІСТЬ & ЦЕНТЕЛЛА', keywords: ['центел', 'заспокоєння', 'чутлив', 'cica', 'пантенол'] },
+  { id: 'brightening', label: '✨ СЯЙВО & ОСВІТЛЕННЯ', keywords: ['сяйво', 'ніацинамід', 'вітамін с', 'освітлення', 'пробіотик'] },
+  { id: 'antiage', label: '⏳ ВІДНОВЛЕННЯ & ANTI-AGE', keywords: ['регенерат', 'антивік', 'пружність', 'колаген', 'пептид'] },
+];
+
 export const ProductGrid: React.FC = () => {
   const { products } = useStore();
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedConcern, setSelectedConcern] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price_asc' | 'price_desc' | 'discount'>('popular');
   const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
 
@@ -47,6 +64,16 @@ export const ProductGrid: React.FC = () => {
       result = result.filter((p) => (p.productType || 'Інше') === selectedCategory);
     }
 
+    if (selectedConcern !== 'all') {
+      const concernObj = SKIN_CONCERNS.find((c) => c.id === selectedConcern);
+      if (concernObj) {
+        result = result.filter((p) => {
+          const text = `${p.title} ${(p.tags || []).join(' ')} ${p.productType || ''}`.toLowerCase();
+          return concernObj.keywords.some((kw) => text.includes(kw));
+        });
+      }
+    }
+
     if (sortBy === 'price_asc') {
       result.sort((a, b) => a.price - b.price);
     } else if (sortBy === 'price_desc') {
@@ -60,7 +87,7 @@ export const ProductGrid: React.FC = () => {
     }
 
     return result;
-  }, [products, search, selectedCategory, sortBy]);
+  }, [products, search, selectedCategory, selectedConcern, sortBy]);
 
   const displayedProducts = filteredProducts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProducts.length;
@@ -161,6 +188,44 @@ export const ProductGrid: React.FC = () => {
                 </button>
               );
             })}
+          </div>
+
+          {/* Skincare Concern Filter Pills */}
+          <div className="space-y-1.5 pt-1 hairline-t">
+            <div className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest flex items-center justify-between">
+              <span>// ПІДБІР ЗА ПОТРЕБОЮ ШКІРИ:</span>
+              {(selectedConcern !== 'all' || selectedCategory !== 'all' || search) && (
+                <button
+                  onClick={() => {
+                    setSelectedCategory('all');
+                    setSelectedConcern('all');
+                    setSearch('');
+                    setVisibleCount(PAGE_SIZE);
+                  }}
+                  className="text-dune-ochre hover:underline uppercase text-[10px] font-bold"
+                >
+                  ✕ СКИНУТИ ВСІ ФІЛЬТРИ
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-none">
+              {SKIN_CONCERNS.map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => {
+                    setSelectedConcern(c.id);
+                    setVisibleCount(PAGE_SIZE);
+                  }}
+                  className={`min-h-[32px] px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap transition-all active:scale-[0.98] ${
+                    selectedConcern === c.id
+                      ? 'bg-black text-white hairline-all shadow-sm'
+                      : 'bg-neutral-50 text-neutral-700 hover:bg-neutral-100 hairline-all'
+                  }`}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

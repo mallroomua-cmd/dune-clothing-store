@@ -1,11 +1,12 @@
 import React from 'react';
-import { ShoppingBag, Zap, Eye, Check } from 'lucide-react';
+import { ShoppingBag, Zap, Eye, Check, Heart } from 'lucide-react';
 import { Product } from '../types';
 import { useStore } from '../context/StoreContext';
 
 export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
-  const { addToCart, openQuickOrder, setSelectedProduct } = useStore();
+  const { addToCart, openQuickOrder, setSelectedProduct, isInWishlist, toggleWishlist, addRecentlyViewed } = useStore();
   const [added, setAdded] = React.useState(false);
+  const isFav = isInWishlist(product.id);
 
   const discountPercent =
     product.compareAtPrice && product.compareAtPrice > product.price
@@ -24,9 +25,32 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
     openQuickOrder(product);
   };
 
+  const handleCardClick = () => {
+    addRecentlyViewed(product.id);
+    setSelectedProduct(product);
+  };
+
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleWishlist(product.id);
+  };
+
+  const dermBadges = React.useMemo(() => {
+    const text = `${product.title} ${(product.tags || []).join(' ')}`.toLowerCase();
+    const badges: string[] = [];
+    if (text.includes('центел') || text.includes('centella') || text.includes('cica')) badges.push('🌿 ЦЕНТЕЛЛА');
+    if (text.includes('муцин') || text.includes('snail')) badges.push('🐌 МУЦИН 96%');
+    if (text.includes('spf') || text.includes('сонцезах')) badges.push('☀️ SPF 50+');
+    if (text.includes('ніацинамід') || text.includes('niacinamide')) badges.push('✨ НІАЦИНАМІД');
+    if (text.includes('гіалурон') || text.includes('hyaluron')) badges.push('💧 ГІАЛУРОН');
+    if (text.includes('bha') || text.includes('чайне дерево') || text.includes('salicylic')) badges.push('🍃 BHA + TEA TREE');
+    if (text.includes('пробіотик') || text.includes('рис') || text.includes('rice')) badges.push('🌾 ПРОБІОТИКИ');
+    return badges.slice(0, 2);
+  }, [product.title, product.tags]);
+
   return (
     <div
-      onClick={() => setSelectedProduct(product)}
+      onClick={handleCardClick}
       className="group relative bg-white hairline-all hover:border-black transition-all duration-200 flex flex-col cursor-pointer"
     >
       {/* Badges container */}
@@ -40,6 +64,20 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           В НАЯВНОСТІ
         </span>
       </div>
+
+      {/* Wishlist Heart Toggle Button */}
+      <button
+        onClick={handleWishlistClick}
+        aria-label={isFav ? 'Видалити з обраного' : 'Додати в обране'}
+        className="absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-neutral-600 hover:text-black flex items-center justify-center transition-all shadow-sm active:scale-90"
+        title={isFav ? 'У списку бажань' : 'Зберегти'}
+      >
+        <Heart
+          className={`w-4 h-4 transition-colors ${
+            isFav ? 'text-rose-500 fill-rose-500' : 'text-neutral-500 hover:text-rose-500'
+          }`}
+        />
+      </button>
 
       {/* Image container with DUNE #F6F6F6 background */}
       <div className="relative aspect-square w-full bg-[#f6f6f6] overflow-hidden">
@@ -72,6 +110,20 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           <span className="text-neutral-300">//</span>
           <span className="text-neutral-400">{product.productType || 'ITEM'}</span>
         </div>
+
+        {/* Active Derm Ingredients */}
+        {dermBadges.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-1.5">
+            {dermBadges.map((badge) => (
+              <span
+                key={badge}
+                className="font-mono text-[9px] font-bold px-1.5 py-0.5 bg-neutral-100 text-neutral-800 tracking-wider uppercase border border-neutral-200"
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Title */}
         <h3 className="font-sans font-medium text-xs sm:text-sm text-black line-clamp-2 uppercase group-hover:text-dune-ochre transition-colors leading-snug mb-2">

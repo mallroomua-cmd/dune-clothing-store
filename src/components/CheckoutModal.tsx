@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { CheckCircle, ShieldCheck, Truck, CreditCard, Banknote } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { formatUaPhone, POPULAR_UA_CITIES } from '../lib/formatters';
+import { formatUaPhone } from '../lib/formatters';
 import { findVariant } from '../lib/ids';
 import { useModal } from '../hooks/useModal';
+import { NovaPoshtaPicker } from './NovaPoshtaPicker';
 
 export const CheckoutModal: React.FC = () => {
   const {
@@ -13,6 +14,7 @@ export const CheckoutModal: React.FC = () => {
     checkoutVariant,
     cart,
     submitOrder,
+    appliedPromo,
   } = useStore();
 
   const isQuick = !!checkoutProduct;
@@ -31,6 +33,18 @@ export const CheckoutModal: React.FC = () => {
   const [orderNumber, setOrderNumber] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Restore saved name and phone for returning customers
+  React.useEffect(() => {
+    try {
+      const savedPhone = localStorage.getItem('mallroom_saved_phone');
+      const savedName = localStorage.getItem('mallroom_saved_name');
+      if (savedPhone) setPhone(savedPhone);
+      if (savedName) setName(savedName);
+    } catch {
+      // ignore
+    }
+  }, []);
+
   const handleClose = () => {
     setIsCheckoutOpen(false);
     setOrderComplete(false);
@@ -45,10 +59,21 @@ export const CheckoutModal: React.FC = () => {
     ? [{ product: checkoutProduct, quantity: 1, selectedVariant: checkoutVariant }]
     : cart;
 
-  const total = items.reduce((acc, item) => {
+  const subtotal = items.reduce((acc, item) => {
     const v = findVariant(item.product, item.selectedVariant);
     return acc + (v?.price || item.product.price) * item.quantity;
   }, 0);
+
+  let discountAmount = 0;
+  if (appliedPromo) {
+    if (appliedPromo.discountType === 'percent') {
+      discountAmount = Math.round((subtotal * appliedPromo.discountValue) / 100);
+    } else {
+      discountAmount = Math.min(appliedPromo.discountValue, subtotal);
+    }
+  }
+
+  const finalTotal = Math.max(subtotal - discountAmount, 0);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatUaPhone(e.target.value);
@@ -73,6 +98,10 @@ export const CheckoutModal: React.FC = () => {
     setIsSubmitting(true);
     try {
       const elapsedMs = Date.now() - openedAt;
+      try {
+        localStorage.setItem('mallroom_saved_phone', phone.trim());
+        if (name.trim()) localStorage.setItem('mallroom_saved_name', name.trim());
+      } catch {}
       const res = await submitOrder({
         name: name.trim() || (isQuick ? 'Клієнт (В 1 клік)' : 'Клієнт'),
         phone: phone.trim(),
@@ -83,6 +112,8 @@ export const CheckoutModal: React.FC = () => {
         notes: notes.trim(),
         website,
         elapsedMs,
+        promoCode: appliedPromo?.code,
+        discountAmount,
       });
 
       setOrderNumber(res.orderId);
@@ -148,8 +179,14 @@ export const CheckoutModal: React.FC = () => {
               </div>
               <div className="flex justify-between font-bold text-sm text-black border-t border-neutral-200 pt-2">
                 <span>СУМА ДО СПЛАТИ:</span>
-                <span className="tabular-nums">{total.toLocaleString('uk-UA')} ₴</span>
+                <span className="tabular-nums text-dune-ochre">{finalTotal.toLocaleString('uk-UA')} ₴</span>
               </div>
+              {discountAmount > 0 && (
+                <div className="flex justify-between text-xs text-emerald-600">
+                  <span>Знижка за промокодом:</span>
+                  <span>-{discountAmount.toLocaleString('uk-UA')} ₴</span>
+                </div>
+              )}
             </div>
 
             <button
@@ -207,8 +244,14 @@ export const CheckoutModal: React.FC = () => {
               })}
               <div className="hairline-t pt-2 flex justify-between items-center text-xs font-bold text-black">
                 <span>РАЗОМ ДО СПЛАТИ:</span>
-                <span className="text-sm tabular-nums">{total.toLocaleString('uk-UA')} ₴</span>
+                <span className="text-sm tabular-nums text-dune-ochre">{finalTotal.toLocaleString('uk-UA')} ₴</span>
               </div>
+              {discountAmount > 0 && (
+                <div className="flex justify-between items-center text-[11px] text-emerald-600 font-bold">
+                  <span>ЗНИЖКА ЗА ПРОМОКОДОМ ({appliedPromo?.code}):</span>
+                  <span className="tabular-nums">-{discountAmount.toLocaleString('uk-UA')} ₴</span>
+                </div>
+              )}
             </div>
 
             {errorMessage && (
@@ -268,14 +311,14 @@ export const CheckoutModal: React.FC = () => {
                     <label className="block text-[11px] font-bold text-black uppercase mb-1.5">
                       СЛУЖБА ДОСТАВКИ
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2 mb-3">
                       <button
                         type="button"
                         onClick={() => setDeliveryMethod('nova_poshta')}
                         className={`min-h-[42px] p-2 hairline-all text-xs uppercase font-bold flex items-center justify-center gap-1.5 transition-all ${
                           deliveryMethod === 'nova_poshta'
                             ? 'bg-black text-white'
-                            : 'bg-white text-neutral-600 hover:text-black'
+                            : 'bg-white text-neutral-600 hover:text-black hover:bg-neutral-50'
                         }`}
                       >
                         <Truck className="w-3.5 h-3.5" />
@@ -287,55 +330,51 @@ export const CheckoutModal: React.FC = () => {
                         className={`min-h-[42px] p-2 hairline-all text-xs uppercase font-bold flex items-center justify-center gap-1.5 transition-all ${
                           deliveryMethod === 'ukrposhta'
                             ? 'bg-black text-white'
-                            : 'bg-white text-neutral-600 hover:text-black'
+                            : 'bg-white text-neutral-600 hover:text-black hover:bg-neutral-50'
                         }`}
                       >
                         <Truck className="w-3.5 h-3.5" />
                         <span>УКРПОШТА</span>
                       </button>
                     </div>
-                  </div>
 
-                  {/* City */}
-                  <div>
-                    <label className="block text-[11px] font-bold text-black uppercase mb-1">
-                      МІСТО ДОСТАВКИ *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Київ, Львів, Одеса..."
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      className="w-full min-h-[44px] px-3 py-2 bg-white hairline-all text-xs text-black focus:outline-none focus:border-black mb-1.5"
-                    />
-                    <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-none text-[10px]">
-                      <span className="text-neutral-400 shrink-0">ПОПУЛЯРНІ:</span>
-                      {POPULAR_UA_CITIES.slice(0, 5).map((c) => (
-                        <button
-                          key={c}
-                          type="button"
-                          onClick={() => setCity(c)}
-                          className="px-2 py-0.5 bg-neutral-100 hover:bg-neutral-200 text-black shrink-0 transition-colors"
-                        >
-                          {c}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Branch */}
-                  <div>
-                    <label className="block text-[11px] font-bold text-black uppercase mb-1">
-                      ВІДДІЛЕННЯ АБО ПОШТОМАТ
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Відділення №12 / Поштомат №5432"
-                      value={warehouse}
-                      onChange={(e) => setWarehouse(e.target.value)}
-                      className="w-full min-h-[44px] px-3 py-2 bg-white hairline-all text-xs text-black focus:outline-none focus:border-black"
-                    />
+                    {deliveryMethod === 'nova_poshta' ? (
+                      <NovaPoshtaPicker
+                        selectedCity={city}
+                        onCityChange={setCity}
+                        warehouse={warehouse}
+                        onWarehouseChange={setWarehouse}
+                      />
+                    ) : (
+                      <div className="space-y-3 font-mono">
+                        <div>
+                          <label className="block text-[10px] sm:text-[11px] font-bold text-black uppercase mb-1">
+                            МІСТО ТА ПОШТОВИЙ ІНДЕКС *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="м. Київ, 01001"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            className="w-full min-h-[42px] px-3 py-2 bg-white hairline-all text-xs text-black focus:outline-none focus:border-black font-medium"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] sm:text-[11px] font-bold text-black uppercase mb-1">
+                            ВІДДІЛЕННЯ УКРПОШТИ АБО АДРЕСА *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="Відділення 01001 (вул. Хрещатик, 22)"
+                            value={warehouse}
+                            onChange={(e) => setWarehouse(e.target.value)}
+                            className="w-full min-h-[42px] px-3 py-2 bg-white hairline-all text-xs text-black focus:outline-none focus:border-black font-medium"
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Payment */}
@@ -396,7 +435,7 @@ export const CheckoutModal: React.FC = () => {
                 >
                   {isSubmitting
                     ? 'ОФОРМЛЕННЯ...'
-                    : `ЗАМОВИТИ ЗАРАЗ • ${total.toLocaleString('uk-UA')} ₴`}
+                    : `ЗАМОВИТИ ЗАРАЗ • ${finalTotal.toLocaleString('uk-UA')} ₴`}
                 </button>
               </div>
 

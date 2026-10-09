@@ -1,5 +1,15 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, AnalyticsConfig, CartItem, OrderDetails, StoredOrder, OrderStatus } from '../types';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import {
+  Product,
+  AnalyticsConfig,
+  CartItem,
+  OrderDetails,
+  StoredOrder,
+  OrderStatus,
+  StoreSettings,
+  PromoCode,
+  ToastMessage,
+} from '../types';
 import { PolicyTabKey } from '../components/PolicyModal';
 
 import { SAMPLE_PRODUCTS } from '../lib/sample-data';
@@ -23,9 +33,48 @@ import {
   flushOutboxWithReport,
 } from '../lib/outbox';
 
+export const DEFAULT_STORE_SETTINGS: StoreSettings = {
+  storeName: 'MALLROOM',
+  phone: '0 (800) 33-22-11',
+  telegramUsername: 'mallroom_ua',
+  viberNumber: '+380800332211',
+  workingHours: 'Пн–Нд: 10:00 — 20:00',
+  freeShippingThreshold: 2000,
+  contactWidgetEnabled: true,
+  socialProofEnabled: true,
+  instagramUsername: 'mallroom_ua',
+};
+
+export const DEFAULT_PROMO_CODES: PromoCode[] = [
+  { id: 'promo-1', code: 'BEAUTY10', discountType: 'percent', discountValue: 10, minOrderAmount: 500, isActive: true },
+  { id: 'promo-2', code: 'GLOW50', discountType: 'fixed', discountValue: 50, minOrderAmount: 600, isActive: true },
+  { id: 'promo-3', code: 'VIP15', discountType: 'percent', discountValue: 15, minOrderAmount: 1500, isActive: true },
+];
+
 interface StoreContextType {
   products: Product[];
   analyticsConfig: AnalyticsConfig;
+  storeSettings: StoreSettings;
+  updateStoreSettings: (settings: Partial<StoreSettings>) => void;
+  promoCodes: PromoCode[];
+  addPromoCode: (promo: PromoCode) => void;
+  deletePromoCode: (id: string) => void;
+  togglePromoCode: (id: string) => void;
+  appliedPromo: PromoCode | null;
+  applyPromoCode: (code: string, currentTotal: number) => { success: boolean; message: string };
+  removePromoCode: () => void;
+  wishlist: string[];
+  toggleWishlist: (productId: string) => void;
+  isInWishlist: (productId: string) => boolean;
+  isWishlistOpen: boolean;
+  setIsWishlistOpen: (open: boolean) => void;
+  isSearchOpen: boolean;
+  setIsSearchOpen: (open: boolean) => void;
+  recentlyViewed: string[];
+  addRecentlyViewed: (productId: string) => void;
+  toasts: ToastMessage[];
+  addToast: (message: string, type?: ToastMessage['type'], title?: string) => void;
+  removeToast: (id: string) => void;
   cart: CartItem[];
   orders: StoredOrder[];
   outboxCount: number;
@@ -64,11 +113,14 @@ interface StoreContextType {
     notes?: string;
     website?: string;
     elapsedMs?: number;
+    promoCode?: string;
+    discountAmount?: number;
   }) => Promise<{ success: boolean; orderId: string }>;
   updateProduct: (product: Product) => Promise<void>;
   addProduct: (product: Product) => Promise<void>;
   deleteProduct: (productId: string) => Promise<void>;
   updateOrderStatus: (orderId: string, status: OrderStatus) => Promise<void>;
+  updateOrderTtn: (orderId: string, ttn: string) => Promise<void>;
   deleteOrder: (orderId: string) => Promise<void>;
   clearOrders: () => Promise<void>;
   retryTelegramNotification: (orderId: string) => Promise<{ success: boolean; error?: string }>;
@@ -133,6 +185,165 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return false;
   });
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
+
+  // Store Settings (phone, messengers, widget toggles, schedule, free shipping)
+  const [storeSettings, setStoreSettings] = useState<StoreSettings>(() => {
+    try {
+      const saved = localStorage.getItem('shopify_store_settings');
+      return saved ? { ...DEFAULT_STORE_SETTINGS, ...JSON.parse(saved) } : DEFAULT_STORE_SETTINGS;
+    } catch {
+      return DEFAULT_STORE_SETTINGS;
+    }
+  });
+
+  const updateStoreSettings = (newSettings: Partial<StoreSettings>) => {
+    setStoreSettings((prev) => {
+      const next = { ...prev, ...newSettings };
+      try {
+        localStorage.setItem('shopify_store_settings', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
+  // Promo Codes
+  const [promoCodes, setPromoCodes] = useState<PromoCode[]>(() => {
+    try {
+      const saved = localStorage.getItem('shopify_store_promos');
+      return saved ? JSON.parse(saved) : DEFAULT_PROMO_CODES;
+    } catch {
+      return DEFAULT_PROMO_CODES;
+    }
+  });
+
+  const addPromoCode = (promo: PromoCode) => {
+    setPromoCodes((prev) => {
+      const next = [promo, ...prev];
+      try {
+        localStorage.setItem('shopify_store_promos', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
+  const deletePromoCode = (id: string) => {
+    setPromoCodes((prev) => {
+      const next = prev.filter((p) => p.id !== id);
+      try {
+        localStorage.setItem('shopify_store_promos', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
+  const togglePromoCode = (id: string) => {
+    setPromoCodes((prev) => {
+      const next = prev.map((p) => (p.id === id ? { ...p, isActive: !p.isActive } : p));
+      try {
+        localStorage.setItem('shopify_store_promos', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
+  const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
+
+  const applyPromoCode = (code: string, currentTotal: number) => {
+    const clean = code.trim().toUpperCase();
+    const found = promoCodes.find((p) => p.code.toUpperCase() === clean && p.isActive);
+    if (!found) {
+      return { success: false, message: 'Промокод не знайдено або термін його дії минув' };
+    }
+    if (found.minOrderAmount && currentTotal < found.minOrderAmount) {
+      return {
+        success: false,
+        message: `Мінімальна сума замовлення для промокоду ${found.code}: ${found.minOrderAmount.toLocaleString('uk-UA')} ₴`,
+      };
+    }
+    setAppliedPromo(found);
+    return { success: true, message: `Промокод ${found.code} активовано!` };
+  };
+
+  const removePromoCode = () => {
+    setAppliedPromo(null);
+  };
+
+  // Toast Notifications
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  const removeToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const addToast = useCallback((message: string, type: ToastMessage['type'] = 'info', title?: string) => {
+    const id = Math.random().toString(36).substring(2, 9);
+    setToasts((prev) => [...prev, { id, message, type, title }]);
+    setTimeout(() => {
+      removeToast(id);
+    }, 3500);
+  }, [removeToast]);
+
+  // Wishlist
+  const [wishlist, setWishlist] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('shopify_store_wishlist');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const toggleWishlist = (productId: string) => {
+    setWishlist((prev) => {
+      const exists = prev.includes(productId);
+      const next = exists ? prev.filter((id) => id !== productId) : [...prev, productId];
+      try {
+        localStorage.setItem('shopify_store_wishlist', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      if (!exists) {
+        addToast('Додано до списку бажань', 'success');
+      } else {
+        addToast('Вилучено зі списку бажань', 'info');
+      }
+      return next;
+    });
+  };
+
+  const isInWishlist = (productId: string) => wishlist.includes(productId);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Recently Viewed
+  const [recentlyViewed, setRecentlyViewed] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('shopify_store_recent');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const addRecentlyViewed = (productId: string) => {
+    setRecentlyViewed((prev) => {
+      const next = [productId, ...prev.filter((id) => id !== productId)].slice(0, 8);
+      try {
+        localStorage.setItem('shopify_store_recent', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
 
   // Policy Modal state (Privacy, Refund, Shipping, Terms, About, Contacts)
   const [isPolicyModalOpen, setIsPolicyModalOpen] = useState<boolean>(() => {
@@ -434,6 +645,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setAnalyticsConfig((prev) => ({ ...prev, ...newConfig }));
   };
 
+  const updateOrderTtn = async (orderId: string, ttn: string) => {
+    setOrders((prev) => {
+      const next = prev.map((o) => (o.orderId === orderId ? { ...o, ttn: ttn.trim() } : o));
+      void dbSet('shopify_store_orders', next);
+      try {
+        localStorage.setItem('shopify_store_orders', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
   const addToCart = (product: Product, quantity = 1, variantTitle?: string) => {
     const v = findVariant(product, variantTitle);
     const chosenVariant = v?.title !== 'Default Title' ? v.title : undefined;
@@ -455,6 +679,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
 
     trackAddToCart(product, quantity, chosenVariant);
+    addToast('Товар успішно додано до кошика', 'success');
   };
 
   const removeFromCart = (productId: string, variantTitle?: string) => {
@@ -521,6 +746,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     notes?: string;
     website?: string;
     elapsedMs?: number;
+    promoCode?: string;
+    discountAmount?: number;
   }): Promise<{ success: boolean; orderId: string }> => {
     const orderId = newOrderId();
 
@@ -534,16 +761,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         ]
       : cart;
 
-    const total = itemsToOrder.reduce((acc, i) => {
+    const rawTotal = itemsToOrder.reduce((acc, i) => {
       const v = findVariant(i.product, i.selectedVariant);
       return acc + (v?.price || i.product.price) * i.quantity;
     }, 0);
+
+    const discountAmount = details.discountAmount || 0;
+    const finalTotal = Math.max(rawTotal - discountAmount, 0);
 
     const fullOrder: OrderDetails = {
       ...details,
       orderId,
       items: itemsToOrder,
-      total,
+      total: finalTotal,
+      promoCode: details.promoCode,
+      discountAmount,
     };
 
     // 1. Direct Telegram dispatch if merchant set token
@@ -604,6 +836,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
     setCheckoutProduct(null);
     setCheckoutVariant('');
+    setAppliedPromo(null);
 
     return { success: true, orderId };
   };
@@ -613,6 +846,27 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       value={{
         products,
         analyticsConfig,
+        storeSettings,
+        updateStoreSettings,
+        promoCodes,
+        addPromoCode,
+        deletePromoCode,
+        togglePromoCode,
+        appliedPromo,
+        applyPromoCode,
+        removePromoCode,
+        wishlist,
+        toggleWishlist,
+        isInWishlist,
+        isWishlistOpen,
+        setIsWishlistOpen,
+        isSearchOpen,
+        setIsSearchOpen,
+        recentlyViewed,
+        addRecentlyViewed,
+        toasts,
+        addToast,
+        removeToast,
         cart,
         orders,
         outboxCount,
@@ -646,6 +900,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         addProduct,
         deleteProduct,
         updateOrderStatus,
+        updateOrderTtn,
         deleteOrder,
         clearOrders,
         retryTelegramNotification,

@@ -38,6 +38,14 @@ export function buildTelegramOrderMessage(order: OrderDetails): string {
       ? '💵 Накладений платіж (при отриманні)'
       : '💳 Оплата карткою';
 
+  const promoInfo = order.promoCode
+    ? `🎟 <b>Промокод:</b> <code>${escTelegramHtml(order.promoCode)}</code> (-${(order.discountAmount || 0).toLocaleString('uk-UA')} ₴)\n`
+    : '';
+
+  const ttnInfo = order.ttn
+    ? `📮 <b>ТТН:</b> <code>${escTelegramHtml(order.ttn)}</code>\n`
+    : '';
+
   const orderNum = order.orderId ? ` #${escTelegramHtml(order.orderId)}` : '';
 
   return (
@@ -49,6 +57,8 @@ export function buildTelegramOrderMessage(order: OrderDetails): string {
     `🏢 <b>Відділення/адреса:</b> ${escTelegramHtml(clipText(order.warehouse, 150)) || 'Уточнюється'}\n` +
     `🚚 <b>Служба доставки:</b> ${deliveryName}\n` +
     `💳 <b>Спосіб оплати:</b> ${paymentName}\n` +
+    promoInfo +
+    ttnInfo +
     `${order.notes ? `💬 <b>Коментар:</b> <i>${escTelegramHtml(clipText(order.notes, 500))}</i>\n` : ''}` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
     `🛍 <b>СПИСОК ТОВАРІВ:</b>\n\n${itemsList}\n` +

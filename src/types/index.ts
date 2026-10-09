@@ -41,6 +41,34 @@ export interface CartItem {
   selectedVariant?: string;
 }
 
+export interface StoreSettings {
+  storeName: string;
+  phone: string;
+  telegramUsername: string;
+  viberNumber: string;
+  workingHours: string;
+  freeShippingThreshold: number;
+  contactWidgetEnabled: boolean;
+  socialProofEnabled: boolean;
+  instagramUsername?: string;
+}
+
+export interface PromoCode {
+  id: string;
+  code: string;
+  discountType: 'percent' | 'fixed';
+  discountValue: number;
+  minOrderAmount?: number;
+  isActive: boolean;
+}
+
+export interface ToastMessage {
+  id: string;
+  title?: string;
+  message: string;
+  type?: 'success' | 'info' | 'warning' | 'error';
+}
+
 export interface OrderDetails {
   orderId?: string;
   name: string;
@@ -54,6 +82,9 @@ export interface OrderDetails {
   total: number;
   website?: string;
   elapsedMs?: number;
+  promoCode?: string;
+  discountAmount?: number;
+  ttn?: string;
 }
 
 export type OrderStatus = 'new' | 'confirmed' | 'shipped' | 'completed' | 'cancelled';
@@ -65,6 +96,7 @@ export interface StoredOrder extends OrderDetails {
   createdAt: number;
   status: OrderStatus;
   syncedToTelegram?: boolean;
+  ttn?: string;
 }
 
 export interface CsvPreviewResult {
