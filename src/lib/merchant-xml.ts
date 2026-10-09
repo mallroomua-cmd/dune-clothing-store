@@ -4,7 +4,11 @@ import { Product } from '../types';
  * Generates official Google Merchant Center / Google Shopping XML (RSS 2.0) feed
  * from loaded Shopify products.
  */
-export function generateGoogleMerchantXml(products: Product[], siteUrl = window.location.origin): string {
+export function generateGoogleMerchantXml(
+  products: Product[],
+  siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://mallroom.com.ua',
+  storeName = 'MALLROOM'
+): string {
   const escapeXml = (unsafe: string) => {
     return unsafe
       .replace(/&/g, '&amp;')
@@ -25,7 +29,7 @@ export function generateGoogleMerchantXml(products: Product[], siteUrl = window.
       const link = `${siteUrl}#${encodeURIComponent(product.handle)}`;
       const imageLink = escapeXml(product.featuredImage || '');
       const priceFormatted = `${product.price.toFixed(2)} UAH`;
-      const brand = escapeXml(product.vendor || 'ШопінгМаркет');
+      const brand = escapeXml(product.vendor || storeName);
       const category = escapeXml(product.productType || 'Товари');
 
       return `    <item>
@@ -47,7 +51,7 @@ export function generateGoogleMerchantXml(products: Product[], siteUrl = window.
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
   <channel>
-    <title>ШопінгМаркет — Товарний фід Google Merchant Center</title>
+    <title>${escapeXml(storeName)} — Товарний фід Google Merchant Center</title>
     <link>${siteUrl}</link>
     <description>Офіційний товарний фід інтернет-магазину</description>
 ${itemsXml}
