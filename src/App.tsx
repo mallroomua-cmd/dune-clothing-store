@@ -3,9 +3,9 @@ import { StoreProvider, useStore } from './context/StoreContext';
 import { Header } from './components/Header';
 import { PromoBanner } from './components/PromoBanner';
 import { BrandLogoSlider } from './components/BrandLogoSlider';
-import { Hero } from './components/Hero';
-import { TrustBadges } from './components/TrustBadges';
 import { ProductGrid } from './components/ProductGrid';
+import { RecentlyViewed } from './components/RecentlyViewed';
+import { TrustBadges } from './components/TrustBadges';
 import { ReviewsSection } from './components/ReviewsSection';
 import { MobileFloatingBar } from './components/MobileFloatingBar';
 import { ProductDetailModal } from './components/ProductDetailModal';
@@ -16,11 +16,8 @@ import { Footer } from './components/Footer';
 import { ContactWidget } from './components/ContactWidget';
 import { WishlistModal } from './components/WishlistModal';
 import { SearchModal } from './components/SearchModal';
-import { SocialProofToast } from './components/SocialProofToast';
 import { ToastContainer } from './components/ToastContainer';
-import { RecentlyViewed } from './components/RecentlyViewed';
 import { ScrollToTop } from './components/ScrollToTop';
-import { FaqSection } from './components/FaqSection';
 
 // Code-splitting heavy components (Admin Hub: 2400+ LOC, Policy docs, Quiz & Tracking modals)
 // This cuts initial bundle size drastically for storefront visitors
@@ -57,18 +54,22 @@ export const AppContent: React.FC = () => {
         {/* Under banner: Horizontal scrolling brand logos (Cosibella style) */}
         <BrandLogoSlider />
 
-        <Hero />
-        <TrustBadges />
+        {/* Product Catalog directly accessible */}
         <ProductGrid />
-        <ReviewsSection />
+
+        {/* Recently viewed products */}
         <RecentlyViewed />
-        <FaqSection />
+
+        {/* Principles of work - moved to the bottom */}
+        <TrustBadges />
+
+        {/* Customer reviews - moved to the bottom */}
+        <ReviewsSection />
       </main>
       <Footer />
 
-      {/* Floating Elements: Contact Button (Right), Social Proof (Left), Scroll to Top */}
+      {/* Floating Elements: Contact Button (Right), Scroll to Top */}
       <ContactWidget />
-      <SocialProofToast />
       <ScrollToTop />
       <ToastContainer />
 
