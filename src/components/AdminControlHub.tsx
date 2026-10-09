@@ -33,6 +33,8 @@ import {
   Tag,
   Copy,
   Truck,
+  Printer,
+  Users,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { Product, OrderStatus, StoredOrder, CsvPreviewResult, StoreSettings } from '../types';
@@ -94,7 +96,12 @@ export const AdminControlHub: React.FC = () => {
   useModal(isAdminOpen, handleClose);
 
   // Active Hub Tab
-  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'settings' | 'feed' | 'marketing'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'clients' | 'settings' | 'feed' | 'marketing'>('products');
+
+  // Module: Clients & CRM state
+  const [clientSearch, setClientSearch] = useState('');
+  const [clientSegmentFilter, setClientSegmentFilter] = useState<'ALL' | 'VIP' | 'REGULAR' | 'NEW'>('ALL');
+  const [selectedClientPhone, setSelectedClientPhone] = useState<string | null>(null);
 
   // PIN Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -678,6 +685,234 @@ export const AdminControlHub: React.FC = () => {
     addToast('Замовлення успішно експортовано у файл CSV', 'success');
   };
 
+  // --- Module: Print Packing Slip (Накладна) ---
+  const handlePrintOrderSlip = (ord: StoredOrder) => {
+    const printWindow = window.open('', '_blank', 'width=800,height=800');
+    if (!printWindow) {
+      addToast('Дозвольте спливаючі вікна для друку накладної', 'error');
+      return;
+    }
+    const itemsHtml = ord.items?.map(it => `
+      <tr>
+        <td style="padding: 10px 8px; border-bottom: 1px solid #e2e8f0;">
+          <div style="font-weight: 600;">${it.product?.title || 'Товар'}</div>
+          ${it.selectedVariant ? `<div style="font-size: 11px; color: #64748b;">Варіант: ${it.selectedVariant}</div>` : ''}
+        </td>
+        <td style="padding: 10px 8px; border-bottom: 1px solid #e2e8f0; text-align: center; font-family: monospace;">${it.quantity}</td>
+        <td style="padding: 10px 8px; border-bottom: 1px solid #e2e8f0; text-align: right; font-family: monospace;">${(it.product?.price || 0).toLocaleString('uk-UA')} ₴</td>
+        <td style="padding: 10px 8px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 700; font-family: monospace;">${((it.product?.price || 0) * it.quantity).toLocaleString('uk-UA')} ₴</td>
+      </tr>
+    `).join('') || '';
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Товарна накладна #${ord.orderId}</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 40px; color: #0f172a; max-width: 800px; margin: 0 auto; line-height: 1.5; }
+          .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0f172a; padding-bottom: 20px; margin-bottom: 24px; }
+          .logo { font-size: 22px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; }
+          .meta { font-size: 12px; color: #64748b; margin-top: 4px; }
+          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; font-size: 13px; }
+          .box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px 16px; border-radius: 8px; }
+          .box h4 { margin: 0 0 8px 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; font-weight: 700; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px; }
+          th { background: #f1f5f9; padding: 10px 8px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #cbd5e1; }
+          .totals { margin-left: auto; width: 320px; font-size: 13px; }
+          .totals div { display: flex; justify-content: space-between; padding: 6px 0; }
+          .grand { font-size: 18px; font-weight: 800; border-top: 2px solid #0f172a; padding-top: 10px; margin-top: 6px; }
+          .notes { margin-top: 20px; font-size: 12px; background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 6px; }
+          .footer { margin-top: 48px; border-top: 1px dashed #cbd5e1; padding-top: 24px; display: flex; justify-content: space-between; font-size: 12px; color: #64748b; }
+          @media print { body { padding: 0; } }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <div class="logo">${storeSettings.storeName || 'DUNE ATELIER'}</div>
+            <div class="meta">Товарно-транспортна накладна / Комплектувальний лист</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 18px; font-weight: 800; font-family: monospace;">#${ord.orderId}</div>
+            <div class="meta">${ord.date}</div>
+            ${ord.ttn ? `<div style="font-weight: 700; color: #0284c7; margin-top: 4px; font-family: monospace;">ТТН: ${ord.ttn}</div>` : ''}
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="box">
+            <h4>Клієнт / Одержувач</h4>
+            <div style="font-weight: 700; font-size: 15px;">${ord.name}</div>
+            <div style="font-family: monospace; margin-top: 2px;">${ord.phone}</div>
+          </div>
+          <div class="box">
+            <h4>Доставка та Оплата</h4>
+            <div>Місто: <strong>${ord.city || 'Уточнюється'}</strong></div>
+            <div>Служба / Відділення: <strong>${ord.warehouse || 'Уточнюється'}</strong></div>
+            <div>Оплата: <strong>${ord.paymentMethod === 'card' ? 'Оплачено онлайн карткою' : 'Накладений платіж (при отриманні)'}</strong></div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Товар</th>
+              <th style="text-align: center;">К-сть</th>
+              <th style="text-align: right;">Ціна</th>
+              <th style="text-align: right;">Сума</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsHtml}
+          </tbody>
+        </table>
+
+        <div class="totals">
+          ${ord.promoCode ? `<div><span>Промокод (${ord.promoCode}):</span><span>-${ord.discountAmount?.toLocaleString('uk-UA')} ₴</span></div>` : ''}
+          <div class="grand"><span>До сплати:</span><span>${ord.total?.toLocaleString('uk-UA')} ₴</span></div>
+        </div>
+
+        ${ord.notes ? `<div class="notes"><strong>Коментар покупця:</strong> ${ord.notes}</div>` : ''}
+
+        <div class="footer">
+          <div>Відпустив: _____________________</div>
+          <div>Отримав: _____________________</div>
+        </div>
+
+        <script>
+          window.onload = function() { window.print(); }
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
+  // --- Module: Clients & CRM Data Aggregation ---
+  const uniqueClients = useMemo(() => {
+    const map = new Map<string, {
+      phone: string;
+      name: string;
+      ordersCount: number;
+      totalSpent: number;
+      lastOrderDate: string;
+      city: string;
+      status: 'vip' | 'regular' | 'new';
+      orders: StoredOrder[];
+    }>();
+
+    orders.forEach((ord) => {
+      const cleanPhone = normalizeUaPhoneForAnalytics(ord.phone) || ord.phone || 'Невідомий';
+      const existing = map.get(cleanPhone);
+      if (existing) {
+        existing.ordersCount += 1;
+        existing.totalSpent += (ord.total || 0);
+        existing.orders.push(ord);
+        if (ord.date > existing.lastOrderDate) {
+          existing.lastOrderDate = ord.date;
+        }
+        if (ord.name && (!existing.name || existing.name === 'Покупець')) {
+          existing.name = ord.name;
+        }
+        if (ord.city && !existing.city) {
+          existing.city = ord.city;
+        }
+      } else {
+        map.set(cleanPhone, {
+          phone: ord.phone,
+          name: ord.name || 'Покупець',
+          ordersCount: 1,
+          totalSpent: ord.total || 0,
+          lastOrderDate: ord.date || '',
+          city: ord.city || '',
+          status: 'new',
+          orders: [ord],
+        });
+      }
+    });
+
+    return Array.from(map.values())
+      .map((c) => {
+        let status: 'vip' | 'regular' | 'new' = 'new';
+        if (c.totalSpent >= 5000) {
+          status = 'vip';
+        } else if (c.ordersCount >= 2) {
+          status = 'regular';
+        }
+        return { ...c, status };
+      })
+      .sort((a, b) => b.totalSpent - a.totalSpent);
+  }, [orders]);
+
+  const filteredClients = useMemo(() => {
+    return uniqueClients.filter((c) => {
+      const matchesSearch =
+        !clientSearch.trim() ||
+        c.name.toLowerCase().includes(clientSearch.toLowerCase()) ||
+        c.phone.toLowerCase().includes(clientSearch.toLowerCase()) ||
+        c.city.toLowerCase().includes(clientSearch.toLowerCase());
+
+      const matchesSegment =
+        clientSegmentFilter === 'ALL' ||
+        (clientSegmentFilter === 'VIP' && c.status === 'vip') ||
+        (clientSegmentFilter === 'REGULAR' && c.status === 'regular') ||
+        (clientSegmentFilter === 'NEW' && c.status === 'new');
+
+      return matchesSearch && matchesSegment;
+    });
+  }, [uniqueClients, clientSearch, clientSegmentFilter]);
+
+  const clientsKpi = useMemo(() => {
+    const totalClients = uniqueClients.length;
+    const vipCount = uniqueClients.filter((c) => c.status === 'vip').length;
+    const regularCount = uniqueClients.filter((c) => c.status === 'regular').length;
+    const totalRevenue = uniqueClients.reduce((acc, c) => acc + c.totalSpent, 0);
+    const avgLtv = totalClients > 0 ? Math.round(totalRevenue / totalClients) : 0;
+    return { totalClients, vipCount, regularCount, totalRevenue, avgLtv };
+  }, [uniqueClients]);
+
+  const handleExportClientsCsv = () => {
+    if (uniqueClients.length === 0) {
+      addToast('Немає клієнтів для експорту', 'info');
+      return;
+    }
+    const headers = [
+      'Телефон',
+      "Ім'я",
+      'Кількість замовлень',
+      'Загальна сума (грн)',
+      'Сегмент',
+      'Місто',
+      'Останнє замовлення',
+    ];
+    const rows = uniqueClients.map((c) => [
+      `"${c.phone}"`,
+      `"${c.name.replace(/"/g, '""')}"`,
+      c.ordersCount,
+      c.totalSpent,
+      c.status === 'vip' ? 'VIP' : c.status === 'regular' ? 'Постійний' : 'Новий',
+      `"${c.city.replace(/"/g, '""')}"`,
+      `"${c.lastOrderDate}"`,
+    ]);
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `clients_crm_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    addToast('Базу клієнтів успішно експортовано в CSV', 'success');
+  };
+
+
   // --- Module 5: Settings & Promo Handlers ---
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
@@ -984,6 +1219,22 @@ export const AdminControlHub: React.FC = () => {
                 )}
               </button>
 
+              <button
+                onClick={() => setActiveTab('clients')}
+                className={`py-3 px-3.5 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
+                  activeTab === 'clients'
+                    ? 'border-brand-600 text-brand-600 bg-white shadow-xs'
+                    : 'border-transparent text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Users className="w-4 h-4" />
+                <span>Клієнти ({uniqueClients.length})</span>
+                {clientsKpi.vipCount > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-800 font-bold border border-amber-300">
+                    {clientsKpi.vipCount} VIP
+                  </span>
+                )}
+              </button>
               <button
                 onClick={() => setActiveTab('marketing')}
                 className={`py-3 px-3.5 text-xs sm:text-sm font-bold border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
@@ -2088,6 +2339,14 @@ export const AdminControlHub: React.FC = () => {
                                       </button>
                                       <button
                                         type="button"
+                                        onClick={() => handlePrintOrderSlip(ord)}
+                                        className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100"
+                                        title="Друкувати накладну"
+                                      >
+                                        <Printer className="w-3.5 h-3.5" />
+                                      </button>
+                                      <button
+                                        type="button"
                                         onClick={() => setSelectedOrderDetails(ord)}
                                         className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                                         title="Переглянути деталі замовлення"
@@ -2204,6 +2463,15 @@ export const AdminControlHub: React.FC = () => {
                               >
                                 <Copy className="w-3 h-3" />
                                 <span>Копіювати для НП</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => handlePrintOrderSlip(selectedOrderDetails)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-800 font-bold text-[11px] shadow-xs border border-slate-300"
+                              >
+                                <Printer className="w-3 h-3" />
+                                <span>Друк накладної</span>
                               </button>
                             </div>
                           )}
@@ -2365,6 +2633,285 @@ export const AdminControlHub: React.FC = () => {
                       </div>
                     </div>
                   )}
+                </div>
+              )}
+
+
+              {/* ======================================================== */}
+              {/* MODULE 6: CLIENTS / CRM DATABASE & ANALYTICS              */}
+              {/* ======================================================== */}
+              {activeTab === 'clients' && (
+                <div className="max-w-6xl mx-auto space-y-6">
+                  {/* KPI Grid */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+                      <div className="text-slate-500 text-xs font-medium">Усього клієнтів</div>
+                      <div className="text-2xl font-black font-mono text-slate-900 mt-1">
+                        {clientsKpi.totalClients}
+                      </div>
+                      <div className="text-[11px] text-slate-400 mt-1">У базі замовлень</div>
+                    </div>
+
+                    <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+                      <div className="text-slate-500 text-xs font-medium">VIP Покупці (від 5 000 ₴)</div>
+                      <div className="text-2xl font-black font-mono text-amber-600 mt-1">
+                        {clientsKpi.vipCount}
+                      </div>
+                      <div className="text-[11px] text-amber-600/80 mt-1">Найвищий пріоритет</div>
+                    </div>
+
+                    <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+                      <div className="text-slate-500 text-xs font-medium">Загальний LTV бази</div>
+                      <div className="text-2xl font-black font-mono text-emerald-600 mt-1">
+                        {clientsKpi.totalRevenue.toLocaleString('uk-UA')} ₴
+                      </div>
+                      <div className="text-[11px] text-slate-400 mt-1">Сума всіх покупок</div>
+                    </div>
+
+                    <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+                      <div className="text-slate-500 text-xs font-medium">Середній чек на клієнта</div>
+                      <div className="text-2xl font-black font-mono text-indigo-600 mt-1">
+                        {clientsKpi.avgLtv.toLocaleString('uk-UA')} ₴
+                      </div>
+                      <div className="text-[11px] text-slate-400 mt-1">LTV на 1 покупця</div>
+                    </div>
+                  </div>
+
+                  {/* Actions & Filters */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                    <div className="flex-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      <div className="relative flex-1">
+                        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                        <input
+                          type="text"
+                          value={clientSearch}
+                          onChange={(e) => setClientSearch(e.target.value)}
+                          placeholder="Пошук за ім'ям, телефоном або містом..."
+                          className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 rounded-xl focus:outline-hidden focus:border-brand-500"
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
+                        {(['ALL', 'VIP', 'REGULAR', 'NEW'] as const).map((seg) => (
+                          <button
+                            key={seg}
+                            type="button"
+                            onClick={() => setClientSegmentFilter(seg)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                              clientSegmentFilter === seg
+                                ? 'bg-slate-900 text-white shadow-xs'
+                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                            }`}
+                          >
+                            {seg === 'ALL' && 'Всі сегменти'}
+                            {seg === 'VIP' && `VIP (${clientsKpi.vipCount})`}
+                            {seg === 'REGULAR' && `Постійні (${clientsKpi.regularCount})`}
+                            {seg === 'NEW' && 'Нові'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleExportClientsCsv}
+                      className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Експорт бази (CSV)</span>
+                    </button>
+                  </div>
+
+                  {/* Clients Table */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs">
+                        <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+                          <tr>
+                            <th className="py-3 px-4">Клієнт</th>
+                            <th className="py-3 px-4">Зв'язок</th>
+                            <th className="py-3 px-4">Місто</th>
+                            <th className="py-3 px-4">Сегмент</th>
+                            <th className="py-3 px-4 text-center">Замовлень</th>
+                            <th className="py-3 px-4 text-right">LTV (Сума)</th>
+                            <th className="py-3 px-4 text-right">Останнє замовлення</th>
+                            <th className="py-3 px-4 text-center">Дії</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {filteredClients.length === 0 ? (
+                            <tr>
+                              <td colSpan={8} className="py-12 text-center text-slate-400">
+                                <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                                <p className="font-medium">Клієнтів не знайдено</p>
+                              </td>
+                            </tr>
+                          ) : (
+                            filteredClients.map((client, idx) => {
+                              const cleanPhone = normalizeUaPhoneForAnalytics(client.phone).replace('+', '');
+                              return (
+                                <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
+                                  <td className="py-3 px-4 font-medium text-slate-900">
+                                    <div className="font-bold">{client.name}</div>
+                                    <div className="font-mono text-slate-400 text-[11px]">{client.phone}</div>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="flex items-center gap-1.5">
+                                      <a
+                                        href={`tel:${client.phone}`}
+                                        className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
+                                        title="Зателефонувати"
+                                      >
+                                        <Phone className="w-3 h-3" />
+                                      </a>
+                                      {cleanPhone && (
+                                        <>
+                                          <a
+                                            href={`https://t.me/+${cleanPhone}`}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="p-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700"
+                                            title="Telegram"
+                                          >
+                                            <Send className="w-3 h-3" />
+                                          </a>
+                                          <a
+                                            href={`viber://chat?number=%2B${cleanPhone}`}
+                                            className="p-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700"
+                                            title="Viber"
+                                          >
+                                            <MessageSquare className="w-3 h-3" />
+                                          </a>
+                                        </>
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td className="py-3 px-4 text-slate-600">
+                                    {client.city || '—'}
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    {client.status === 'vip' && (
+                                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                                        ★ VIP
+                                      </span>
+                                    )}
+                                    {client.status === 'regular' && (
+                                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200">
+                                        Постійний
+                                      </span>
+                                    )}
+                                    {client.status === 'new' && (
+                                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                                        Новий
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className="py-3 px-4 text-center font-mono font-bold text-slate-800">
+                                    {client.ordersCount}
+                                  </td>
+                                  <td className="py-3 px-4 text-right font-mono font-bold text-slate-900">
+                                    {client.totalSpent.toLocaleString('uk-UA')} ₴
+                                  </td>
+                                  <td className="py-3 px-4 text-right font-mono text-slate-500 text-[11px]">
+                                    {client.lastOrderDate || '—'}
+                                  </td>
+                                  <td className="py-3 px-4 text-center">
+                                    <button
+                                      type="button"
+                                      onClick={() => setSelectedClientPhone(client.phone)}
+                                      className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                                      title="Історія замовлень клієнта"
+                                    >
+                                      <Eye className="w-3.5 h-3.5" />
+                                    </button>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Selected Client Orders Modal */}
+                  {selectedClientPhone && (() => {
+                    const client = uniqueClients.find((c) => c.phone === selectedClientPhone);
+                    if (!client) return null;
+                    return (
+                      <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+                        <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200">
+                          <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+                            <div>
+                              <h3 className="font-bold text-slate-900 text-base">{client.name}</h3>
+                              <p className="font-mono text-xs text-slate-500">{client.phone} • {client.city || 'Місто не вказано'}</p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => setSelectedClientPhone(null)}
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                            >
+                              <X className="w-5 h-5" />
+                            </button>
+                          </div>
+                          <div className="p-4 sm:p-5 overflow-y-auto space-y-4">
+                            <div className="grid grid-cols-3 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200/60 text-center">
+                              <div>
+                                <span className="text-[10px] text-slate-400 block uppercase font-bold">Замовлень</span>
+                                <span className="font-mono font-bold text-slate-800 text-sm">{client.ordersCount}</span>
+                              </div>
+                              <div>
+                                <span className="text-[10px] text-slate-400 block uppercase font-bold">LTV</span>
+                                <span className="font-mono font-bold text-emerald-600 text-sm">{client.totalSpent.toLocaleString('uk-UA')} ₴</span>
+                              </div>
+                              <div>
+                                <span className="text-[10px] text-slate-400 block uppercase font-bold">Статус</span>
+                                <span className="text-xs font-bold text-amber-600">{client.status.toUpperCase()}</span>
+                              </div>
+                            </div>
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Історія замовлень</h4>
+                            <div className="space-y-2">
+                              {client.orders.map((ord, i) => (
+                                <div key={i} className="p-3 rounded-xl border border-slate-200 bg-white flex items-center justify-between gap-3 text-xs">
+                                  <div>
+                                    <div className="font-bold text-slate-900 font-mono">#{ord.orderId} • <span className="text-slate-500 font-normal">{ord.date}</span></div>
+                                    <div className="text-[11px] text-slate-500 mt-0.5">
+                                      {ord.items?.map((it) => `${it.product?.title} (x${it.quantity})`).join(', ')}
+                                    </div>
+                                    {ord.ttn && <div className="text-[11px] text-sky-600 font-mono mt-0.5">ТТН: {ord.ttn}</div>}
+                                  </div>
+                                  <div className="text-right shrink-0">
+                                    <div className="font-bold font-mono text-slate-900">{ord.total?.toLocaleString('uk-UA')} ₴</div>
+                                    <div className="mt-1 flex items-center justify-end gap-1">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setSelectedOrderDetails(ord);
+                                          setSelectedClientPhone(null);
+                                        }}
+                                        className="p-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700"
+                                        title="Деталі"
+                                      >
+                                        <Eye className="w-3 h-3" />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handlePrintOrderSlip(ord)}
+                                        className="p-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700"
+                                        title="Друк накладної"
+                                      >
+                                        <Printer className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 

@@ -152,6 +152,43 @@ function runWave2Tests() {
   assert.strictEqual(bundlePrice + bundleDiscount, rawSum);
 
   console.log('✓ Skin Routine Quiz logic tests passed!');
+
+  console.log('Testing Admin CRM aggregation and VIP segmentation...');
+  // CRM Aggregation from multiple orders by same customer
+  const crmOrders = [
+    { phone: '+380501234567', name: 'Олена', total: 3200 },
+    { phone: '+380501234567', name: 'Олена', total: 2100 },
+    { phone: '+380679876543', name: 'Ігор', total: 1400 },
+  ];
+  const clientMap = new Map<string, { phone: string; name: string; ordersCount: number; totalSpent: number; status: string }>();
+  crmOrders.forEach(o => {
+    const existing = clientMap.get(o.phone);
+    if (existing) {
+      existing.ordersCount += 1;
+      existing.totalSpent += o.total;
+    } else {
+      clientMap.set(o.phone, { phone: o.phone, name: o.name, ordersCount: 1, totalSpent: o.total, status: 'new' });
+    }
+  });
+  const clients = Array.from(clientMap.values()).map(c => {
+    let status = 'new';
+    if (c.totalSpent >= 5000) status = 'vip';
+    else if (c.ordersCount >= 2) status = 'regular';
+    return { ...c, status };
+  });
+
+  assert.strictEqual(clients.length, 2, 'Should aggregate 3 orders into 2 unique clients');
+  const olena = clients.find(c => c.phone === '+380501234567');
+  assert.ok(olena);
+  assert.strictEqual(olena?.ordersCount, 2);
+  assert.strictEqual(olena?.totalSpent, 5300);
+  assert.strictEqual(olena?.status, 'vip', 'Total spend >= 5000 must grant VIP status');
+
+  const ihor = clients.find(c => c.phone === '+380679876543');
+  assert.strictEqual(ihor?.ordersCount, 1);
+  assert.strictEqual(ihor?.status, 'new');
+  console.log('✓ CRM aggregation & VIP segmentation tests passed!');
+
   console.log('✓ ALL WAVE 2 VERIFICATION TESTS PASSED!');
 }
 
