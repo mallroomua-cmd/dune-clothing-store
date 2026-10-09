@@ -63,4 +63,19 @@ assert.ok(renderedMsg.includes('900 ₴'), 'Total price should be displayed');
 assert.ok(renderedMsg.includes('📦 Нова Пошта'), 'Delivery method should be displayed');
 assert.ok(renderedMsg.includes('+380501234567'), 'Phone link should be present');
 
+// 4. Test promo code and TTN rendering in Telegram
+const orderWithPromoAndTtn: OrderDetails = {
+  ...mockOrder,
+  orderId: 'ORD-777',
+  promoCode: 'GLOW15',
+  discountAmount: 135,
+  ttn: '20450912345678',
+  total: 765,
+};
+const renderedWithPromo = buildTelegramOrderMessage(orderWithPromoAndTtn);
+assert.ok(renderedWithPromo.includes('GLOW15'), 'Should contain promo code');
+assert.ok(renderedWithPromo.includes('-135 ₴'), 'Should contain discount amount');
+assert.ok(renderedWithPromo.includes('20450912345678'), 'Should contain TTN tracking number');
+assert.ok(renderedWithPromo.includes('765 ₴'), 'Should contain final discounted total');
+
 console.log('✓ All Telegram HTML security & formatting tests passed successfully!');

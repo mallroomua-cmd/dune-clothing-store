@@ -98,7 +98,8 @@ export async function sendTelegramOrderNotification(
       return { success: false, error: data.description || 'Помилка Telegram API' };
     }
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Мережева помилка при зверненні до Telegram' };
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'Мережева помилка при зверненні до Telegram';
+    return { success: false, error: errorMsg };
   }
 }
