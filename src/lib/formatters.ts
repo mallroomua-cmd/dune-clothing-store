@@ -8,6 +8,10 @@ export function formatUaPhone(input: string): string {
 
   if (digits.startsWith('380')) {
     digits = digits.slice(3);
+  } else if (digits.startsWith('80') && digits.length >= 11) {
+    digits = digits.slice(2);
+  } else if (digits.startsWith('38') && digits.length >= 11) {
+    digits = digits.slice(2);
   } else if (digits.startsWith('0')) {
     digits = digits.slice(1);
   }

@@ -82,6 +82,7 @@ export const CheckoutModal: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setErrorMessage(null);
 
     const cleanDigits = phone.replace(/\D/g, '');

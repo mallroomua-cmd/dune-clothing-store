@@ -82,7 +82,7 @@ export const AdminControlHub: React.FC = () => {
   useModal(isAdminOpen, handleClose);
 
   // Active Hub Tab
-  const [activeTab, setActiveTab] = useState<'feed' | 'products' | 'orders' | 'marketing'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'settings' | 'feed' | 'marketing'>('products');
 
   // PIN Authentication state
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
