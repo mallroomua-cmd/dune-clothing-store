@@ -1,22 +1,29 @@
 import { OrderDetails } from '../types';
 
 /**
- * Sends order notification directly to Telegram manager bot/channel
+ * Strict HTML escape for Telegram's parse_mode: 'HTML'.
+ * Prevents 400 Bad Request error when order notes, customer names, or product titles
+ * contain reserved characters like '&', '<', '>', '"', or '\''.
  */
-export async function sendTelegramOrderNotification(
-  order: OrderDetails,
-  botToken: string,
-  chatId: string
-): Promise<{ success: boolean; error?: string }> {
-  if (!botToken.trim() || !chatId.trim()) {
-    return { success: false, error: 'Telegram Bot Token або Chat ID не налаштовані' };
-  }
+export const escTelegramHtml = (s: unknown): string =>
+  String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
 
+export const clipText = (s: unknown, maxLen: number): string =>
+  String(s ?? '').slice(0, maxLen);
+
+/**
+ * Formats the customer order details into safe HTML text for Telegram
+ */
+export function buildTelegramOrderMessage(order: OrderDetails): string {
   const itemsList = order.items
-    .map(
-      (item, idx) =>
-        `${idx + 1}. <b>${item.product.title}</b>\n   • Кількість: ${item.quantity} шт.\n   • Ціна: ${item.product.price.toLocaleString('uk-UA')} ₴`
-    )
+    .map((item, idx) => {
+      const title = escTelegramHtml(clipText(item.product.title, 120));
+      const variant = item.selectedVariant ? ` (${escTelegramHtml(clipText(item.selectedVariant, 60))})` : '';
+      const qty = item.quantity;
+      const price = item.product.price;
+      const subtotal = (price * qty).toLocaleString('uk-UA');
+      return `${idx + 1}. <b>${title}</b>${variant}\n   • Кількість: ${qty} шт.\n   • Ціна: ${price.toLocaleString('uk-UA')} ₴ (${subtotal} ₴)`;
+    })
     .join('\n\n');
 
   const deliveryName =
@@ -29,23 +36,41 @@ export async function sendTelegramOrderNotification(
   const paymentName =
     order.paymentMethod === 'cash_on_delivery'
       ? '💵 Накладений платіж (при отриманні)'
-      : '💳 Оплата картою';
+      : '💳 Оплата карткою';
 
-  const message =
-    `🔥 <b>НОВЕ ЗАМОВЛЕННЯ З САЙТУ</b>\n` +
+  const orderNum = order.orderId ? ` #${escTelegramHtml(order.orderId)}` : '';
+
+  return (
+    `🔥 <b>НОВЕ ЗАМОВЛЕННЯ З САЙТУ${orderNum}</b>\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
-    `👤 <b>Клієнт:</b> ${order.name}\n` +
-    `📞 <b>Телефон:</b> <a href="tel:${order.phone}">${order.phone}</a>\n` +
-    `📍 <b>Місто:</b> ${order.city}\n` +
-    `🏢 <b>Відділення/адреса:</b> ${order.warehouse || 'Уточнюється'}\n` +
+    `👤 <b>Клієнт:</b> ${escTelegramHtml(clipText(order.name, 100)) || 'Клієнт'}\n` +
+    `📞 <b>Телефон:</b> <a href="tel:${escTelegramHtml(order.phone)}">${escTelegramHtml(order.phone)}</a>\n` +
+    `📍 <b>Місто:</b> ${escTelegramHtml(clipText(order.city, 80))}\n` +
+    `🏢 <b>Відділення/адреса:</b> ${escTelegramHtml(clipText(order.warehouse, 150)) || 'Уточнюється'}\n` +
     `🚚 <b>Служба доставки:</b> ${deliveryName}\n` +
     `💳 <b>Спосіб оплати:</b> ${paymentName}\n` +
-    `${order.notes ? `💬 <b>Коментар:</b> <i>${order.notes}</i>\n` : ''}` +
+    `${order.notes ? `💬 <b>Коментар:</b> <i>${escTelegramHtml(clipText(order.notes, 500))}</i>\n` : ''}` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
     `🛍 <b>СПИСОК ТОВАРІВ:</b>\n\n${itemsList}\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
     `💰 <b>РАЗОМ ДО СПЛАТИ:</b> <b>${order.total.toLocaleString('uk-UA')} ₴</b>\n` +
-    `⏰ <i>Час замовлення: ${new Date().toLocaleString('uk-UA')}</i>`;
+    `⏰ <i>Час замовлення: ${new Date().toLocaleString('uk-UA')}</i>`
+  );
+}
+
+/**
+ * Sends order notification directly to Telegram manager bot/channel
+ */
+export async function sendTelegramOrderNotification(
+  order: OrderDetails,
+  botToken: string,
+  chatId: string
+): Promise<{ success: boolean; error?: string }> {
+  if (!botToken.trim() || !chatId.trim()) {
+    return { success: false, error: 'Telegram Bot Token або Chat ID не налаштовані' };
+  }
+
+  const message = buildTelegramOrderMessage(order);
 
   try {
     const res = await fetch(`https://api.telegram.org/bot${botToken.trim()}/sendMessage`, {

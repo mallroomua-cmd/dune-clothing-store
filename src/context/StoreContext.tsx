@@ -582,7 +582,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       createdAt: Date.now(),
       date: new Date().toLocaleString('uk-UA'),
       status: 'new',
-      syncedToTelegram: directTelegramSuccess,
+      syncedToTelegram: directTelegramSuccess || sent,
     };
 
     setOrders((prev) => {

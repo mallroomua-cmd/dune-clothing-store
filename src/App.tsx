@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
@@ -9,12 +9,19 @@ import { MobileFloatingBar } from './components/MobileFloatingBar';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { CheckoutModal } from './components/CheckoutModal';
 import { CartDrawer } from './components/CartDrawer';
-import { AdminControlHub } from './components/AdminControlHub';
-import { PolicyModal } from './components/PolicyModal';
 import { Footer } from './components/Footer';
 
+// Code-splitting heavy components (Admin Hub: 2400+ LOC & Policy docs)
+// This cuts initial bundle size drastically for storefront visitors
+const AdminControlHub = lazy(() =>
+  import('./components/AdminControlHub').then((m) => ({ default: m.AdminControlHub }))
+);
+const PolicyModal = lazy(() =>
+  import('./components/PolicyModal').then((m) => ({ default: m.PolicyModal }))
+);
+
 export const AppContent: React.FC = () => {
-  const { isPolicyModalOpen, policyModalTab, closePolicyModal } = useStore();
+  const { isPolicyModalOpen, policyModalTab, closePolicyModal, isAdminOpen } = useStore();
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-dune-black selection:bg-black selection:text-white pb-20 sm:pb-0">
@@ -34,16 +41,26 @@ export const AppContent: React.FC = () => {
       <ProductDetailModal />
       <CheckoutModal />
       <CartDrawer />
-      <PolicyModal
-        isOpen={isPolicyModalOpen}
-        initialTab={policyModalTab}
-        onClose={closePolicyModal}
-      />
-      <AdminControlHub />
+
+      {/* Lazy Modals loaded only on demand */}
+      {isPolicyModalOpen && (
+        <Suspense fallback={null}>
+          <PolicyModal
+            isOpen={isPolicyModalOpen}
+            initialTab={policyModalTab}
+            onClose={closePolicyModal}
+          />
+        </Suspense>
+      )}
+
+      {isAdminOpen && (
+        <Suspense fallback={null}>
+          <AdminControlHub />
+        </Suspense>
+      )}
     </div>
   );
 };
-
 
 export default function App() {
   return (
