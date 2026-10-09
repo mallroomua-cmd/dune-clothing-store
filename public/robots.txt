@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Allow: /api/feed
+Allow: /api/feed.xml
+
+Sitemap: https://mallroom.com.ua/sitemap.xml
