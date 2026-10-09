@@ -1,10 +1,13 @@
-import { AnalyticsConfig, Product, OrderDetails } from '../types';
+import { AnalyticsConfig, Product, OrderDetails, CartItem } from '../types';
+import { getItemId, findVariant } from './ids';
 import { normalizeUaPhoneForAnalytics } from './formatters';
 
 declare global {
   interface Window {
     dataLayer: any[];
     gtag?: (...args: any[]) => void;
+    __tagsInit?: boolean;
+    __ANALYTICS_DEBUG__?: boolean;
   }
 }
 
@@ -16,7 +19,6 @@ export interface AnalyticsEventLog {
   payload: Record<string, any>;
 }
 
-// In-memory or subscriber-based debug event history
 let eventListeners: ((event: AnalyticsEventLog) => void)[] = [];
 export const eventHistory: AnalyticsEventLog[] = [];
 
@@ -43,29 +45,95 @@ export function logEvent(
   if (eventHistory.length > 50) eventHistory.pop();
   eventListeners.forEach((fn) => fn(item));
 
-  if (typeof window !== 'undefined' && (window as any).__ANALYTICS_DEBUG__) {
+  if (typeof window !== 'undefined' && window.__ANALYTICS_DEBUG__) {
     console.log(`[Analytics: ${platform}] ${eventName}:`, payload);
   }
 }
 
 /**
- * Injects Google Tags (gtag.js) dynamically based on user settings
+ * Maps a product or cart line to GA4 E-commerce Item specification
+ * Guarantees that item_id strictly matches <g:id> in Google Merchant Center!
+ */
+export function toGaItem(
+  line: { product: Product; quantity?: number; selectedVariant?: string },
+  index = 0
+) {
+  const p = line.product;
+  const v = findVariant(p, line.selectedVariant);
+  const price = v?.price ?? p.price;
+  const qty = line.quantity ?? 1;
+
+  return {
+    item_id: getItemId(p, line.selectedVariant),
+    item_name: p.title,
+    item_brand: p.vendor || 'ШопінгМаркет',
+    item_category: p.productType || 'Товари',
+    item_variant: v && v.title !== 'Default Title' ? v.title : undefined,
+    price,
+    quantity: qty,
+    index,
+    discount:
+      v?.compareAtPrice && v.compareAtPrice > price
+        ? parseFloat((v.compareAtPrice - price).toFixed(2))
+        : undefined,
+    google_business_vertical: 'retail', // Google Ads Dynamic Remarketing
+  };
+}
+
+/**
+ * SHA-256 hasher for Google Ads Enhanced Conversions
+ */
+async function sha256(value: string): Promise<string> {
+  if (typeof window === 'undefined' || !window.crypto?.subtle) {
+    return value;
+  }
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+export async function setEnhancedUserData(phone?: string, city?: string) {
+  if (!window.gtag) return;
+  const normalizedPhone = phone ? normalizeUaPhoneForAnalytics(phone) : '';
+  const userData: Record<string, any> = {
+    address: {
+      city: city || 'Київ',
+      country: 'UA',
+    },
+  };
+
+  if (normalizedPhone) {
+    userData.sha256_phone_number = await sha256(normalizedPhone);
+    userData.phone_number = normalizedPhone;
+  }
+
+  window.gtag('set', 'user_data', userData);
+  logEvent('set_user_data (Enhanced Conversions)', 'Google Ads', userData);
+}
+
+/**
+ * Initializes Google Analytics / Google Ads tags once without duplicate pageviews
  */
 export function initializeTracking(config: AnalyticsConfig) {
   if (typeof window === 'undefined') return;
+
+  const targetId = config.googleAdsId || config.gaMeasurementId;
+  window.__ANALYTICS_DEBUG__ = config.debugMode;
+
+  if (window.__tagsInit) return;
+  window.__tagsInit = true;
 
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () {
     window.dataLayer.push(arguments);
   };
 
-  (window as any).__ANALYTICS_DEBUG__ = config.debugMode;
-
-  const targetId = config.googleAdsId || config.gaMeasurementId;
-
-  // Remove previously injected scripts if any
-  const oldScript = document.getElementById('dynamic-gtag-script');
-  if (oldScript) oldScript.remove();
+  // Google Consent Mode v2 setup
+  window.gtag('consent', 'default', {
+    ad_storage: 'granted',
+    ad_user_data: 'granted',
+    ad_personalization: 'granted',
+    analytics_storage: 'granted',
+  });
 
   if (targetId) {
     const script = document.createElement('script');
@@ -87,16 +155,15 @@ export function initializeTracking(config: AnalyticsConfig) {
       window.gtag('config', config.googleAdsId, {
         allow_enhanced_conversions: true,
       });
-      logEvent('config', 'Google Ads', { id: config.googleAdsId, enhanced_conversions: true });
+      logEvent('config', 'Google Ads', { id: config.googleAdsId, allow_enhanced_conversions: true });
     }
   }
 
-  // Handle Merchant Center verification tag
+  // Google Merchant Center verification tag
   if (config.merchantCenterTag) {
     const existingMeta = document.getElementById('gmc-verification-meta');
     if (existingMeta) existingMeta.remove();
 
-    // Check if user entered full meta tag or just the verification code
     const tagMatch = config.merchantCenterTag.match(/content=["']([^"']+)["']/i);
     const content = tagMatch ? tagMatch[1] : config.merchantCenterTag.replace(/<[^>]+>/g, '').trim();
 
@@ -111,23 +178,12 @@ export function initializeTracking(config: AnalyticsConfig) {
   }
 }
 
-/**
- * Track Product View (GA4 view_item)
- */
-export function trackViewItem(product: Product, _config?: AnalyticsConfig) {
+export function trackViewItem(product: Product, selectedVariant?: string) {
+  const item = toGaItem({ product, selectedVariant });
   const payload = {
     currency: 'UAH',
-    value: product.price,
-    items: [
-      {
-        item_id: product.id,
-        item_name: product.title,
-        item_category: product.productType,
-        item_brand: product.vendor,
-        price: product.price,
-        quantity: 1,
-      },
-    ],
+    value: item.price,
+    items: [item],
   };
 
   if (window.gtag) {
@@ -136,23 +192,12 @@ export function trackViewItem(product: Product, _config?: AnalyticsConfig) {
   logEvent('view_item', 'Google Analytics', payload);
 }
 
-/**
- * Track Add To Cart (GA4 add_to_cart)
- */
-export function trackAddToCart(product: Product, quantity = 1, _config?: AnalyticsConfig) {
+export function trackAddToCart(product: Product, quantity = 1, selectedVariant?: string) {
+  const item = toGaItem({ product, quantity, selectedVariant });
   const payload = {
     currency: 'UAH',
-    value: product.price * quantity,
-    items: [
-      {
-        item_id: product.id,
-        item_name: product.title,
-        item_category: product.productType,
-        item_brand: product.vendor,
-        price: product.price,
-        quantity,
-      },
-    ],
+    value: item.price * quantity,
+    items: [item],
   };
 
   if (window.gtag) {
@@ -161,21 +206,25 @@ export function trackAddToCart(product: Product, quantity = 1, _config?: Analyti
   logEvent('add_to_cart', 'Google Analytics', payload);
 }
 
-/**
- * Track Begin Checkout (GA4 begin_checkout)
- */
-export function trackBeginCheckout(items: { product: Product; quantity: number }[], total: number) {
+export function trackRemoveFromCart(product: Product, quantity = 1, selectedVariant?: string) {
+  const item = toGaItem({ product, quantity, selectedVariant });
+  const payload = {
+    currency: 'UAH',
+    value: item.price * quantity,
+    items: [item],
+  };
+
+  if (window.gtag) {
+    window.gtag('event', 'remove_from_cart', payload);
+  }
+  logEvent('remove_from_cart', 'Google Analytics', payload);
+}
+
+export function trackBeginCheckout(items: CartItem[], total: number) {
   const payload = {
     currency: 'UAH',
     value: total,
-    items: items.map((i) => ({
-      item_id: i.product.id,
-      item_name: i.product.title,
-      item_category: i.product.productType,
-      item_brand: i.product.vendor,
-      price: i.product.price,
-      quantity: i.quantity,
-    })),
+    items: items.map((i, idx) => toGaItem(i, idx)),
   };
 
   if (window.gtag) {
@@ -185,25 +234,26 @@ export function trackBeginCheckout(items: { product: Product; quantity: number }
 }
 
 /**
- * Track Purchase & Google Ads Enhanced Conversion
+ * Purchases tracking with deduplication, Enhanced Conversions, and single Order ID
  */
-export function trackPurchase(order: OrderDetails, config: AnalyticsConfig) {
-  const transactionId = `ORD-${Date.now()}`;
-  const formattedPhone = normalizeUaPhoneForAnalytics(order.phone);
+export async function trackPurchase(
+  order: OrderDetails & { orderId: string },
+  config: AnalyticsConfig
+) {
+  const transactionId = order.orderId;
 
-  // 1. Google Ads Enhanced Conversions: send user_data prior to conversion
-  if (window.gtag && formattedPhone) {
-    window.gtag('set', 'user_data', {
-      phone_number: formattedPhone,
-      address: {
-        city: order.city,
-        country: 'UA',
-      },
-    });
-    logEvent('set_user_data (Enhanced Conversions)', 'Google Ads', {
-      phone: formattedPhone,
-      city: order.city,
-    });
+  // Deduplication check
+  try {
+    const sent: string[] = JSON.parse(sessionStorage.getItem('ga_sent_tx') || '[]');
+    if (sent.includes(transactionId)) return;
+    sessionStorage.setItem('ga_sent_tx', JSON.stringify([...sent, transactionId].slice(-25)));
+  } catch {
+    // sessionStorage not available
+  }
+
+  // 1. Google Ads Enhanced Conversions
+  if (config.googleAdsId) {
+    await setEnhancedUserData(order.phone, order.city);
   }
 
   // 2. GA4 Purchase event
@@ -213,14 +263,7 @@ export function trackPurchase(order: OrderDetails, config: AnalyticsConfig) {
     currency: 'UAH',
     tax: 0,
     shipping: 0,
-    items: order.items.map((i) => ({
-      item_id: i.product.id,
-      item_name: i.product.title,
-      item_category: i.product.productType,
-      item_brand: i.product.vendor,
-      price: i.product.price,
-      quantity: i.quantity,
-    })),
+    items: order.items.map((i, idx) => toGaItem(i, idx)),
   };
 
   if (window.gtag) {
@@ -242,14 +285,5 @@ export function trackPurchase(order: OrderDetails, config: AnalyticsConfig) {
       window.gtag('event', 'conversion', gadsPayload);
     }
     logEvent('conversion', 'Google Ads', gadsPayload);
-  }
-
-  // 4. DataLayer push
-  if (window.dataLayer) {
-    window.dataLayer.push({
-      event: 'ecommerce_purchase',
-      ecommerce: gaPayload,
-    });
-    logEvent('ecommerce_purchase', 'DataLayer', { transactionId, total: order.total });
   }
 }

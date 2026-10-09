@@ -1,9 +1,11 @@
 import React from 'react';
-import { ArrowDown, CheckCircle2, Star, Sparkles, Upload } from 'lucide-react';
+import { ArrowDown, CheckCircle2, Star, Sparkles, ShieldCheck } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { getDispatchStatus } from '../lib/related';
 
 export const Hero: React.FC = () => {
-  const { products, setIsAdminOpen } = useStore();
+  const { products } = useStore();
+  const dispatch = getDispatchStatus();
 
   const scrollToCatalog = () => {
     document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
@@ -43,27 +45,27 @@ export const Hero: React.FC = () => {
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed mb-8 max-w-2xl mx-auto">
-            Обирайте перевірену техніку, ґаджети та аксесуари. Швидка відправка в день замовлення, офіційна гарантія та огляд перед оплатою.
+            Обирайте перевірену техніку, ґаджети та аксесуари. Огляд перед оплатою на Новій Пошті, швидка відправка та офіційна гарантія 14 днів.
           </p>
 
-          {/* CTAs */}
+          {/* High-Converting CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10">
             <button
               onClick={scrollToCatalog}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-base shadow-lg shadow-accent-500/25 active:scale-95 transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-black text-base shadow-lg shadow-accent-500/25 active:scale-95 transition-all"
             >
               <Sparkles className="w-5 h-5" />
-              <span>Переглянути каталог ({products.length})</span>
+              <span>Обрати товари ({products.length})</span>
               <ArrowDown className="w-4 h-4 animate-bounce" />
             </button>
 
-            <button
-              onClick={() => setIsAdminOpen(true)}
+            <a
+              href="#catalog-section"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-base border border-slate-200 shadow-sm transition-all"
             >
-              <Upload className="w-5 h-5 text-brand-600" />
-              <span>Завантажити свій CSV фід</span>
-            </button>
+              <ShieldCheck className="w-5 h-5 text-brand-600" />
+              <span>Оплата при отриманні</span>
+            </a>
           </div>
 
           {/* Micro trust icons list */}
@@ -74,11 +76,11 @@ export const Hero: React.FC = () => {
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-brand-600" />
-              <span>Відправка сьогодні</span>
+              <span>{dispatch.text}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-brand-600" />
-              <span>14 днів на обмін</span>
+              <span>14 днів на повернення</span>
             </div>
           </div>
         </div>

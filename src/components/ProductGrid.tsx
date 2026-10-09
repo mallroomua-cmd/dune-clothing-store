@@ -12,13 +12,21 @@ export const ProductGrid: React.FC = () => {
   const [sortBy, setSortBy] = useState<'popular' | 'price_asc' | 'price_desc' | 'discount'>('popular');
   const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
 
-  // Extract distinct categories
-  const categories = useMemo(() => {
-    const set = new Set<string>();
-    products.forEach((p) => {
-      if (p.productType) set.add(p.productType);
-    });
-    return Array.from(set);
+  // Single O(N) pass to calculate category counts (Fixes B11 performance issue!)
+  const { categories, categoryCounts } = useMemo(() => {
+    const counts = new Map<string, number>();
+    const catList: string[] = [];
+
+    for (const p of products) {
+      const type = p.productType || 'Інше';
+      if (!counts.has(type)) {
+        counts.set(type, 0);
+        catList.push(type);
+      }
+      counts.set(type, counts.get(type)! + 1);
+    }
+
+    return { categories: catList, categoryCounts: counts };
   }, [products]);
 
   // Filter and sort
@@ -36,7 +44,7 @@ export const ProductGrid: React.FC = () => {
     }
 
     if (selectedCategory !== 'all') {
-      result = result.filter((p) => p.productType === selectedCategory);
+      result = result.filter((p) => (p.productType || 'Інше') === selectedCategory);
     }
 
     if (sortBy === 'price_asc') {
@@ -118,7 +126,7 @@ export const ProductGrid: React.FC = () => {
             )}
           </div>
 
-          {/* Category Chips */}
+          {/* Category Chips with O(1) count lookups */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
             <button
               onClick={() => {
@@ -134,7 +142,7 @@ export const ProductGrid: React.FC = () => {
               Всі товари ({products.length})
             </button>
             {categories.map((cat) => {
-              const count = products.filter((p) => p.productType === cat).length;
+              const count = categoryCounts.get(cat) ?? 0;
               return (
                 <button
                   key={cat}

@@ -3,9 +3,11 @@ import { Product, AnalyticsConfig, CartItem, OrderDetails } from '../types';
 import { SAMPLE_PRODUCTS } from '../lib/sample-data';
 import { parseShopifyCsv } from '../lib/shopify-parser';
 import { dbGet, dbSet, dbDelete } from '../lib/db';
+import { newOrderId, findVariant } from '../lib/ids';
 import {
   initializeTracking,
   trackAddToCart,
+  trackRemoveFromCart,
   trackBeginCheckout,
   trackPurchase,
   trackViewItem,
@@ -17,11 +19,14 @@ interface StoreContextType {
   analyticsConfig: AnalyticsConfig;
   cart: CartItem[];
   selectedProduct: Product | null;
+  selectedVariant: string;
   isCheckoutOpen: boolean;
   checkoutProduct: Product | null;
+  checkoutVariant: string;
   isAdminOpen: boolean;
   isCartDrawerOpen: boolean;
   setSelectedProduct: (p: Product | null) => void;
+  setSelectedVariant: (v: string) => void;
   setIsCheckoutOpen: (open: boolean) => void;
   setIsAdminOpen: (open: boolean) => void;
   setIsCartDrawerOpen: (open: boolean) => void;
@@ -29,10 +34,10 @@ interface StoreContextType {
   resetToDemo: () => Promise<void>;
   updateAnalyticsConfig: (config: Partial<AnalyticsConfig>) => void;
   addToCart: (product: Product, quantity?: number, variant?: string) => void;
-  removeFromCart: (productId: string) => void;
-  updateCartQuantity: (productId: string, quantity: number) => void;
+  removeFromCart: (productId: string, variant?: string) => void;
+  updateCartQuantity: (productId: string, quantity: number, variant?: string) => void;
   clearCart: () => void;
-  openQuickOrder: (product: Product) => void;
+  openQuickOrder: (product: Product, variant?: string) => void;
   openCartCheckout: () => void;
   submitOrder: (details: {
     name: string;
@@ -42,19 +47,20 @@ interface StoreContextType {
     deliveryMethod: 'nova_poshta' | 'ukrposhta' | 'courier';
     paymentMethod: 'cash_on_delivery' | 'card';
     notes?: string;
-  }) => Promise<{ success: boolean }>;
+  }) => Promise<{ success: boolean; orderId: string }>;
 }
 
+// Fallback to environment variables if provided (critical for production visitors!)
 const DEFAULT_ANALYTICS: AnalyticsConfig = {
-  gaMeasurementId: '',
-  googleAdsId: '',
-  googleAdsConversionLabel: '',
-  merchantCenterTag: '',
-  gtmId: '',
-  telegramBotToken: '',
-  telegramChatId: '',
-  novaPoshtaApiKey: '',
-  debugMode: true,
+  gaMeasurementId: (import.meta.env.VITE_GA_ID as string) || '',
+  googleAdsId: (import.meta.env.VITE_ADS_ID as string) || '',
+  googleAdsConversionLabel: (import.meta.env.VITE_ADS_LABEL as string) || '',
+  merchantCenterTag: (import.meta.env.VITE_GMC_TAG as string) || '',
+  gtmId: (import.meta.env.VITE_GTM_ID as string) || '',
+  telegramBotToken: (import.meta.env.VITE_TG_BOT_TOKEN as string) || '',
+  telegramChatId: (import.meta.env.VITE_TG_CHAT_ID as string) || '',
+  novaPoshtaApiKey: (import.meta.env.VITE_NP_KEY as string) || '',
+  debugMode: import.meta.env.DEV,
 };
 
 const StoreContext = createContext<StoreContextType | null>(null);
@@ -81,8 +87,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<string>('');
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutProduct, setCheckoutProduct] = useState<Product | null>(null);
+  const [checkoutVariant, setCheckoutVariant] = useState<string>('');
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
 
@@ -95,12 +103,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, []);
 
-  // Save products asynchronously to IndexedDB (supports unlimited feed size)
+  // Save products asynchronously to IndexedDB
   useEffect(() => {
     dbSet('shopify_store_products', products);
   }, [products]);
 
-  // Sync analytics config and re-initialize tracking
+  // Sync analytics config and initialize tracking once
   useEffect(() => {
     try {
       localStorage.setItem('shopify_store_analytics', JSON.stringify(analyticsConfig));
@@ -122,14 +130,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Track product view when detail modal opens
   useEffect(() => {
     if (selectedProduct) {
-      trackViewItem(selectedProduct, analyticsConfig);
+      trackViewItem(selectedProduct, selectedVariant);
     }
-  }, [selectedProduct]);
+  }, [selectedProduct, selectedVariant]);
 
   const uploadCsv = async (csvContent: string): Promise<{ count: number }> => {
     const parsed = await parseShopifyCsv(csvContent);
     if (!parsed || parsed.length === 0) {
-      throw new Error('У файлі не знайдено валідних товарів Shopify');
+      throw new Error('У файлі не знайдено валідних активних товарів Shopify');
     }
     setProducts(parsed);
     await dbSet('shopify_store_products', parsed);
@@ -146,32 +154,52 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const addToCart = (product: Product, quantity = 1, variantTitle?: string) => {
+    const v = findVariant(product, variantTitle);
+    const chosenVariant = v?.title !== 'Default Title' ? v.title : undefined;
+
     setCart((prev) => {
-      const existing = prev.find((item) => item.product.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
+      const existingIndex = prev.findIndex(
+        (item) => item.product.id === product.id && item.selectedVariant === chosenVariant
+      );
+
+      if (existingIndex > -1) {
+        const next = [...prev];
+        next[existingIndex] = {
+          ...next[existingIndex],
+          quantity: next[existingIndex].quantity + quantity,
+        };
+        return next;
       }
-      return [...prev, { product, quantity, selectedVariant: variantTitle }];
+      return [...prev, { product, quantity, selectedVariant: chosenVariant }];
     });
-    trackAddToCart(product, quantity, analyticsConfig);
+
+    trackAddToCart(product, quantity, chosenVariant);
   };
 
-  const removeFromCart = (productId: string) => {
-    setCart((prev) => prev.filter((item) => item.product.id !== productId));
+  const removeFromCart = (productId: string, variantTitle?: string) => {
+    const item = cart.find(
+      (i) => i.product.id === productId && i.selectedVariant === variantTitle
+    );
+    if (item) {
+      trackRemoveFromCart(item.product, item.quantity, item.selectedVariant);
+    }
+    setCart((prev) =>
+      prev.filter(
+        (item) => !(item.product.id === productId && item.selectedVariant === variantTitle)
+      )
+    );
   };
 
-  const updateCartQuantity = (productId: string, quantity: number) => {
+  const updateCartQuantity = (productId: string, quantity: number, variantTitle?: string) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(productId, variantTitle);
       return;
     }
     setCart((prev) =>
       prev.map((item) =>
-        item.product.id === productId ? { ...item, quantity } : item
+        item.product.id === productId && item.selectedVariant === variantTitle
+          ? { ...item, quantity }
+          : item
       )
     );
   };
@@ -180,18 +208,25 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setCart([]);
   };
 
-  const openQuickOrder = (product: Product) => {
+  const openQuickOrder = (product: Product, variantTitle?: string) => {
+    const v = findVariant(product, variantTitle);
+    const chosenVariant = v?.title !== 'Default Title' ? v.title : '';
     setCheckoutProduct(product);
+    setCheckoutVariant(chosenVariant);
     setIsCheckoutOpen(true);
-    trackBeginCheckout([{ product, quantity: 1 }], product.price);
+    trackBeginCheckout([{ product, quantity: 1, selectedVariant: chosenVariant }], v.price);
   };
 
   const openCartCheckout = () => {
     if (cart.length === 0) return;
     setCheckoutProduct(null);
+    setCheckoutVariant('');
     setIsCartDrawerOpen(false);
     setIsCheckoutOpen(true);
-    const total = cart.reduce((acc, i) => acc + i.product.price * i.quantity, 0);
+    const total = cart.reduce((acc, i) => {
+      const v = findVariant(i.product, i.selectedVariant);
+      return acc + (v?.price || i.product.price) * i.quantity;
+    }, 0);
     trackBeginCheckout(cart, total);
   };
 
@@ -203,12 +238,24 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     deliveryMethod: 'nova_poshta' | 'ukrposhta' | 'courier';
     paymentMethod: 'cash_on_delivery' | 'card';
     notes?: string;
-  }): Promise<{ success: boolean }> => {
+  }): Promise<{ success: boolean; orderId: string }> => {
+    // Generate unified Order ID
+    const orderId = newOrderId();
+
     const itemsToOrder: CartItem[] = checkoutProduct
-      ? [{ product: checkoutProduct, quantity: 1, selectedVariant: checkoutProduct.variants[0]?.title }]
+      ? [
+          {
+            product: checkoutProduct,
+            quantity: 1,
+            selectedVariant: checkoutVariant || undefined,
+          },
+        ]
       : cart;
 
-    const total = itemsToOrder.reduce((acc, i) => acc + i.product.price * i.quantity, 0);
+    const total = itemsToOrder.reduce((acc, i) => {
+      const v = findVariant(i.product, i.selectedVariant);
+      return acc + (v?.price || i.product.price) * i.quantity;
+    }, 0);
 
     const fullOrder: OrderDetails = {
       ...details,
@@ -216,24 +263,30 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       total,
     };
 
-    // 1. Google Ads Enhanced Conversions + GA4 purchase
-    trackPurchase(fullOrder, analyticsConfig);
-
-    // 2. Telegram order notification
-    if (analyticsConfig.telegramBotToken && analyticsConfig.telegramChatId) {
-      sendTelegramOrderNotification(
-        fullOrder,
-        analyticsConfig.telegramBotToken,
-        analyticsConfig.telegramChatId
-      ).catch((err) => console.warn('Telegram send failed', err));
+    // 1. Dispatch notification to Telegram
+    const tgToken = analyticsConfig.telegramBotToken || (import.meta.env.VITE_TG_BOT_TOKEN as string);
+    const tgChat = analyticsConfig.telegramChatId || (import.meta.env.VITE_TG_CHAT_ID as string);
+    if (tgToken && tgChat) {
+      sendTelegramOrderNotification(fullOrder, tgToken, tgChat).catch((err) =>
+        console.warn('Telegram notification failed:', err)
+      );
     }
 
-    // 3. Save order history in localStorage for admin
+    // 2. Dispatch to Serverless API if configured
+    fetch('/api/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...fullOrder, orderId }),
+    }).catch(() => {
+      // Offline fallback: order is stored in history and sent to TG
+    });
+
+    // 3. Save order history
     try {
       const history = JSON.parse(localStorage.getItem('shopify_store_orders') || '[]');
       history.unshift({
         ...fullOrder,
-        id: `ORD-${Date.now()}`,
+        id: orderId,
         date: new Date().toLocaleString('uk-UA'),
       });
       localStorage.setItem('shopify_store_orders', JSON.stringify(history.slice(0, 50)));
@@ -241,12 +294,16 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       console.warn('Failed saving order history', e);
     }
 
+    // 4. Track Purchase & Google Ads Enhanced Conversion AFTER order is successfully recorded!
+    void trackPurchase({ ...fullOrder, orderId }, analyticsConfig);
+
     if (!checkoutProduct) {
       clearCart();
     }
     setCheckoutProduct(null);
+    setCheckoutVariant('');
 
-    return { success: true };
+    return { success: true, orderId };
   };
 
   return (
@@ -256,11 +313,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         analyticsConfig,
         cart,
         selectedProduct,
+        selectedVariant,
         isCheckoutOpen,
         checkoutProduct,
+        checkoutVariant,
         isAdminOpen,
         isCartDrawerOpen,
         setSelectedProduct,
+        setSelectedVariant,
         setIsCheckoutOpen,
         setIsAdminOpen,
         setIsCartDrawerOpen,

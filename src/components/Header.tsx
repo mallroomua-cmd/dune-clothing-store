@@ -1,17 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Settings, Phone, ShieldCheck, Truck } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { getDispatchStatus } from '../lib/related';
 
 export const Header: React.FC = () => {
   const { cart, setIsAdminOpen, setIsCartDrawerOpen } = useStore();
   const totalCartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const dispatch = getDispatchStatus();
+
+  const [isAdminVisible, setIsAdminVisible] = useState(false);
+
+  useEffect(() => {
+    // Show Admin toggle if in dev mode, or if URL contains #admin or ?admin
+    if (
+      import.meta.env.DEV ||
+      window.location.hash === '#admin' ||
+      window.location.search.includes('admin')
+    ) {
+      setIsAdminVisible(true);
+    }
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition-all">
       {/* Top Notification Bar */}
       <div className="bg-gradient-to-r from-brand-700 via-brand-600 to-emerald-600 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium flex items-center justify-center gap-2">
         <span className="inline-block animate-pulse">🔥</span>
-        <span>Сезонний розпродаж! Знижки до <strong>-40%</strong> • Швидка відправка по всій Україні</span>
+        <span>
+          Сезонний розпродаж! Знижки до <strong>-40%</strong> • Безкоштовна доставка від 2 000 ₴ •{' '}
+          <strong>{dispatch.text}</strong>
+        </span>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,7 +44,7 @@ export const Header: React.FC = () => {
                 <span className="text-xl sm:text-2xl font-black font-heading tracking-tight text-slate-900 group-hover:text-brand-600 transition-colors">
                   Шопінг<span className="text-brand-600">Маркет</span>
                 </span>
-                <span className="hidden sm:block text-[11px] font-semibold text-slate-600 tracking-wider uppercase">
+                <span className="hidden sm:block text-[11px] font-semibold text-slate-400 tracking-wider uppercase">
                   Офіційний інтернет-магазин
                 </span>
               </div>
@@ -37,7 +55,7 @@ export const Header: React.FC = () => {
           <div className="hidden lg:flex items-center gap-6 text-sm text-slate-600">
             <div className="flex items-center gap-2">
               <Truck className="w-4 h-4 text-brand-600" />
-              <span>Доставка Новою Поштою 1-2 дні</span>
+              <span>{dispatch.text}</span>
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-brand-600" />
@@ -56,15 +74,17 @@ export const Header: React.FC = () => {
 
           {/* Right Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Admin Panel Toggle */}
-            <button
-              onClick={() => setIsAdminOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 transition-colors border border-slate-200/60"
-              title="Адмін панель: завантаження CSV та налаштування Google Ads / Analytics"
-            >
-              <Settings className="w-4 h-4 text-slate-500" />
-              <span className="hidden sm:inline">Адмін панель</span>
-            </button>
+            {/* Discreet Admin Toggle (Visible in DEV or with #admin) */}
+            {isAdminVisible && (
+              <button
+                onClick={() => setIsAdminOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors border border-slate-200/60"
+                title="Панель керування: CSV фід, Google Ads, Telegram"
+              >
+                <Settings className="w-4 h-4 text-slate-500" />
+                <span className="hidden sm:inline">Адмін</span>
+              </button>
+            )}
 
             {/* Cart Button */}
             <button

@@ -15,6 +15,7 @@ import {
   Play,
   Send,
   FileCode,
+  FileJson,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { SAMPLE_SHOPIFY_CSV } from '../lib/sample-data';
@@ -26,6 +27,8 @@ import {
 } from '../lib/analytics';
 import { downloadGoogleMerchantXml } from '../lib/merchant-xml';
 import { sendTelegramOrderNotification } from '../lib/telegram';
+import { readCsvFileWithEncoding } from '../lib/shopify-parser';
+import { useModal } from '../hooks/useModal';
 
 export const AdminDrawer: React.FC = () => {
   const {
@@ -37,6 +40,9 @@ export const AdminDrawer: React.FC = () => {
     analyticsConfig,
     updateAnalyticsConfig,
   } = useStore();
+
+  const handleClose = () => setIsAdminOpen(false);
+  useModal(isAdminOpen, handleClose);
 
   const [activeTab, setActiveTab] = useState<'csv' | 'analytics' | 'telegram' | 'debug' | 'orders'>('csv');
   const [dragActive, setDragActive] = useState(false);
@@ -92,7 +98,7 @@ export const AdminDrawer: React.FC = () => {
 
   if (!isAdminOpen) return null;
 
-  // File drop handler
+  // File handler with auto charset decoding (UTF-8 & Windows-1251)
   const handleFileProcess = async (file: File) => {
     if (!file.name.toLowerCase().endsWith('.csv')) {
       setUploadError('Будь ласка, оберіть файл формату .csv');
@@ -104,9 +110,9 @@ export const AdminDrawer: React.FC = () => {
     setUploadSuccess(null);
 
     try {
-      const text = await file.text();
+      const text = await readCsvFileWithEncoding(file);
       const res = await uploadCsv(text);
-      setUploadSuccess(`Успішно завантажено та збережено в IndexedDB ${res.count} товарів!`);
+      setUploadSuccess(`Успішно імпортовано та збережено ${res.count} товарів (IndexedDB)!`);
     } catch (err: any) {
       setUploadError(err.message || 'Помилка читання файлу CSV');
     } finally {
@@ -128,6 +134,18 @@ export const AdminDrawer: React.FC = () => {
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'shopify_products_export_example.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleExportJson = () => {
+    const jsonStr = JSON.stringify(products, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'catalog.json');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -195,6 +213,7 @@ export const AdminDrawer: React.FC = () => {
   const handleTestConversion = () => {
     trackPurchase(
       {
+        orderId: `TEST-${Date.now().toString().slice(-5)}`,
         name: 'Тестовий Клієнт',
         phone: '+380991234567',
         city: 'Київ',
@@ -203,20 +222,7 @@ export const AdminDrawer: React.FC = () => {
         paymentMethod: 'cash_on_delivery',
         items: [
           {
-            product: products[0] || {
-              id: 'test-1',
-              title: 'Тестовий товар',
-              price: 1500,
-              productType: 'Тест',
-              tags: [],
-              images: [],
-              featuredImage: '',
-              handle: 'test',
-              bodyHtml: '',
-              vendor: '',
-              available: true,
-              variants: [],
-            },
+            product: products[0],
             quantity: 1,
           },
         ],
@@ -227,7 +233,12 @@ export const AdminDrawer: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-slate-900/60 backdrop-blur-sm flex justify-end animate-fade-in">
+    <div
+      className="fixed inset-0 z-50 overflow-hidden bg-slate-900/60 backdrop-blur-sm flex justify-end animate-fade-in"
+      onClick={handleClose}
+      role="dialog"
+      aria-modal="true"
+    >
       <div
         className="w-full max-w-2xl bg-white h-full shadow-2xl flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
@@ -248,7 +259,7 @@ export const AdminDrawer: React.FC = () => {
             </p>
           </div>
           <button
-            onClick={() => setIsAdminOpen(false)}
+            onClick={handleClose}
             className="w-8 h-8 rounded-full bg-white border border-slate-200 hover:bg-slate-100 text-slate-500 flex items-center justify-center transition-colors"
           >
             <X className="w-5 h-5" />
@@ -354,7 +365,7 @@ export const AdminDrawer: React.FC = () => {
                   Перетягніть CSV файл Shopify сюди
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto mb-5 leading-relaxed">
-                  Підтримується необмежений розмір завдяки IndexedDB. Імпортуються назви, фотографії, ціни та варіанти.
+                  Підтримуються кодування UTF-8 та Windows-1251 (Excel UA). Без обмеження розміру завдяки IndexedDB.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -411,6 +422,16 @@ export const AdminDrawer: React.FC = () => {
                   >
                     <FileCode className="w-4 h-4" />
                     <span>Експорт XML для Google Merchant Center</span>
+                  </button>
+
+                  {/* JSON Catalog Export */}
+                  <button
+                    onClick={handleExportJson}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-bold transition-colors shadow-sm"
+                    title="Завантажити catalog.json для розміщення в public/catalog.json"
+                  >
+                    <FileJson className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Експорт catalog.json</span>
                   </button>
 
                   <button
@@ -546,7 +567,7 @@ export const AdminDrawer: React.FC = () => {
                 <Send className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
                 <div>
                   <strong className="block font-bold mb-0.5">Миттєві сповіщення про замовлення:</strong>
-                  Кожне замовлення миттєво надсилається у ваш приватний Telegram-чат з деталями: ім'я, телефон, товари, сума, місто та відділення Нової Пошти.
+                  Кожне замовлення надсилається у ваш приватний Telegram-чат з деталями: ім'я, телефон, товари, сума, місто та відділення Нової Пошти.
                 </div>
               </div>
 
@@ -561,9 +582,6 @@ export const AdminDrawer: React.FC = () => {
                   onChange={(e) => setTgToken(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:border-brand-500"
                 />
-                <p className="text-[11px] text-slate-500">
-                  Отримайте у безкоштовному боті @BotFather у Telegram через команду /newbot.
-                </p>
               </div>
 
               <div className="space-y-2">
@@ -577,9 +595,6 @@ export const AdminDrawer: React.FC = () => {
                   onChange={(e) => setTgChatId(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:border-brand-500"
                 />
-                <p className="text-[11px] text-slate-500">
-                  Ваш ID або ID групи (можна дізнатися у боті @userinfobot).
-                </p>
               </div>
 
               <div className="flex gap-3">

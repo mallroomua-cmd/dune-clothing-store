@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-import { X, ShoppingCart, Zap, CheckCircle2, ShieldCheck, Truck } from 'lucide-react';
+import { X, ShoppingCart, Zap, CheckCircle2, ShieldCheck, Truck, Plus } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import { useStore } from '../context/StoreContext';
 import { ProductJsonLd } from './ProductJsonLd';
+import { findVariant } from '../lib/ids';
+import { useModal } from '../hooks/useModal';
+import { getRelatedProducts } from '../lib/related';
 
 export const ProductDetailModal: React.FC = () => {
-  const { selectedProduct, setSelectedProduct, addToCart, openQuickOrder } = useStore();
+  const {
+    selectedProduct,
+    setSelectedProduct,
+    selectedVariant,
+    setSelectedVariant,
+    products,
+    addToCart,
+    openQuickOrder,
+  } = useStore();
+
   const [selectedImage, setSelectedImage] = useState<string>('');
-  const [selectedVariant, setSelectedVariant] = useState<string>('');
-
-  if (!selectedProduct) return null;
-
-  const activeImage = selectedImage || selectedProduct.featuredImage;
-  const discountPercent =
-    selectedProduct.compareAtPrice && selectedProduct.compareAtPrice > selectedProduct.price
-      ? Math.round(
-          ((selectedProduct.compareAtPrice - selectedProduct.price) /
-            selectedProduct.compareAtPrice) *
-            100
-        )
-      : null;
 
   const handleClose = () => {
     setSelectedProduct(null);
@@ -26,8 +26,30 @@ export const ProductDetailModal: React.FC = () => {
     setSelectedVariant('');
   };
 
+  useModal(!!selectedProduct, handleClose);
+
+  if (!selectedProduct) return null;
+
+  const currentVariant = findVariant(selectedProduct, selectedVariant);
+  const activePrice = currentVariant?.price ?? selectedProduct.price;
+  const activeComparePrice = currentVariant?.compareAtPrice ?? selectedProduct.compareAtPrice;
+
+  const activeImage = selectedImage || selectedProduct.featuredImage;
+  const discountPercent =
+    activeComparePrice && activeComparePrice > activePrice
+      ? Math.round(((activeComparePrice - activePrice) / activeComparePrice) * 100)
+      : null;
+
+  // Cross-sell items
+  const related = getRelatedProducts([selectedProduct], products, 2);
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+    <div
+      className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+      onClick={handleClose}
+      role="dialog"
+      aria-modal="true"
+    >
       {/* Schema.org JSON-LD microdata for Google Merchant / SEO */}
       <ProductJsonLd product={selectedProduct} />
 
@@ -64,7 +86,7 @@ export const ProductDetailModal: React.FC = () => {
 
           {/* Thumbnails */}
           {selectedProduct.images.length > 1 && (
-            <div className="flex items-center gap-2 overflow-x-auto w-full max-w-sm pb-1">
+            <div className="flex items-center gap-2 overflow-x-auto w-full max-w-sm pb-1 scrollbar-none">
               {selectedProduct.images.map((img, idx) => (
                 <button
                   key={idx}
@@ -94,21 +116,20 @@ export const ProductDetailModal: React.FC = () => {
             )}
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-black font-heading text-slate-900 mb-3 leading-snug">
+          <h2 className="text-xl sm:text-2xl font-black font-heading text-slate-900 mb-2 leading-snug">
             {selectedProduct.title}
           </h2>
 
           {/* Pricing */}
           <div className="flex items-baseline gap-3 mb-4">
             <span className="text-2xl sm:text-3xl font-black font-heading text-slate-900">
-              {selectedProduct.price.toLocaleString('uk-UA')} <span className="text-base font-bold">₴</span>
+              {activePrice.toLocaleString('uk-UA')} <span className="text-base font-bold">₴</span>
             </span>
-            {selectedProduct.compareAtPrice &&
-              selectedProduct.compareAtPrice > selectedProduct.price && (
-                <span className="text-base text-slate-400 line-through font-semibold">
-                  {selectedProduct.compareAtPrice.toLocaleString('uk-UA')} ₴
-                </span>
-              )}
+            {activeComparePrice && activeComparePrice > activePrice && (
+              <span className="text-base text-slate-400 line-through font-semibold">
+                {activeComparePrice.toLocaleString('uk-UA')} ₴
+              </span>
+            )}
           </div>
 
           {/* Stock state */}
@@ -117,11 +138,11 @@ export const ProductDetailModal: React.FC = () => {
             <span>В наявності на складі • Відправка сьогодні</span>
           </div>
 
-          {/* Variants Selector (if multiple) */}
+          {/* Variants Selector */}
           {selectedProduct.variants && selectedProduct.variants.length > 1 && (
             <div className="mb-5">
               <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
-                Варіант / Колір:
+                Оберіть варіант / колір:
               </label>
               <div className="flex flex-wrap gap-2">
                 {selectedProduct.variants.map((v) => (
@@ -130,18 +151,18 @@ export const ProductDetailModal: React.FC = () => {
                     onClick={() => setSelectedVariant(v.title)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
                       (selectedVariant || selectedProduct.variants[0].title) === v.title
-                        ? 'border-brand-600 bg-brand-50 text-brand-700'
+                        ? 'border-brand-600 bg-brand-50 text-brand-700 shadow-sm'
                         : 'border-slate-200 hover:border-slate-300 text-slate-700'
                     }`}
                   >
-                    {v.title}
+                    {v.title} — {v.price} ₴
                   </button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Description */}
+          {/* Sanitized HTML Description (Fixes XSS) */}
           <div className="text-sm text-slate-600 leading-relaxed mb-6 space-y-2 border-t border-slate-100 pt-4">
             <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider">
               Опис товару
@@ -149,18 +170,53 @@ export const ProductDetailModal: React.FC = () => {
             {selectedProduct.bodyHtml ? (
               <div
                 className="prose prose-sm max-w-none text-slate-600 line-clamp-6"
-                dangerouslySetInnerHTML={{ __html: selectedProduct.bodyHtml }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(selectedProduct.bodyHtml),
+                }}
               />
             ) : (
-              <p>Якісний товар, протестований перед відправкою. Офіційна гарантія виробника.</p>
+              <p>Якісний товар, перевірений перед відправкою. Офіційна гарантія.</p>
             )}
           </div>
+
+          {/* Cross-Sell Recommendations */}
+          {related.length > 0 && (
+            <div className="border-t border-slate-100 pt-4 mb-6">
+              <h4 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2">
+                Часто замовляють разом:
+              </h4>
+              <div className="space-y-2">
+                {related.map((rel) => (
+                  <div
+                    key={rel.id}
+                    className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/60 text-xs"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <img
+                        src={rel.featuredImage}
+                        alt=""
+                        className="w-8 h-8 rounded-lg object-cover shrink-0"
+                      />
+                      <span className="font-bold text-slate-800 truncate">{rel.title}</span>
+                    </div>
+                    <button
+                      onClick={() => addToCart(rel, 1)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-brand-50 hover:text-brand-700 font-bold text-slate-700 shrink-0 ml-2"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>{rel.price} ₴</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* CTAs */}
           <div className="mt-auto space-y-2.5 pt-4 border-t border-slate-100">
             <button
               onClick={() => {
-                openQuickOrder(selectedProduct);
+                openQuickOrder(selectedProduct, selectedVariant || currentVariant?.title);
                 handleClose();
               }}
               className="w-full py-3.5 px-4 rounded-xl bg-accent-500 hover:bg-accent-600 active:scale-95 text-white font-bold text-sm shadow-lg shadow-accent-500/25 flex items-center justify-center gap-2 transition-all"
@@ -171,7 +227,7 @@ export const ProductDetailModal: React.FC = () => {
 
             <button
               onClick={() => {
-                addToCart(selectedProduct, 1, selectedVariant);
+                addToCart(selectedProduct, 1, selectedVariant || currentVariant?.title);
                 handleClose();
               }}
               className="w-full py-3 px-4 rounded-xl bg-brand-50 hover:bg-brand-100 active:scale-95 text-brand-700 border border-brand-200 font-bold text-sm flex items-center justify-center gap-2 transition-all"
@@ -181,7 +237,6 @@ export const ProductDetailModal: React.FC = () => {
             </button>
           </div>
 
-          {/* Mini guarantee reassurance */}
           <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500">
             <div className="flex items-center gap-1.5">
               <Truck className="w-3.5 h-3.5 text-brand-600" />
@@ -189,7 +244,7 @@ export const ProductDetailModal: React.FC = () => {
             </div>
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-brand-600" />
-              <span>Оплата при огляді</span>
+              <span>Оплата при отриманні</span>
             </div>
           </div>
         </div>
