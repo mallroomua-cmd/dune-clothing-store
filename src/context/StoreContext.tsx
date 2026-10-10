@@ -14,7 +14,7 @@ import {
 import { PolicyTabKey } from '../components/PolicyModal';
 
 import { SAMPLE_PRODUCTS } from '../lib/sample-data';
-import { parseShopifyCsv } from '../lib/shopify-parser';
+import { parseUniversalCsvFeed, mergeProducts } from '../lib/universal-csv';
 import { dbGet, dbSet, dbDelete } from '../lib/db';
 import { newOrderId, findVariant } from '../lib/ids';
 import {
@@ -38,6 +38,7 @@ import {
   fetchProductsFromSupabase,
   saveProductToSupabase,
   deleteProductFromSupabase,
+  bulkSyncProductsToSupabase,
   STORE_ID,
 } from '../lib/supabase';
 
@@ -156,7 +157,11 @@ interface StoreContextType {
   setIsCheckoutOpen: (open: boolean) => void;
   setIsAdminOpen: (open: boolean) => void;
   setIsCartDrawerOpen: (open: boolean) => void;
-  uploadCsv: (csvContent: string) => Promise<{ count: number }>;
+  uploadCsv: (
+    csvContent: string,
+    options?: { syncToSupabase?: boolean; mode?: 'replace' | 'upsert' }
+  ) => Promise<{ count: number; syncedToCloud?: number; cloudError?: string }>;
+  syncCatalogWithCloud: (direction: 'push' | 'pull') => Promise<{ success: boolean; count: number; message: string }>;
   resetToDemo: () => Promise<void>;
   updateAnalyticsConfig: (config: Partial<AnalyticsConfig>) => void;
   addToCart: (product: Product, quantity?: number, variant?: string) => void;
@@ -674,14 +679,73 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [selectedProduct?.id]);
 
-  const uploadCsv = async (csvContent: string): Promise<{ count: number }> => {
-    const parsed = await parseShopifyCsv(csvContent);
+  const uploadCsv = async (
+    csvContent: string,
+    options?: { syncToSupabase?: boolean; mode?: 'replace' | 'upsert' }
+  ): Promise<{ count: number; syncedToCloud?: number; cloudError?: string }> => {
+    const parsed = await parseUniversalCsvFeed(csvContent);
     if (!parsed || parsed.length === 0) {
-      throw new Error('У файлі не знайдено валідних активних товарів Shopify');
+      throw new Error('У файлі не знайдено валідних активних товарів (перевірте формат колонок)');
     }
-    setProducts(parsed);
-    await dbSet('shopify_store_products', parsed);
-    return { count: parsed.length };
+    const mode = options?.mode || 'replace';
+    const merged = mergeProducts(products, parsed, mode);
+    setProducts(merged);
+    await dbSet('shopify_store_products', merged);
+
+    let syncedCount = 0;
+    let cloudErr: string | undefined;
+
+    const shouldSync = options?.syncToSupabase ?? isSupabaseConfigured();
+    if (shouldSync && isSupabaseConfigured()) {
+      try {
+        const syncRes = await bulkSyncProductsToSupabase(merged, STORE_ID);
+        syncedCount = syncRes.success;
+      } catch (err: unknown) {
+        cloudErr = err instanceof Error ? err.message : String(err);
+        console.error('[Supabase] Bulk sync failed during CSV import:', err);
+      }
+    }
+
+    return { count: merged.length, syncedToCloud: syncedCount, cloudError: cloudErr };
+  };
+
+  const syncCatalogWithCloud = async (
+    direction: 'push' | 'pull'
+  ): Promise<{ success: boolean; count: number; message: string }> => {
+    if (!isSupabaseConfigured()) {
+      return { success: false, count: 0, message: 'Supabase не налаштовано. Перевірте URL та ключ у налаштуваннях.' };
+    }
+
+    if (direction === 'push') {
+      try {
+        const res = await bulkSyncProductsToSupabase(products, STORE_ID);
+        return {
+          success: res.failed === 0,
+          count: res.success,
+          message: `Вивантажено в Supabase: ${res.success} товарів${res.failed > 0 ? ` (помилок: ${res.failed})` : ''}`,
+        };
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return { success: false, count: 0, message: `Помилка вивантаження в Supabase: ${msg}` };
+      }
+    } else {
+      try {
+        const cloudProducts = await fetchProductsFromSupabase(STORE_ID);
+        if (!cloudProducts || cloudProducts.length === 0) {
+          return { success: false, count: 0, message: 'У хмарі Supabase ще немає збережених товарів для цього магазину.' };
+        }
+        setProducts(cloudProducts);
+        await dbSet('shopify_store_products', cloudProducts);
+        return {
+          success: true,
+          count: cloudProducts.length,
+          message: `Успішно завантажено з Supabase: ${cloudProducts.length} товарів!`,
+        };
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return { success: false, count: 0, message: `Помилка завантаження з Supabase: ${msg}` };
+      }
+    }
   };
 
   const resetToDemo = async () => {
@@ -1057,6 +1121,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setIsAdminOpen,
         setIsCartDrawerOpen,
         uploadCsv,
+        syncCatalogWithCloud,
         resetToDemo,
         updateAnalyticsConfig,
         addToCart,

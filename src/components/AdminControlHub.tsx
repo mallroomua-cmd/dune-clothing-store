@@ -58,6 +58,7 @@ import {
   validateCsvPreview,
   downloadShopifyCsv,
 } from '../lib/shopify-parser';
+import { generateSampleCsvTemplate } from '../lib/universal-csv';
 import { normalizeUaPhoneForAnalytics } from '../lib/formatters';
 import { useModal } from '../hooks/useModal';
 
@@ -127,6 +128,8 @@ export const AdminControlHub: React.FC = () => {
   const [isApplyingFeed, setIsApplyingFeed] = useState(false);
   const [feedSuccess, setFeedSuccess] = useState<string | null>(null);
   const [feedError, setFeedError] = useState<string | null>(null);
+  const [importMode, setImportMode] = useState<'replace' | 'upsert'>('upsert');
+  const [syncToSupabaseOnImport, setSyncToSupabaseOnImport] = useState<boolean>(() => isSupabaseConfigured());
 
   // Module 2: Products Manager state
   const [productSearch, setProductSearch] = useState('');
@@ -278,14 +281,27 @@ export const AdminControlHub: React.FC = () => {
     if (!pendingCsvString) return;
     setIsApplyingFeed(true);
     setFeedError(null);
+    setFeedSuccess(null);
     try {
-      const res = await uploadCsv(pendingCsvString);
-      setFeedSuccess(`Успішно імпортовано та збережено в IndexedDB: ${res.count} товарів!`);
+      const res = await uploadCsv(pendingCsvString, {
+        mode: importMode,
+        syncToSupabase: syncToSupabaseOnImport,
+      });
+      let msg = `Успішно імпортовано: ${res.count} товарів (${importMode === 'upsert' ? 'оновлено та додано за артикулом' : 'повна заміна каталогу'})!`;
+      if (res.syncedToCloud !== undefined && res.syncedToCloud > 0) {
+        msg += ` Синхронізовано з Supabase хмарою: ${res.syncedToCloud} тов.`;
+      }
+      if (res.cloudError) {
+        msg += ` (Увага: помилка хмари Supabase: ${res.cloudError})`;
+      }
+      setFeedSuccess(msg);
+      addToast(msg, 'success');
       setCsvPreview(null);
       setPendingCsvString(null);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Помилка імпорту каталогу';
       setFeedError(msg);
+      addToast(msg, 'error');
     } finally {
       setIsApplyingFeed(false);
     }
@@ -294,6 +310,20 @@ export const AdminControlHub: React.FC = () => {
   const handleCancelPreview = () => {
     setCsvPreview(null);
     setPendingCsvString(null);
+  };
+
+  const handleDownloadUniversalTemplate = () => {
+    const templateStr = generateSampleCsvTemplate();
+    const blob = new Blob(['\uFEFF' + templateStr], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'dune_catalog_template_ua.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    addToast('Універсальний шаблон CSV завантажено', 'info');
   };
 
   const handleDownloadSample = () => {
@@ -1289,6 +1319,62 @@ export const AdminControlHub: React.FC = () => {
                         </div>
                       </div>
 
+                      {/* Import Strategy and Cloud Sync Options */}
+                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                        <div className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                          Стратегія імпорту:
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                          <label className={`flex items-start gap-2 p-2.5 rounded-lg border cursor-pointer transition-all ${importMode === 'upsert' ? 'bg-white border-brand-500 shadow-xs' : 'border-slate-200'}`}>
+                            <input
+                              type="radio"
+                              name="importMode"
+                              checked={importMode === 'upsert'}
+                              onChange={() => setImportMode('upsert')}
+                              className="mt-0.5 text-brand-600 focus:ring-brand-500"
+                            />
+                            <div>
+                              <strong className="block text-slate-900 font-bold">Оновити та додати (Рекомендовано)</strong>
+                              <span className="text-[11px] text-slate-500 leading-snug">
+                                Збіги за артикулом (SKU) оновлюють ціну та залишки, нові додаються. Наявні товари не зникають.
+                              </span>
+                            </div>
+                          </label>
+
+                          <label className={`flex items-start gap-2 p-2.5 rounded-lg border cursor-pointer transition-all ${importMode === 'replace' ? 'bg-white border-brand-500 shadow-xs' : 'border-slate-200'}`}>
+                            <input
+                              type="radio"
+                              name="importMode"
+                              checked={importMode === 'replace'}
+                              onChange={() => setImportMode('replace')}
+                              className="mt-0.5 text-brand-600 focus:ring-brand-500"
+                            />
+                            <div>
+                              <strong className="block text-slate-900 font-bold">Повна заміна каталогу</strong>
+                              <span className="text-[11px] text-slate-500 leading-snug">
+                                Повністю замінює поточний список товарів позиціями з цього CSV файлу.
+                              </span>
+                            </div>
+                          </label>
+                        </div>
+
+                        {/* Supabase Sync Toggle */}
+                        <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                          <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
+                            <input
+                              type="checkbox"
+                              checked={syncToSupabaseOnImport}
+                              onChange={(e) => setSyncToSupabaseOnImport(e.target.checked)}
+                              className="rounded text-brand-600 focus:ring-brand-500"
+                            />
+                            <span>Синхронізувати з хмарою Supabase одразу після імпорту</span>
+                          </label>
+                          <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${isSupabaseConfigured() ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}`}>
+                            {isSupabaseConfigured() ? '● Supabase підключено' : '○ Supabase не налаштовано'}
+                          </span>
+                        </div>
+                      </div>
+
                       {/* Confirm & Apply Buttons */}
                       <div className="flex items-center justify-end gap-3 pt-2">
                         <button
@@ -1302,14 +1388,18 @@ export const AdminControlHub: React.FC = () => {
                           type="button"
                           disabled={isApplyingFeed}
                           onClick={handleApplyCsvFeed}
-                          className="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5"
+                          className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 active:scale-95"
                         >
                           {isApplyingFeed ? (
                             <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                           ) : (
-                            <Check className="w-3.5 h-3.5" />
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
                           )}
-                          <span>Застосувати та зберегти в IndexedDB ({csvPreview.validProducts.length} тов.)</span>
+                          <span>
+                            {isApplyingFeed
+                              ? 'Імпортуємо та синхронізуємо...'
+                              : `Застосувати (${csvPreview.validProducts.length} тов.)`}
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -1401,6 +1491,15 @@ export const AdminControlHub: React.FC = () => {
                       >
                         <FileJson className="w-4 h-4 text-blue-600" />
                         <span>Експорт catalog.json</span>
+                      </button>
+
+                      {/* Download universal template */}
+                      <button
+                        onClick={handleDownloadUniversalTemplate}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-black text-xs font-bold transition-all shadow-sm active:scale-95"
+                      >
+                        <Download className="w-4 h-4 text-black" />
+                        <span>Шаблон CSV (UA / Excel)</span>
                       </button>
 
                       {/* Download sample */}
