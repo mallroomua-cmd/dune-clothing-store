@@ -68,19 +68,69 @@ export function buildTelegramOrderMessage(order: OrderDetails): string {
   );
 }
 
+export interface TelegramInlineButton {
+  text: string;
+  url?: string;
+  callback_data?: string;
+}
+
+export interface TelegramInlineMarkup {
+  inline_keyboard: TelegramInlineButton[][];
+}
+
+/**
+ * Builds interactive 1-click action buttons for order management in Telegram
+ */
+export function buildOrderInlineKeyboard(order: OrderDetails): TelegramInlineMarkup {
+  const cleanPhone = (order.phone || '').replace(/\D/g, '');
+  let normalizedDial = cleanPhone;
+  if (cleanPhone.startsWith('0') && cleanPhone.length === 10) {
+    normalizedDial = '38' + cleanPhone;
+  } else if (!cleanPhone.startsWith('380') && cleanPhone.length === 9) {
+    normalizedDial = '380' + cleanPhone;
+  }
+
+  const orderId = order.orderId || 'order';
+
+  const rows: TelegramInlineButton[][] = [
+    [
+      { text: '✅ Підтвердити', callback_data: `status:confirmed:${orderId}` },
+      { text: '📦 Відправлено', callback_data: `status:shipped:${orderId}` },
+      { text: '❌ Скасувати', callback_data: `status:cancelled:${orderId}` },
+    ],
+  ];
+
+  const contactButtons: TelegramInlineButton[] = [];
+  if (normalizedDial) {
+    contactButtons.push({
+      text: '💬 Telegram клієнта',
+      url: `https://t.me/+${normalizedDial}`,
+    });
+  }
+  contactButtons.push({
+    text: '🔍 Деталі',
+    callback_data: `view:${orderId}`,
+  });
+
+  rows.push(contactButtons);
+  return { inline_keyboard: rows };
+}
+
 /**
  * Sends order notification directly to Telegram manager bot/channel
  */
 export async function sendTelegramOrderNotification(
   order: OrderDetails,
   botToken: string,
-  chatId: string
+  chatId: string,
+  includeKeyboard = true
 ): Promise<{ success: boolean; error?: string }> {
   if (!botToken.trim() || !chatId.trim()) {
     return { success: false, error: 'Telegram Bot Token або Chat ID не налаштовані' };
   }
 
   const message = buildTelegramOrderMessage(order);
+  const replyMarkup = includeKeyboard ? buildOrderInlineKeyboard(order) : undefined;
 
   try {
     const res = await fetch(`https://api.telegram.org/bot${botToken.trim()}/sendMessage`, {
@@ -90,6 +140,7 @@ export async function sendTelegramOrderNotification(
         chat_id: chatId.trim(),
         text: message,
         parse_mode: 'HTML',
+        reply_markup: replyMarkup,
       }),
     });
 

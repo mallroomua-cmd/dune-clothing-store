@@ -132,12 +132,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const chatId = process.env.TG_CHAT_ID;
 
   if (botToken && chatId) {
+    const inlineKeyboard = {
+      inline_keyboard: [
+        [
+          { text: '✅ Підтвердити', callback_data: `status:confirmed:${o.orderId}` },
+          { text: '📦 Відправлено', callback_data: `status:shipped:${o.orderId}` },
+          { text: '❌ Скасувати', callback_data: `status:cancelled:${o.orderId}` },
+        ],
+        [
+          ...(normalizedDial ? [{ text: '💬 Telegram клієнта', url: `https://t.me/+${normalizedDial}` }] : []),
+          { text: '🔍 Деталі', callback_data: `view:${o.orderId}` },
+        ],
+      ],
+    };
+
     try {
       await postWithRetry(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         chat_id: chatId,
         text,
         parse_mode: 'HTML',
         disable_web_page_preview: true,
+        reply_markup: inlineKeyboard,
       });
     } catch (tgError) {
       console.error('Telegram notification error:', tgError);
