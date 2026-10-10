@@ -150,6 +150,40 @@ async function runTests() {
   const foundNew = upserted.find((p) => p.sku === 'SKU-003');
   assert.ok(foundNew, 'New product appended in upsert');
 
+  // 6. Test imported Lil-Shop beauty catalog parsing & categorization
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const importedCsvPath = path.resolve(process.cwd(), 'data/imported-catalog.csv');
+  if (fs.existsSync(importedCsvPath)) {
+    const importedCsv = fs.readFileSync(importedCsvPath, 'utf-8');
+    const importedProducts = await parseUniversalCsvFeed(importedCsv);
+    assert.strictEqual(importedProducts.length, 9, 'Should parse all 9 products from data/imported-catalog.csv');
+
+    // All must be in-stock, priced, with multiple images
+    for (const p of importedProducts) {
+      assert.ok(p.price > 0, `Product ${p.title} must have positive price`);
+      assert.strictEqual(p.available, true, `Product ${p.title} must be available`);
+      assert.ok(p.images.length > 0, `Product ${p.title} must have images`);
+    }
+
+    // Verify categories
+    const makeup = importedProducts.filter((p) => p.productType === 'Декоративна косметика');
+    const fragrance = importedProducts.filter((p) => p.productType === 'Парфуми та аромати');
+    const bags = importedProducts.filter((p) => p.productType === 'Аксесуари та сумки');
+
+    assert.strictEqual(makeup.length, 7, 'Expected 7 makeup items');
+    assert.strictEqual(fragrance.length, 1, 'Expected 1 fragrance item');
+    assert.strictEqual(bags.length, 1, 'Expected 1 accessories/bag item');
+
+    // Subcategory tag filtering
+    const lips = importedProducts.filter((p) => p.tags.includes('Губи'));
+    assert.strictEqual(lips.length, 5, 'Expected 5 lip products (Fenty, Rare Beauty, SF balm, SF oil, Rhode)');
+
+    const face = importedProducts.filter((p) => p.tags.includes('Обличчя'));
+    assert.strictEqual(face.length, 2, 'Expected 2 face products (Dior, Hourglass)');
+    console.log('✓ Imported catalog beauty parsing & categorization verified (9 products across categories)!');
+  }
+
   console.log('✓ All Universal CSV parser & merge tests passed successfully!');
 }
 

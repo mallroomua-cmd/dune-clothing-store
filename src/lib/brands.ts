@@ -26,6 +26,14 @@ export const STREETWEAR_BRANDS: BrandItem[] = [
   { id: 'asics', name: 'ASICS', sub: 'Japan • Gel-Kayano 14 & Gel-NYC', badge: 'ТРЕНД' },
   { id: 'supreme', name: 'Supreme', sub: 'New York • Box Logo & Limited Drops', badge: 'ДРОП' },
   { id: 'adidas-originals', name: 'adidas Originals', sub: 'Germany • Samba, Gazelle, Handball Spezial', badge: 'ТОП' },
+  { id: 'fenty-beauty', name: 'Fenty Beauty', sub: 'Rihanna • Gloss Bomb & Radiant Beauty', badge: 'ХІТ' },
+  { id: 'rare-beauty', name: 'Rare Beauty', sub: 'Selena Gomez • Soft Pinch Lip Oil', badge: 'ТОП' },
+  { id: 'summer-fridays', name: 'Summer Fridays', sub: 'USA • Lip Butter Balm & Dream Lip Oil', badge: 'ХІТ' },
+  { id: 'rhode', name: 'Rhode', sub: 'Hailey Bieber • Peptide Lip Shape & Glaze', badge: 'ТРЕНД' },
+  { id: 'dior', name: 'Dior', sub: 'Paris • Backstage Glow Face Palette', badge: 'LUXURY' },
+  { id: 'hourglass', name: 'Hourglass', sub: 'USA • Unreal Liquid Blush & Ambient Glow', badge: 'PREMIUM' },
+  { id: 'sol-de-janeiro', name: 'Sol de Janeiro', sub: 'Brazil • Rio Radiance & Cheirosa Mists', badge: 'ХІТ' },
+  { id: 'charlotte-tilbury', name: 'Charlotte Tilbury', sub: 'London • Pillow Talk & Quilted Bags', badge: 'LUXURY' },
 ];
 
 // Alias for backwards compatibility across existing components and tests

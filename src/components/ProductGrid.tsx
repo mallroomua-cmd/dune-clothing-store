@@ -13,11 +13,14 @@ export interface FashionFilter {
 }
 
 export const FASHION_COLLECTIONS: FashionFilter[] = [
-  { id: 'all', label: 'УСІ РЕЧІ', keywords: [] },
+  { id: 'all', label: 'УСІ ТОВАРИ', keywords: [] },
+  { id: 'makeup', label: '💄 ДЕКОРАТИВНА КОСМЕТИКА', keywords: ['декоративна', 'губи', 'блиск', 'тінт', 'бальзам', 'олійка', 'олівець', 'румʼяна', 'рум\'яна', 'хайлайтер', 'палітра', 'dior', 'fenty', 'rare', 'summer fridays', 'rhode', 'hourglass'] },
+  { id: 'skincare', label: '✨ ДОГЛЯД ЗА ОБЛИЧЧЯМ', keywords: ['догляд за обличчям', 'сироватк', 'крем', 'маск', 'очищенн', 'тонер', 'spf', 'cosrx', 'anua', 'biodance', 'round lab', 'centella', 'manyo', 'althea', 'paula'] },
+  { id: 'hair', label: '💇‍♀️ ДОГЛЯД ЗА ВОЛОССЯМ', keywords: ['волосся', 'волоссям', 'olaplex', 'k18', 'шампун', 'маска для волосся'] },
+  { id: 'body_fragrance', label: '🌸 ПАРФУМИ ТА ТІЛО', keywords: ['парфум', 'спрей', 'міст', 'тіло', 'тілом', 'sol de janeiro', 'rio radiance', 'bum bum'] },
+  { id: 'bags', label: '👜 СУМКИ ТА АКСЕСУАРИ', keywords: ['сумк', 'bag', 'tote', 'рюкзак', 'chiquito', 'кросбоді', 'косметичк', 'аксесуар', 'годинник', 'breda', 'charlotte tilbury'] },
   { id: 'clothing', label: '🧥 ОДЯГ', keywords: ['одяг', 'худі', 'hoodie', 'футболк', 'tee', 'штани', 'pant', 'куртк', 'jacket', 'світшот'] },
   { id: 'footwear', label: '👟 ВЗУТТЯ', keywords: ['взуття', 'кросів', 'sneaker', 'jordan', 'new balance', 'salomon', 'кеди'] },
-  { id: 'bags', label: '👜 СУМКИ', keywords: ['сумк', 'bag', 'tote', 'рюкзак', 'chiquito', 'кросбоді'] },
-  { id: 'accessories', label: '🕶️ АКСЕСУАРИ', keywords: ['аксесуар', 'годинник', 'breda', 'кепк', 'шапк', 'ремінь'] },
   { id: 'new', label: '✨ НОВИНКИ', keywords: ['new', 'нова', 'новинк', 'дроп'] },
   { id: 'sale', label: '🏷️ SALE', keywords: ['sale', 'знижк', 'акція'] },
 ];
@@ -191,7 +194,7 @@ export const ProductGrid: React.FC = () => {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
             <input
               type="text"
-              placeholder="ПОШУК: AMI PARIS, GANNI, JACQUEMUS, CARHARTT, СУМКИ, ВЗУТТЯ..."
+              placeholder="ПОШУК: FENTY, RARE BEAUTY, RHODE, DIOR, ХАЙЛАЙТЕР, СУМКИ, AMI PARIS..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);

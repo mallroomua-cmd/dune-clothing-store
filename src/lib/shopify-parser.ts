@@ -35,7 +35,134 @@ export async function readCsvFileWithEncoding(file: File): Promise<string> {
   }
 }
 
-export function parseShopifyCsv(csvString: string): Promise<Product[]> {
+export function inferVendorAndCategory(
+  title: string,
+  rawVendor?: string,
+  rawType?: string,
+  rawCategory?: string
+): { vendor: string; productType: string; tags: string[] } {
+  let vendor = (rawVendor || '').trim();
+  const titleLower = title.toLowerCase();
+
+  // If vendor missing or generic, infer from brand names in title
+  if (!vendor || vendor === 'Загальне' || vendor === 'Default' || vendor === 'Косметика') {
+    const knownVendors = [
+      'Sol de Janeiro', 'Fenty Beauty', 'Rare Beauty', 'Summer Fridays',
+      'Rhode Cosmetics', 'Rhode', 'Dior', 'Hourglass', 'Charlotte Tilbury',
+      'COSRX', 'Beauty of Joseon', 'Round Lab', 'Skin1004', 'Manyo',
+      'Anua', 'Dr. Althea', 'Olaplex', 'K18', "Paula's Choice", 'Biodance',
+      'AMI Paris', 'Ganni', 'Jacquemus', 'Jil Sander', 'New Balance',
+      'Salomon', 'Jordan', 'Nike', 'Stüssy', 'Supreme', 'Carhartt WIP',
+      'Stone Island', 'Breda', 'D1 Milano'
+    ];
+    const match = knownVendors.find((v) => titleLower.includes(v.toLowerCase()));
+    if (match) {
+      vendor = match === 'Rhode Cosmetics' ? 'Rhode' : match;
+    } else {
+      vendor = 'MOLAND';
+    }
+  }
+
+  let productType = (rawType || rawCategory || 'Загальне').trim();
+  const text = `${title} ${productType} ${rawCategory || ''}`.toLowerCase();
+  const extraTags: string[] = [];
+
+  if (
+    text.includes('губ') ||
+    text.includes('блиск') ||
+    text.includes('тінт') ||
+    text.includes('бальзам для губ') ||
+    text.includes('олійка для губ') ||
+    text.includes('помад') ||
+    text.includes('контурний олівець')
+  ) {
+    productType = 'Декоративна косметика';
+    extraTags.push('Губи', 'Декоративна косметика');
+  } else if (
+    text.includes('хайлайтер') ||
+    text.includes('румʼян') ||
+    text.includes('рум\'ян') ||
+    text.includes('палітра') ||
+    text.includes('пудр') ||
+    text.includes('консилер') ||
+    text.includes('тіні') ||
+    text.includes('туш') ||
+    text.includes('макіяж')
+  ) {
+    productType = 'Декоративна косметика';
+    extraTags.push('Обличчя', 'Декоративна косметика');
+  } else if (
+    text.includes('парфум') ||
+    text.includes('міст') ||
+    text.includes('perfume mist') ||
+    text.includes('аромат')
+  ) {
+    productType = 'Парфуми та аромати';
+    extraTags.push('Парфуми', 'Спреї');
+  } else if (
+    text.includes('косметичк') ||
+    text.includes('сумк') ||
+    text.includes('handbag') ||
+    text.includes('рюкзак') ||
+    text.includes('chiquito')
+  ) {
+    productType = 'Аксесуари та сумки';
+    extraTags.push('Сумки', 'Аксесуари');
+  } else if (
+    text.includes('сироватк') ||
+    text.includes('ампул') ||
+    text.includes('крем для обличчя') ||
+    text.includes('вмиванн') ||
+    text.includes('очищенн') ||
+    text.includes('тонік') ||
+    text.includes('тонер') ||
+    text.includes('маск') ||
+    text.includes('педи') ||
+    text.includes('spf') ||
+    text.includes('сонцезахис')
+  ) {
+    productType = 'Догляд за обличчям';
+    extraTags.push('Догляд за обличчям');
+  } else if (
+    text.includes('волос') ||
+    text.includes('шампун') ||
+    text.includes('olaplex') ||
+    text.includes('k18')
+  ) {
+    productType = 'Догляд за волоссям';
+    extraTags.push('Догляд за волоссям');
+  } else if (
+    text.includes('для тіла') ||
+    text.includes('bum bum')
+  ) {
+    productType = 'Догляд за тілом';
+    extraTags.push('Догляд за тілом');
+  } else if (
+    text.includes('кросів') ||
+    text.includes('снікер') ||
+    text.includes('взуття')
+  ) {
+    productType = 'Взуття / Кросівки';
+    extraTags.push('Взуття', 'Кросівки');
+  } else if (
+    text.includes('худі') ||
+    text.includes('світшот') ||
+    text.includes('футболк') ||
+    text.includes('штани') ||
+    text.includes('куртк') ||
+    text.includes('одяг')
+  ) {
+    productType = 'Одяг';
+    extraTags.push('Одяг');
+  }
+
+  return { vendor, productType, tags: extraTags };
+}
+
+export function parseShopifyCsv(
+  csvString: string,
+  options?: { includeDrafts?: boolean }
+): Promise<Product[]> {
   return new Promise((resolve, reject) => {
     Papa.parse<Record<string, string>>(csvString, {
       header: true,
@@ -45,28 +172,46 @@ export function parseShopifyCsv(csvString: string): Promise<Product[]> {
         try {
           const productsMap = new Map<string, Product>();
 
+          // Check if there are active rows with product titles in the CSV. If none exist (or includeDrafts is true), allow draft rows
+          const hasActiveRows = results.data.some((r) => Boolean((r['Title'] || '').trim()) && isRowActive(r));
+          const shouldFilterDrafts = !options?.includeDrafts && hasActiveRows;
+
+          // Check if CSV contains priced items
+          const hasPricedItems = results.data.some((r) => parsePrice(r['Variant Price'] || r['Price']) > 0);
+
           results.data.forEach((row) => {
-            if (!isRowActive(row)) return;
+            if (shouldFilterDrafts && !isRowActive(row)) return;
 
             const handle = (row['Handle'] || row['handle'] || '').trim();
             const title = (row['Title'] || row['title'] || '').trim();
 
             if (!handle && !title) return;
 
-            const productKey = handle || title;
-
-            // Extract image
-            const imageSrc = (row['Image Src'] || row['image_src'] || row['Image URL'] || '').trim();
-
             // Robust price parsing (handles Ukrainian commas)
             const price = parsePrice(row['Variant Price'] || row['Price']);
             const compareAtPrice = parsePrice(row['Variant Compare At Price'] || row['Compare At Price']) || undefined;
 
-            // Inventory quantity
+            const productKey = handle || title;
+
+            // Skip taxonomy/category placeholder rows that have 0 price when real products exist
+            // (but do NOT skip secondary image/variant rows for products already registered in productsMap)
+            if (!productsMap.has(productKey) && hasPricedItems && price <= 0 && (!row['Variant SKU'] || row['Variant SKU'] === 'no-content')) {
+              return;
+            }
+
+            // Extract image
+            const imageSrc = (row['Image Src'] || row['image_src'] || row['Image URL'] || '').trim();
+
+            // Inventory quantity (if tracker is empty, inventory is untracked and therefore available)
             const rawQty = row['Variant Inventory Qty'];
+            const inventoryTracker = (row['Variant Inventory Tracker'] || '').trim();
             const inventoryQty = rawQty !== undefined && rawQty !== '' ? parseInt(rawQty, 10) : undefined;
             const inventoryPolicy = (row['Variant Inventory Policy'] || '').toLowerCase();
-            const isAvailable = inventoryQty === undefined ? true : inventoryQty > 0 || inventoryPolicy === 'continue';
+            const isAvailable = !inventoryTracker
+              ? true
+              : inventoryQty === undefined
+              ? true
+              : inventoryQty > 0 || inventoryPolicy === 'continue';
 
             const sku = (row['Variant SKU'] || row['SKU'] || '').trim();
             const barcode = (row['Variant Barcode'] || '').trim();
@@ -80,13 +225,19 @@ export function parseShopifyCsv(csvString: string): Promise<Product[]> {
 
             if (!productsMap.has(productKey)) {
               const tagsRaw = (row['Tags'] || row['tags'] || '').trim();
-              const tags = tagsRaw
+              const existingTags = tagsRaw
                 ? tagsRaw.split(',').map((t) => t.trim()).filter(Boolean)
                 : [];
 
+              const rawVendor = (row['Vendor'] || row['vendor'] || '').trim();
+              const rawType = (row['Type'] || row['Product Category'] || '').trim();
+              const inferred = inferVendorAndCategory(title || handle, rawVendor, rawType, row['Product Category']);
+
+              const tags = Array.from(new Set([...existingTags, ...inferred.tags]));
+              const vendor = inferred.vendor;
+              const productType = inferred.productType;
+
               const bodyHtml = row['Body (HTML)'] || row['Body'] || row['Description'] || '';
-              const vendor = (row['Vendor'] || row['vendor'] || '').trim();
-              const productType = (row['Type'] || row['Product Category'] || 'Загальне').trim();
 
               const newProduct: Product = {
                 id: productKey, // Stable ID based on handle/key

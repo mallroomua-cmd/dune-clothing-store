@@ -78,10 +78,13 @@ const config: TelegramBotConfig = {
     },
     async getProducts() {
       try {
-        return await fetchProductsFromSupabase(STORE_ID);
+        const cloud = await fetchProductsFromSupabase(STORE_ID);
+        if (cloud && cloud.length > 0) return cloud;
       } catch {
-        return [];
+        // ignore
       }
+      const { SAMPLE_PRODUCTS } = await import('../src/lib/sample-data.ts');
+      return SAMPLE_PRODUCTS;
     },
   },
 };

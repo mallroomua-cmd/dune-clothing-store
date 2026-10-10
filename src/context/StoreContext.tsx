@@ -588,22 +588,15 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
       }
 
-      // 2. Fallback to IndexedDB with DUNE catalog migration
+      // 2. Fallback to IndexedDB with DUNE & Beauty catalog migration
       try {
         const saved = await dbGet<Product[]>('shopify_store_products');
-        const hasLegacy = saved && saved.some((p) =>
-          p.vendor === 'TechPro' ||
-          p.vendor === 'COSRX' ||
-          p.vendor === 'Beauty of Joseon' ||
-          p.handle.includes('smart-watch') ||
-          p.handle.includes('snail')
-        );
         const nicheVersion = localStorage.getItem('moland_catalog_niche');
 
-        if (!saved || saved.length === 0 || hasLegacy || nicheVersion !== 'moland_fashion_v1') {
+        if (!saved || saved.length === 0 || nicheVersion !== 'dune_beauty_catalog_v2') {
           setProducts(SAMPLE_PRODUCTS);
           void dbSet('shopify_store_products', SAMPLE_PRODUCTS);
-          localStorage.setItem('moland_catalog_niche', 'moland_fashion_v1');
+          localStorage.setItem('moland_catalog_niche', 'dune_beauty_catalog_v2');
         } else {
           setProducts(saved);
         }
