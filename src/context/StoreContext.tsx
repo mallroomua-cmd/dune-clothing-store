@@ -138,6 +138,8 @@ interface StoreContextType {
   checkoutVariant: string;
   isAdminOpen: boolean;
   isCartDrawerOpen: boolean;
+  isMobileFiltersOpen: boolean;
+  setIsMobileFiltersOpen: (open: boolean) => void;
   isQuizOpen: boolean;
   setIsQuizOpen: (open: boolean) => void;
   isTrackingOpen: boolean;
@@ -253,6 +255,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return false;
   });
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   // Store Settings (phone, messengers, widget toggles, schedule, free shipping)
   const [storeSettings, setStoreSettings] = useState<StoreSettings>(() => {
@@ -1120,6 +1123,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setIsCheckoutOpen,
         setIsAdminOpen,
         setIsCartDrawerOpen,
+        isMobileFiltersOpen,
+        setIsMobileFiltersOpen,
         uploadCsv,
         syncCatalogWithCloud,
         resetToDemo,
