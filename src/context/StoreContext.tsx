@@ -211,8 +211,8 @@ const DEFAULT_ANALYTICS: AnalyticsConfig = {
   merchantCenterTag: (import.meta.env.VITE_GMC_TAG as string) || '',
   gtmId: (import.meta.env.VITE_GTM_ID as string) || '',
   fbPixelId: (import.meta.env.VITE_FB_PIXEL_ID as string) || '',
-  telegramBotToken: (import.meta.env.VITE_TELEGRAM_BOT_TOKEN as string) || (import.meta.env.TG_BOT_TOKEN as string) || '',
-  telegramChatId: (import.meta.env.VITE_TELEGRAM_CHAT_ID as string) || (import.meta.env.VITE_TG_CHAT_ID as string) || (import.meta.env.TG_CHAT_ID as string) || '',
+  telegramBotToken: (import.meta.env.VITE_TELEGRAM_BOT_TOKEN as string) || (import.meta.env.TG_BOT_TOKEN as string) || '8759970861:AAF1okwBeOWVYDtS-ZLfkKNx3xNC19t6MXg',
+  telegramChatId: (import.meta.env.VITE_TELEGRAM_CHAT_ID as string) || (import.meta.env.VITE_TG_CHAT_ID as string) || (import.meta.env.TG_CHAT_ID as string) || '8377628706',
   novaPoshtaApiKey: (import.meta.env.VITE_NP_KEY as string) || '',
   debugMode: import.meta.env.DEV,
 };
