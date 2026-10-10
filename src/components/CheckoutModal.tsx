@@ -5,6 +5,7 @@ import { formatUaPhone } from '../lib/formatters';
 import { findVariant } from '../lib/ids';
 import { useModal } from '../hooks/useModal';
 import { NovaPoshtaPicker } from './NovaPoshtaPicker';
+import { getTelegramUser, hapticImpact, hapticNotification } from '../lib/telegram-webapp';
 
 export const CheckoutModal: React.FC = () => {
   const {
@@ -39,19 +40,30 @@ export const CheckoutModal: React.FC = () => {
   const [promoInput, setPromoInput] = useState('');
   const [promoFeedback, setPromoFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Restore saved name and phone for returning customers
+  // Restore saved name and phone for returning customers & Telegram WebApp auto-fill
   React.useEffect(() => {
     try {
       const savedPhone = localStorage.getItem('mallroom_saved_phone');
       const savedName = localStorage.getItem('mallroom_saved_name');
       if (savedPhone) setPhone(savedPhone);
       if (savedName) setName(savedName);
+
+      const tgUser = getTelegramUser();
+      if (tgUser) {
+        if (!savedName && tgUser.fullName) {
+          setName(tgUser.fullName);
+        }
+        if (tgUser.username && !notes) {
+          setNotes(`TG: @${tgUser.username}`);
+        }
+      }
     } catch {
       // ignore
     }
   }, []);
 
   const handleClose = () => {
+    hapticImpact('light');
     setIsCheckoutOpen(false);
     setOrderComplete(false);
     setErrorMessage(null);
@@ -125,6 +137,7 @@ export const CheckoutModal: React.FC = () => {
 
       setOrderNumber(res.orderId);
       setOrderComplete(true);
+      hapticNotification('success');
     } catch {
       setErrorMessage('Помилка при оформленні. Спробуйте ще раз або зателефонуйте нам.');
     } finally {

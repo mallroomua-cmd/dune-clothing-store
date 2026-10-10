@@ -13,6 +13,8 @@ export interface Product {
   available: boolean;
   sku?: string;
   barcode?: string;
+  category?: string;
+  description?: string;
   variants: {
     id: string;
     title: string;

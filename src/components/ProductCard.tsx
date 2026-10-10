@@ -2,6 +2,8 @@ import React from 'react';
 import { ShoppingBag, Zap, Eye, Check, Heart } from 'lucide-react';
 import { Product } from '../types';
 import { useStore } from '../context/StoreContext';
+import { hapticImpact } from '../lib/telegram-webapp';
+import { getBeautyBadges } from '../lib/bundle-synergy';
 
 export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const { addToCart, openQuickOrder, setSelectedProduct, isInWishlist, toggleWishlist, addRecentlyViewed } = useStore();
@@ -15,6 +17,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
+    hapticImpact('light');
     addToCart(product, 1);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
@@ -22,20 +25,27 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 
   const handleQuickBuy = (e: React.MouseEvent) => {
     e.stopPropagation();
+    hapticImpact('medium');
     openQuickOrder(product);
   };
 
   const handleCardClick = () => {
+    hapticImpact('light');
     addRecentlyViewed(product.id);
     setSelectedProduct(product);
   };
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    hapticImpact('light');
     toggleWishlist(product.id);
   };
 
   const streetwearBadges = React.useMemo(() => {
+    const beautyInfo = getBeautyBadges(product);
+    if (beautyInfo.isBeauty) {
+      return beautyInfo.badges.slice(0, 2);
+    }
     const text = `${product.title} ${(product.tags || []).join(' ')} ${product.productType || ''}`.toLowerCase();
     const badges: string[] = [];
     if (text.includes('кросів') || text.includes('sneaker') || text.includes('jordan') || text.includes('dunk')) badges.push('👟 SNEAKERS');
@@ -47,7 +57,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
     if (text.includes('штани') || text.includes('pant') || text.includes('cargo')) badges.push('👖 WORKWEAR');
     if (badges.length === 0) badges.push('✨ 100% ORIGINAL');
     return badges.slice(0, 2);
-  }, [product.title, product.tags, product.productType]);
+  }, [product]);
 
   const sizesSummary = React.useMemo(() => {
     if (!product.variants || product.variants.length <= 1) return null;

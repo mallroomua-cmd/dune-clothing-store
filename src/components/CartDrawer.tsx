@@ -5,6 +5,7 @@ import { findVariant } from '../lib/ids';
 import { useModal } from '../hooks/useModal';
 import { getRelatedProducts } from '../lib/related';
 import { DispatchCountdown } from './DispatchCountdown';
+import { hapticImpact } from '../lib/telegram-webapp';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -25,7 +26,10 @@ export const CartDrawer: React.FC = () => {
   const [promoInput, setPromoInput] = useState('');
   const [promoError, setPromoError] = useState<string | null>(null);
 
-  const handleClose = () => setIsCartDrawerOpen(false);
+  const handleClose = () => {
+    hapticImpact('light');
+    setIsCartDrawerOpen(false);
+  };
   useModal(isCartDrawerOpen, handleClose);
 
   if (!isCartDrawerOpen) return null;
@@ -166,13 +170,14 @@ export const CartDrawer: React.FC = () => {
                       <div className="flex items-center justify-between font-mono">
                         <div className="flex items-center hairline-all bg-white">
                           <button
-                            onClick={() =>
+                            onClick={() => {
+                              hapticImpact('light');
                               updateCartQuantity(
                                 item.product.id,
                                 item.quantity - 1,
                                 item.selectedVariant
-                              )
-                            }
+                              );
+                            }}
                             className="w-6 h-6 flex items-center justify-center hover:bg-neutral-100 text-neutral-600 transition-colors"
                             title="Зменшити кількість"
                           >
@@ -182,13 +187,14 @@ export const CartDrawer: React.FC = () => {
                             {item.quantity}
                           </span>
                           <button
-                            onClick={() =>
+                            onClick={() => {
+                              hapticImpact('light');
                               updateCartQuantity(
                                 item.product.id,
                                 item.quantity + 1,
                                 item.selectedVariant
-                              )
-                            }
+                              );
+                            }}
                             className="w-6 h-6 flex items-center justify-center hover:bg-neutral-100 text-neutral-600 transition-colors"
                             title="Збільшити кількість"
                           >
@@ -197,7 +203,10 @@ export const CartDrawer: React.FC = () => {
                         </div>
 
                         <button
-                          onClick={() => removeFromCart(item.product.id, item.selectedVariant)}
+                          onClick={() => {
+                            hapticImpact('medium');
+                            removeFromCart(item.product.id, item.selectedVariant);
+                          }}
                           className="text-neutral-400 hover:text-black p-1 transition-colors"
                           title="Видалити"
                         >
@@ -245,7 +254,10 @@ export const CartDrawer: React.FC = () => {
                             </div>
                           </div>
                           <button
-                            onClick={() => addToCart(rel, 1)}
+                            onClick={() => {
+                              hapticImpact('light');
+                              addToCart(rel, 1);
+                            }}
                             className="min-h-[32px] inline-flex items-center gap-1 px-3 py-1 bg-black text-white font-mono text-[10px] uppercase font-bold shrink-0 ml-2 hover:bg-neutral-800 active:scale-95 transition-all"
                             title="Додати до комплекту"
                           >
@@ -359,7 +371,10 @@ export const CartDrawer: React.FC = () => {
             </div>
 
             <button
-              onClick={openCartCheckout}
+              onClick={() => {
+                hapticImpact('medium');
+                openCartCheckout();
+              }}
               className="w-full min-h-[46px] py-3 px-4 bg-black hover:bg-neutral-800 text-white font-mono font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
             >
               <span>ОФОРМИТИ ЗАМОВЛЕННЯ</span>

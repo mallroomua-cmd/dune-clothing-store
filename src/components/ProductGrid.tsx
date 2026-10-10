@@ -3,6 +3,7 @@ import { Search, SlidersHorizontal, PackageX, ChevronDown } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from './ProductCard';
 import { MobileFilterDrawer } from './MobileFilterDrawer';
+import { hapticImpact } from '../lib/telegram-webapp';
 
 const PAGE_SIZE = 12;
 
@@ -61,6 +62,19 @@ export const ProductGrid: React.FC = () => {
     }
 
     return { categories: catList, categoryCounts: counts };
+  }, [products]);
+
+  // Dynamic top brands with product counts
+  const topBrands = useMemo(() => {
+    const brandMap = new Map<string, number>();
+    for (const p of products) {
+      const v = (p.vendor || '').trim();
+      if (!v) continue;
+      brandMap.set(v, (brandMap.get(v) || 0) + 1);
+    }
+    return Array.from(brandMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([name, count]) => ({ name, count }));
   }, [products]);
 
   // Filter and sort
@@ -211,6 +225,50 @@ export const ProductGrid: React.FC = () => {
                 ✕
               </button>
             )}
+          </div>
+
+          {/* Quick Brand Pills Horizontal Scroll Bar */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none font-mono text-[11px]">
+            <span className="text-[10px] text-neutral-400 uppercase font-bold tracking-wider shrink-0 mr-1">
+              БРЕНДИ:
+            </span>
+            <button
+              onClick={() => {
+                hapticImpact('light');
+                setSelectedBrand('all');
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className={`min-h-[30px] px-2.5 py-1 uppercase font-bold tracking-wider whitespace-nowrap transition-all ${
+                selectedBrand === 'all'
+                  ? 'bg-black text-white hairline-all'
+                  : 'bg-white text-neutral-600 hover:text-black hairline-all'
+              }`}
+            >
+              ВСІ
+            </button>
+            {topBrands.slice(0, 16).map(({ name, count }) => {
+              const isSelected = selectedBrand.toLowerCase().trim() === name.toLowerCase().trim();
+              return (
+                <button
+                  key={name}
+                  onClick={() => {
+                    hapticImpact('light');
+                    setSelectedBrand(isSelected ? 'all' : name);
+                    setVisibleCount(PAGE_SIZE);
+                  }}
+                  className={`min-h-[30px] px-2.5 py-1 uppercase font-bold tracking-wider whitespace-nowrap transition-all flex items-center gap-1 ${
+                    isSelected
+                      ? 'bg-black text-white hairline-all'
+                      : 'bg-white text-neutral-700 hover:text-black hairline-all hover:bg-neutral-50'
+                  }`}
+                >
+                  <span>{name}</span>
+                  <span className={`text-[10px] tabular-nums ${isSelected ? 'text-dune-ochre' : 'text-neutral-400'}`}>
+                    ({count})
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Category Monospace Tabs (Stiletto horizontal look) */}

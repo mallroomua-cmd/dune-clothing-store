@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "bot": "jiti scripts/telegram-bot.ts",
-    "test": "jiti test/csv-parser.test.ts && jiti test/merchant-xml.test.ts && jiti test/cart-and-order.test.ts && jiti test/csv-export.test.ts && jiti test/telegram-and-resilience.test.ts && jiti test/wave2-features.test.ts && jiti test/wave3-features.test.ts && jiti test/wave4-navigation-and-banner.test.ts && jiti test/wave5-moland-the-rooms.test.ts && jiti test/universal-csv.test.ts && jiti test/supabase-sync.test.ts && jiti test/mobile-experience.test.ts && jiti test/telegram-bot.test.ts"
+    "test": "jiti test/csv-parser.test.ts && jiti test/merchant-xml.test.ts && jiti test/cart-and-order.test.ts && jiti test/csv-export.test.ts && jiti test/telegram-and-resilience.test.ts && jiti test/wave2-features.test.ts && jiti test/wave3-features.test.ts && jiti test/wave4-navigation-and-banner.test.ts && jiti test/wave5-moland-the-rooms.test.ts && jiti test/universal-csv.test.ts && jiti test/supabase-sync.test.ts && jiti test/mobile-experience.test.ts && jiti test/telegram-bot.test.ts && jiti test/pareto-features.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",

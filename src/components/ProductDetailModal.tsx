@@ -15,6 +15,8 @@ import { ProductJsonLd } from './ProductJsonLd';
 import { findVariant } from '../lib/ids';
 import { useModal } from '../hooks/useModal';
 import { getRelatedProducts } from '../lib/related';
+import { hapticImpact } from '../lib/telegram-webapp';
+import { getComplementaryProduct, calculateBundlePricing, getBeautyBadges } from '../lib/bundle-synergy';
 
 type DetailTab = 'desc' | 'sizing' | 'materials' | 'delivery' | 'reviews';
 
@@ -33,6 +35,7 @@ export const ProductDetailModal: React.FC = () => {
     addToast,
     getProductReviews,
     addReview,
+    setIsCartDrawerOpen,
   } = useStore();
 
   const [selectedImage, setSelectedImage] = useState<string>('');
@@ -67,8 +70,16 @@ export const ProductDetailModal: React.FC = () => {
     return getRelatedProducts([selectedProduct], products, 2);
   }, [selectedProduct, products]);
 
+  const beautyInfo = useMemo(() => {
+    if (!selectedProduct) return null;
+    return getBeautyBadges(selectedProduct);
+  }, [selectedProduct]);
+
   const dermBadges = useMemo(() => {
     if (!selectedProduct) return [];
+    if (beautyInfo?.isBeauty) {
+      return beautyInfo.badges;
+    }
     const text = `${selectedProduct.title} ${(selectedProduct.tags || []).join(' ')} ${selectedProduct.productType || ''}`.toLowerCase();
     const badges: string[] = [];
     if (text.includes('кросів') || text.includes('sneaker') || text.includes('jordan') || text.includes('dunk'))
@@ -85,11 +96,17 @@ export const ProductDetailModal: React.FC = () => {
       badges.push('🧥 Технічний захист');
     badges.push('✨ Verified Legit Check');
     return badges.slice(0, 3);
-  }, [selectedProduct]);
+  }, [selectedProduct, beautyInfo]);
 
-  // Streetwear Drop & Style Guide classification
+  // Streetwear Drop & Style Guide / Beauty classification
   const styleProtocol = useMemo(() => {
     if (!selectedProduct) return null;
+    if (beautyInfo?.isBeauty) {
+      return {
+        step: 'BEAUTY & CARE // 100% ORIGINAL',
+        badge: '🌸 ДЕРМАТОЛОГІЧНИЙ ДОГЛЯД',
+      };
+    }
     const type = (selectedProduct.productType || '').toLowerCase();
     const title = selectedProduct.title.toLowerCase();
 
@@ -121,7 +138,18 @@ export const ProductDetailModal: React.FC = () => {
       step: 'STREETWEAR BASICS // 100% ORIGINAL',
       badge: '⚡ КУЛЬТОВИЙ ДРОП',
     };
-  }, [selectedProduct]);
+  }, [selectedProduct, beautyInfo]);
+
+  // Synergistic complementary bundle product & pricing
+  const complementaryItem = useMemo(() => {
+    if (!selectedProduct) return null;
+    return getComplementaryProduct(selectedProduct, products);
+  }, [selectedProduct, products]);
+
+  const bundleData = useMemo(() => {
+    if (!selectedProduct || !complementaryItem) return null;
+    return calculateBundlePricing(selectedProduct, complementaryItem, 10);
+  }, [selectedProduct, complementaryItem]);
 
   // Product reviews
   const productReviews = useMemo(() => {
@@ -142,12 +170,23 @@ export const ProductDetailModal: React.FC = () => {
       : null;
 
   const handleAddAndClose = () => {
+    hapticImpact('light');
     addToCart(selectedProduct, 1, selectedVariant || currentVariant?.title);
     setAdded(true);
     setTimeout(() => {
       setAdded(false);
       handleClose();
     }, 400);
+  };
+
+  const handleBuyBundle = () => {
+    if (!selectedProduct || !complementaryItem || !bundleData) return;
+    hapticImpact('medium');
+    addToCart(selectedProduct, 1, selectedVariant || currentVariant?.title);
+    addToCart(complementaryItem, 1);
+    addToast(`Комплект додано! Знижка 10% (-${bundleData.discountAmount} ₴)`, 'success');
+    handleClose();
+    setIsCartDrawerOpen(true);
   };
 
   const handleShare = () => {
@@ -609,11 +648,66 @@ export const ProductDetailModal: React.FC = () => {
             )}
           </div>
 
+          {/* Bundle Synergy Booster: Часто купують разом (-10%) */}
+          {bundleData && complementaryItem && (
+            <div className="hairline-t pt-3 mb-4 font-mono">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-bold text-dune-ochre uppercase tracking-wider flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-dune-ochre" />
+                  <span>// КУПУЙТЕ РАЗОМ: СИНЕРГІЯ</span>
+                </span>
+                <span className="bg-black text-white text-[9px] px-1.5 py-0.5 font-bold uppercase">
+                  -10% НА СЕТ
+                </span>
+              </div>
+              <div className="p-3 bg-neutral-50 hairline-all space-y-2.5">
+                <div className="flex items-center gap-2">
+                  <img
+                    src={selectedProduct.featuredImage}
+                    alt=""
+                    className="w-12 h-12 object-cover bg-white hairline-all shrink-0 mix-blend-multiply"
+                  />
+                  <span className="text-black font-bold text-xs">+</span>
+                  <img
+                    src={complementaryItem.featuredImage}
+                    alt=""
+                    className="w-12 h-12 object-cover bg-white hairline-all shrink-0 mix-blend-multiply"
+                  />
+                  <div className="min-w-0 flex-1 ml-1 font-sans">
+                    <p className="text-[11px] font-semibold text-black uppercase truncate leading-tight">
+                      {complementaryItem.title}
+                    </p>
+                    <div className="flex items-baseline gap-1.5 font-mono text-[11px] mt-1">
+                      <span className="font-bold text-black tabular-nums">
+                        {bundleData.bundlePrice.toLocaleString('uk-UA')} ₴
+                      </span>
+                      <span className="text-[10px] text-neutral-400 line-through tabular-nums">
+                        {bundleData.originalTotal.toLocaleString('uk-UA')} ₴
+                      </span>
+                      <span className="text-[10px] text-emerald-600 font-bold">
+                        (-{bundleData.discountAmount} ₴)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleBuyBundle}
+                  className="w-full py-2.5 bg-dune-ochre hover:bg-[#ebd500] text-black font-mono font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors active:scale-[0.98]"
+                >
+                  <Sparkles className="w-3.5 h-3.5 fill-current" />
+                  <span>КУПИТИ КОМПЛЕКТОМ ({bundleData.bundlePrice.toLocaleString('uk-UA')} ₴)</span>
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Cross-Sell Recommendations */}
-          {related.length > 0 && (
+          {related.length > 0 && !bundleData && (
             <div className="hairline-t pt-3 mb-4">
               <h4 className="font-mono text-neutral-500 text-[10px] uppercase tracking-wider mb-2">
-                // ЧАСТО ЗАМОВЛЯЮТЬ РАЗОМ:
+                // РЕКОМЕНДОВАНІ ПОЗИЦІЇ:
               </h4>
               <div className="space-y-2">
                 {related.map((rel) => (
@@ -632,7 +726,10 @@ export const ProductDetailModal: React.FC = () => {
                       </span>
                     </div>
                     <button
-                      onClick={() => addToCart(rel, 1)}
+                      onClick={() => {
+                        hapticImpact('light');
+                        addToCart(rel, 1);
+                      }}
                       className="min-h-[30px] inline-flex items-center gap-1 px-2.5 py-1 bg-black text-white font-mono text-[10px] uppercase font-bold shrink-0 ml-2 hover:bg-neutral-800 transition-all"
                     >
                       <span>+ {rel.price} ₴</span>
@@ -647,6 +744,7 @@ export const ProductDetailModal: React.FC = () => {
           <div className="mt-auto space-y-2 pt-3 hairline-t font-mono">
             <button
               onClick={() => {
+                hapticImpact('medium');
                 openQuickOrder(selectedProduct, selectedVariant || currentVariant?.title);
                 handleClose();
               }}
@@ -679,6 +777,7 @@ export const ProductDetailModal: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
+                hapticImpact('light');
                 addToCart(selectedProduct, 1, selectedVariant || currentVariant?.title);
                 handleClose();
               }}
@@ -688,6 +787,7 @@ export const ProductDetailModal: React.FC = () => {
             </button>
             <button
               onClick={() => {
+                hapticImpact('medium');
                 openQuickOrder(selectedProduct, selectedVariant || currentVariant?.title);
                 handleClose();
               }}

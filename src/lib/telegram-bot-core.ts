@@ -87,9 +87,12 @@ export function buildMainMenuReplyKeyboard(): TelegramReplyKeyboardMarkup {
 /**
  * Builds inline buttons for the /start admin dashboard
  */
-export function buildAdminDashboardInlineKeyboard(): TelegramInlineKeyboardMarkup {
+export function buildAdminDashboardInlineKeyboard(storeUrl: string = 'https://v0-luxury-fashion-homepage.vercel.app'): TelegramInlineKeyboardMarkup {
   return {
     inline_keyboard: [
+      [
+        { text: '🛍 Відкрити магазин (Web App)', web_app: { url: storeUrl } },
+      ],
       [
         { text: '📦 Нові замовлення', callback_data: 'menu:orders' },
         { text: '📊 Статистика', callback_data: 'menu:stats' },

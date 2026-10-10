@@ -72,6 +72,7 @@ export interface TelegramInlineButton {
   text: string;
   url?: string;
   callback_data?: string;
+  web_app?: { url: string };
 }
 
 export interface TelegramInlineMarkup {
