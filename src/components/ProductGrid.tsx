@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Search, SlidersHorizontal, PackageX, ChevronDown } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from './ProductCard';
+import { MobileFilterDrawer } from './MobileFilterDrawer';
 
 const PAGE_SIZE = 12;
 
@@ -31,10 +32,15 @@ export const ProductGrid: React.FC = () => {
     setSelectedCategory,
     selectedBrand,
     setSelectedBrand,
+    isMobileFiltersOpen,
+    setIsMobileFiltersOpen,
   } = useStore();
   const [search, setSearch] = useState('');
   const [selectedConcern, setSelectedConcern] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price_asc' | 'price_desc' | 'discount'>('popular');
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(0);
+  const [inStockOnly, setInStockOnly] = useState<boolean>(false);
   const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
 
   // Single O(N) pass to calculate category counts
@@ -97,6 +103,16 @@ export const ProductGrid: React.FC = () => {
       }
     }
 
+    if (minPrice > 0) {
+      result = result.filter((p) => p.price >= minPrice);
+    }
+    if (maxPrice > 0) {
+      result = result.filter((p) => p.price <= maxPrice);
+    }
+    if (inStockOnly) {
+      result = result.filter((p) => p.available);
+    }
+
     if (sortBy === 'price_asc') {
       result.sort((a, b) => a.price - b.price);
     } else if (sortBy === 'price_desc') {
@@ -130,6 +146,23 @@ export const ProductGrid: React.FC = () => {
             <p className="font-mono text-xs text-neutral-500 uppercase tracking-wider mt-1">
               ДОСТУПНО ДО ВІДПРАВКИ: {filteredProducts.length} ПОЗИЦІЙ
             </p>
+
+            {/* Mobile Filter Trigger Button */}
+            <div className="flex md:hidden items-center gap-2 mt-3 w-full">
+              <button
+                type="button"
+                onClick={() => setIsMobileFiltersOpen(true)}
+                className="flex-1 min-h-[44px] px-4 py-2.5 bg-black text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-between active:scale-[0.98] transition-transform shadow-xs"
+              >
+                <div className="flex items-center gap-2">
+                  <SlidersHorizontal className="w-4 h-4 text-dune-ochre" />
+                  <span>ФІЛЬТРИ ТА СОРТУВАННЯ</span>
+                </div>
+                <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded font-mono font-bold">
+                  {filteredProducts.length}
+                </span>
+              </button>
+            </div>
           </div>
 
           {/* Sort dropdown */}
@@ -328,6 +361,21 @@ export const ProductGrid: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Dedicated Mobile Bottom Sheet Filter Drawer */}
+      <MobileFilterDrawer
+        isOpen={isMobileFiltersOpen}
+        onClose={() => setIsMobileFiltersOpen(false)}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        setMinPrice={setMinPrice}
+        setMaxPrice={setMaxPrice}
+        inStockOnly={inStockOnly}
+        setInStockOnly={setInStockOnly}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        totalFilteredCount={filteredProducts.length}
+      />
     </section>
   );
 };
