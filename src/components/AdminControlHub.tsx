@@ -2914,6 +2914,16 @@ export const AdminControlHub: React.FC = () => {
                           <Play className="w-3.5 h-3.5 text-sky-600" />
                           <span>Надіслати тестове замовлення в Telegram</span>
                         </button>
+
+                        <a
+                          href="https://t.me/sawezbot"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-4 py-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 text-xs font-bold transition-all flex items-center gap-1.5"
+                        >
+                          <Send className="w-3.5 h-3.5 text-sky-600" />
+                          <span>Відкрити бота @sawezbot →</span>
+                        </a>
                       </div>
 
                       {tgTestResult.message && (

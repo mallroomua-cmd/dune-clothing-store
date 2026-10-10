@@ -211,8 +211,8 @@ const DEFAULT_ANALYTICS: AnalyticsConfig = {
   merchantCenterTag: (import.meta.env.VITE_GMC_TAG as string) || '',
   gtmId: (import.meta.env.VITE_GTM_ID as string) || '',
   fbPixelId: (import.meta.env.VITE_FB_PIXEL_ID as string) || '',
-  telegramBotToken: '', // Token is strictly kept on server to prevent leakage; set in Admin UI only for local sandbox testing
-  telegramChatId: (import.meta.env.VITE_TG_CHAT_ID as string) || '',
+  telegramBotToken: (import.meta.env.VITE_TELEGRAM_BOT_TOKEN as string) || (import.meta.env.TG_BOT_TOKEN as string) || '',
+  telegramChatId: (import.meta.env.VITE_TELEGRAM_CHAT_ID as string) || (import.meta.env.VITE_TG_CHAT_ID as string) || (import.meta.env.TG_CHAT_ID as string) || '',
   novaPoshtaApiKey: (import.meta.env.VITE_NP_KEY as string) || '',
   debugMode: import.meta.env.DEV,
 };

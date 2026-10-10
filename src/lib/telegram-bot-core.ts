@@ -385,7 +385,8 @@ export async function processTelegramUpdate(
       const welcomeText =
         `👋 <b>Вітаємо в системі керування магазином DUNE / MOLAND!</b>\n` +
         `━━━━━━━━━━━━━━━━━━━━\n` +
-        `Ви підключені як адміністратор магазину.\n\n` +
+        `Ви підключені як адміністратор магазину.\n` +
+        `🔑 <b>Ваш Chat ID:</b> <code>${chatId}</code>\n\n` +
         `📦 <b>Нових замовлень:</b> <b>${stats.newCount}</b>\n` +
         `💰 <b>Оборот за сьогодні:</b> <b>${stats.todayRevenue.toLocaleString('uk-UA')} ₴</b>\n` +
         `📦 <b>Всього замовлень:</b> ${stats.totalCount}\n\n` +
