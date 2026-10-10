@@ -42,22 +42,23 @@ import {
 } from '../lib/supabase';
 
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
-  storeName: 'DUNE',
-  phone: '0 (800) 33-22-11',
-  telegramUsername: 'dune_concept',
-  viberNumber: '+380800332211',
+  storeName: 'MOLAND',
+  phone: '+38 (093) 345-68-10',
+  telegramUsername: 'moland_ua',
+  viberNumber: '+380933456810',
   workingHours: 'Пн–Нд: 10:00 — 21:00',
   freeShippingThreshold: 3000,
   contactWidgetEnabled: true,
   socialProofEnabled: true,
-  instagramUsername: 'dune_concept',
+  instagramUsername: 'moland.ua',
 };
 
 export const DEFAULT_PROMO_CODES: PromoCode[] = [
-  { id: 'promo-1', code: 'DUNE10', discountType: 'percent', discountValue: 10, minOrderAmount: 1000, isActive: true },
-  { id: 'promo-2', code: 'DROP100', discountType: 'fixed', discountValue: 100, minOrderAmount: 1500, isActive: true },
-  { id: 'promo-3', code: 'VIP15', discountType: 'percent', discountValue: 15, minOrderAmount: 1500, isActive: true },
-  { id: 'promo-4', code: 'SNEAKER5', discountType: 'percent', discountValue: 5, minOrderAmount: 800, isActive: true },
+  { id: 'promo-1', code: 'MOLAND10', discountType: 'percent', discountValue: 10, minOrderAmount: 1000, isActive: true },
+  { id: 'promo-2', code: 'ROOMS10', discountType: 'percent', discountValue: 10, minOrderAmount: 1000, isActive: true },
+  { id: 'promo-3', code: 'DUNE10', discountType: 'percent', discountValue: 10, minOrderAmount: 1000, isActive: true },
+  { id: 'promo-4', code: 'DROP100', discountType: 'fixed', discountValue: 100, minOrderAmount: 1500, isActive: true },
+  { id: 'promo-5', code: 'VIP15', discountType: 'percent', discountValue: 15, minOrderAmount: 1500, isActive: true },
 ];
 
 export const DEFAULT_REVIEWS: ProductReview[] = [
@@ -66,8 +67,8 @@ export const DEFAULT_REVIEWS: ProductReview[] = [
     productId: 'all',
     author: 'Владислав К.',
     rating: 5,
-    text: 'Отримав кросівки Air Jordan 1 Lost & Found — 100% оригінал, коробка ідеальна, з вінтажним чеком. Огляд перед оплатою у відділенні Нової Пошти зняв усі сумніви. Респект за сервіс!',
-    date: '08.10.2026',
+    text: 'Замовляв світшот AMI Paris та кросівки New Balance 1906R — 100% оригінальні речі, фірмове пакування. Огляд та примірка у відділенні Нової Пошти зняли всі сумніви. Респект команді MOLAND!',
+    date: '09.10.2026',
     verified: true,
   },
   {
@@ -75,8 +76,8 @@ export const DEFAULT_REVIEWS: ProductReview[] = [
     productId: 'all',
     author: 'Артем Д.',
     rating: 5,
-    text: 'Худі Stüssy Basic Hoodie сіло ідеально (розмір L на зріст 184 см). Матеріал важкий, дуже щільний фліс. Відправили того ж дня, отримав через 24 години.',
-    date: '05.10.2026',
+    text: 'Худі Stüssy та штани Carhartt Double Knee сіли ідеально. Консультант у Telegram підказав за розмірною сіткою протягом 5 хвилин. Швидка відправка в той же день.',
+    date: '07.10.2026',
     verified: true,
   },
   {
@@ -84,8 +85,8 @@ export const DEFAULT_REVIEWS: ProductReview[] = [
     productId: 'all',
     author: 'Дар’я М.',
     rating: 5,
-    text: 'New Balance 1906R — мої найзручніші снікери на кожен день. Підійшли за розмірною сіткою один в один. Дякую команді DUNE за швидку консультацію!',
-    date: '02.10.2026',
+    text: 'Купила сумочку Ganni Bou Bag та годинник Breda. Дуже естетичне пакування, речі бездоганної якості. Дякую MOLAND за класний сервіс і швидку доставку по Києву!',
+    date: '04.10.2026',
     verified: true,
   },
   {
@@ -93,8 +94,8 @@ export const DEFAULT_REVIEWS: ProductReview[] = [
     productId: 'all',
     author: 'Михайло С.',
     rating: 5,
-    text: 'Штани Carhartt Double Knee та куртка Stone Island. Якість на найвищому рівні, QR Certilogo б’ється без проблем. Буду замовляти ще з наступного дропу.',
-    date: '29.09.2026',
+    text: 'Куртка Stone Island Soft Shell та трейлові Salomon XT-6. Certilogo б’ється офіційно. MOLAND тепер мій улюблений концепт-стор у Києві.',
+    date: '01.10.2026',
     verified: true,
   },
 ];
@@ -583,12 +584,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           p.handle.includes('smart-watch') ||
           p.handle.includes('snail')
         );
-        const nicheVersion = localStorage.getItem('dune_catalog_niche');
+        const nicheVersion = localStorage.getItem('moland_catalog_niche');
 
-        if (!saved || saved.length === 0 || hasLegacy || nicheVersion !== 'dune_streetwear_v2') {
+        if (!saved || saved.length === 0 || hasLegacy || nicheVersion !== 'moland_fashion_v1') {
           setProducts(SAMPLE_PRODUCTS);
           void dbSet('shopify_store_products', SAMPLE_PRODUCTS);
-          localStorage.setItem('dune_catalog_niche', 'dune_streetwear_v2');
+          localStorage.setItem('moland_catalog_niche', 'moland_fashion_v1');
         } else {
           setProducts(saved);
         }

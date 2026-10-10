@@ -9,11 +9,12 @@ interface PromoBannerProps {
 
 const QUICK_DROPS = [
   { id: 'all', label: 'УСІ ДРОПИ', filter: 'all' },
-  { id: 'sneakers', label: '👟 СНІКЕРИ', filter: 'Взуття' },
-  { id: 'hoodies', label: '👕 ХУДІ & СВІТШОТИ', filter: 'Одяг' },
-  { id: 'jackets', label: '🧥 ВЕРХНІЙ ОДЯГ', filter: 'Одяг' },
-  { id: 'pants', label: '👖 ШТАНИ КАРГО', filter: 'Одяг' },
-  { id: 'deadstock', label: '🔥 DEADSTOCK', filter: 'all' },
+  { id: 'clothing', label: '🧥 ОДЯГ', filter: 'Одяг' },
+  { id: 'footwear', label: '👟 ВЗУТТЯ', filter: 'Взуття' },
+  { id: 'bags', label: '👜 СУМКИ', filter: 'Сумки' },
+  { id: 'accessories', label: '🕶️ АКСЕСУАРИ', filter: 'Аксесуари' },
+  { id: 'brands', label: '✦ БРЕНДИ', filter: 'all' },
+  { id: 'sale', label: '🏷️ SALE', filter: 'all' },
 ];
 
 export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
@@ -51,7 +52,7 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
           <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-[2.1/1] min-h-[260px] sm:min-h-[340px] md:min-h-[420px] bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
             <img
               src={duneBannerImg}
-              alt="DUNE Streetwear Concept Store - Новий дроп одягу та снікер-культури"
+              alt="MOLAND Concept Store - Брендовий одяг, взуття та аксесуари"
               className="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-[1.015]"
               loading="eager"
             />
@@ -64,17 +65,17 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
             <div className="absolute top-3 left-3 sm:top-5 sm:left-5 right-3 sm:right-5 flex items-center justify-between pointer-events-none">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-black/80 backdrop-blur-md text-white font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-white/15 rounded shadow-sm">
-                  <Sparkles className="w-3 h-3 text-[#dec400] animate-pulse" />
-                  <span>DUNE // LOOKBOOK 2026</span>
+                  <Sparkles className="w-3 h-3 text-[#A77A06] animate-pulse" />
+                  <span>MOLAND // LOOKBOOK 2026</span>
                 </span>
-                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 bg-[#dec400] text-black font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider rounded">
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 bg-[#A77A06] text-white font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider rounded">
                   <Flame className="w-3 h-3" />
                   <span>NEW SEASON DROP</span>
                 </span>
               </div>
 
               <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 bg-black/70 backdrop-blur-md text-neutral-300 font-mono text-[11px] border border-white/10 rounded">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#dec400]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#A77A06]" />
                 <span>100% LEGIT CHECK</span>
               </span>
             </div>
@@ -83,18 +84,20 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
             <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
               {/* Editorial Headings */}
               <div className="max-w-xl space-y-1 sm:space-y-2 pointer-events-none">
-                <div className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-[#dec400] font-semibold flex items-center gap-1.5">
-                  <span>STREETWEAR</span>
+                <div className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-[#A77A06] font-semibold flex items-center gap-1.5">
+                  <span>AMI PARIS</span>
                   <span>•</span>
-                  <span>WORKWEAR</span>
+                  <span>GANNI</span>
                   <span>•</span>
-                  <span>GORPCORE</span>
+                  <span>JACQUEMUS</span>
+                  <span>•</span>
+                  <span>CARHARTT WIP</span>
                 </div>
-                <h2 className="text-xl sm:text-3xl md:text-4xl font-black font-display text-white uppercase tracking-tight leading-tight drop-shadow-md">
-                  ВУЛИЧНА МОДА ТА СНІКЕР-КУЛЬТУРА
+                <h2 className="text-xl sm:text-3xl md:text-4xl font-bold font-serif text-white uppercase tracking-tight leading-tight drop-shadow-md">
+                  КОНЦЕПТУАЛЬНИЙ БРЕНДОВИЙ ОДЯГ ТА ВЗУТТЯ
                 </h2>
                 <p className="hidden sm:block text-xs md:text-sm text-neutral-300 font-sans max-w-lg leading-relaxed drop-shadow">
-                  Культові релізи світових брендів: Jordan, Stüssy, New Balance, Carhartt WIP, Salomon, Supreme.
+                  Кураторська селекція світових брендів: AMI Paris, Ganni, Jacquemus, Stone Island, Carhartt WIP, New Balance, Salomon, Breda.
                 </p>
               </div>
 
@@ -108,11 +111,11 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onExploreDeals }) => {
                   }}
                   className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 bg-black/80 hover:bg-black text-white font-mono text-xs font-bold uppercase tracking-wider border border-white/20 rounded-lg shadow-lg backdrop-blur-md transition-all active:scale-[0.98]"
                 >
-                  <Compass className="w-3.5 h-3.5 text-[#dec400]" />
-                  <span>ПІДБІР СТИЛЮ</span>
+                  <Compass className="w-3.5 h-3.5 text-[#A77A06]" />
+                  <span>ПІДБІР ОБРАЗУ</span>
                 </button>
 
-                <div className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-[#dec400] hover:bg-[#ebd52d] text-black font-mono text-xs font-black uppercase tracking-wider rounded-lg shadow-xl transition-all transform group-hover:translate-x-0.5">
+                <div className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-[#A77A06] hover:bg-[#8e6704] text-white font-mono text-xs font-black uppercase tracking-wider rounded-lg shadow-xl transition-all transform group-hover:translate-x-0.5">
                   <span>ДО КАТАЛОГУ</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </div>

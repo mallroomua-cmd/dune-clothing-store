@@ -97,14 +97,14 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
         {/* MODAL HEADER */}
         <header className="px-5 py-4 border-b border-neutral-200 bg-neutral-900 text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#dec400] text-black flex items-center justify-center font-bold text-xs">
-              DN
+            <div className="w-8 h-8 rounded-lg bg-[#A77A06] text-white flex items-center justify-center font-bold text-xs">
+              ML
             </div>
             <div>
-              <h2 className="text-sm sm:text-base font-bold font-display uppercase tracking-wide text-white flex items-center gap-2">
+              <h2 className="text-sm sm:text-base font-bold font-serif uppercase tracking-wide text-white flex items-center gap-2">
                 Інформаційний центр & Політики
-                <span className="text-[10px] font-mono text-[#dec400] bg-[#dec400]/10 px-2 py-0.5 rounded border border-[#dec400]/30 hidden sm:inline-block">
-                  DUNE Concept Store
+                <span className="text-[10px] font-mono text-[#A77A06] bg-[#A77A06]/10 px-2 py-0.5 rounded border border-[#A77A06]/30 hidden sm:inline-block">
+                  MOLAND Concept Store
                 </span>
               </h2>
               <p className="text-[11px] text-neutral-400 font-mono">
@@ -206,11 +206,11 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                 <span className="font-mono text-xs text-neutral-400 uppercase tracking-widest">
                   // CONCEPT STORE // PHILOSOPHY
                 </span>
-                <h3 className="text-xl sm:text-2xl font-black font-display text-black uppercase mt-1">
-                  Про концепт-стор DUNE
+                <h3 className="text-xl sm:text-2xl font-bold font-serif text-black uppercase mt-1">
+                  Про концепт-стор MOLAND
                 </h3>
                 <p className="text-neutral-600 mt-2 font-normal leading-relaxed">
-                  <strong>DUNE</strong> — концептуальний мультибрендовий простір у Києві, присвячений сучасній моді, снікер-культурі та утилітарному streetwear. Ми зібрали культові релізи світових брендів: Jordan, Nike, New Balance, Stüssy, Carhartt WIP, Salomon, Supreme, Stone Island.
+                  <strong>MOLAND</strong> — концептуальний мультибрендовий простір у Києві, присвячений сучасній моді, преміальному streetwear та селекції європейських дизайнерів. Ми зібрали культові релізи світових брендів: AMI Paris, Ganni, Jacquemus, Jil Sander, Stone Island, Carhartt WIP, New Balance, Salomon, Breda.
                 </p>
               </div>
 
@@ -386,11 +386,11 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                 <span className="font-mono text-xs text-neutral-400 uppercase tracking-widest">
                   // CONSUMER RIGHTS // UKRAINE LAW
                 </span>
-                <h3 className="text-xl sm:text-2xl font-black font-display text-black uppercase mt-1">
+                <h3 className="text-xl sm:text-2xl font-bold font-serif text-black uppercase mt-1">
                   Політика повернення та обміну (14 днів)
                 </h3>
                 <p className="text-neutral-600 mt-2 font-normal">
-                  Відповідно до статті 9 Закону України «Про захист прав споживачів» та стандартів концепт-стору DUNE.
+                  Відповідно до статті 9 Закону України «Про захист прав споживачів» та стандартів концепт-стору MOLAND.
                 </p>
               </div>
 
@@ -675,7 +675,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
                       Фактична адреса / Шоурум:
                     </span>
                     <span className="text-white font-medium">
-                      Україна, 03035, м. Київ, вул. Митрополита Василя Липківського, 16Б
+                      Україна, 01004, м. Київ, вул. Велика Васильківська, 23 (Шоурум MOLAND)
                     </span>
                   </div>
 
@@ -725,7 +725,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
         <footer className="px-5 py-3 border-t border-neutral-200 bg-neutral-50 flex items-center justify-between text-xs font-mono text-neutral-500 shrink-0">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span>Офіційний сервіс MALLROOM</span>
+            <span>Офіційний сервіс MOLAND CONCEPT STORE</span>
           </div>
           <button
             onClick={handleClose}

@@ -47,9 +47,10 @@ export default {
       },
       fontFamily: {
         mono: ['"IBM Plex Mono"', 'SF Mono', 'Menlo', 'Consolas', 'monospace'],
-        display: ['Unbounded', 'sans-serif'],
-        heading: ['Unbounded', 'sans-serif'],
-        sans: ['"IBM Plex Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        heading: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['Jost', '"Inter Tight"', '"IBM Plex Sans"', 'system-ui', '-apple-system', 'sans-serif'],
       },
       boxShadow: {
         'dune-card': '0 1px 3px rgba(0, 0, 0, 0.05)',

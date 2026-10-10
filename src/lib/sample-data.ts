@@ -192,10 +192,100 @@ export const SAMPLE_PRODUCTS: Product[] = [
       { id: 'v-8b-xl', title: 'XL (Boxy fit)', price: 2400, compareAtPrice: 2900, sku: 'STU-8BALL-XL' },
     ],
   },
+  {
+    id: 'prod-jacquemus-le-chiquito-moyen',
+    handle: 'jacquemus-le-chiquito-moyen-leather-bag-black',
+    title: "Jacquemus Le Chiquito Moyen Leather Bag 'Black'",
+    bodyHtml: '<p>Культова дизайнерська сумка Le Chiquito Moyen від французького бренду Jacquemus. Виготовлена з гладкої преміальної шкіри з золотистим металевим логотипом JACQUEMUS. Комплектується знімним регульованим ременем через плече та фірмовим пильником.</p><ul><li><strong>Матеріал:</strong> 100% натуральна теляча шкіра, бавовняна підкладка.</li><li><strong>Деталі:</strong> магнітна застібка, золотиста фурнітура, фірмовий пильник Jacquemus у комплекті.</li><li><strong>Розміри:</strong> 18 x 13.5 x 8 см.</li></ul>',
+    vendor: 'Jacquemus',
+    productType: 'Сумки / Кросбоді',
+    tags: ['Сумки', 'Jacquemus', 'Аксесуари', 'Шкіра', 'Преміум', 'Новинки'],
+    price: 19800,
+    compareAtPrice: 23500,
+    images: [
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=80',
+    ],
+    featuredImage: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=80',
+    available: true,
+    sku: '213BA002-3000-990',
+    variants: [
+      { id: 'v-jacq-os', title: 'One Size', price: 19800, compareAtPrice: 23500, sku: '213BA002-990-OS' },
+    ],
+  },
+  {
+    id: 'prod-ami-paris-ami-de-coeur-sweatshirt',
+    handle: 'ami-paris-ami-de-coeur-organic-cotton-sweatshirt-noir',
+    title: "AMI Paris Ami de Coeur Sweatshirt 'Noir / Red'",
+    bodyHtml: '<p>Фірмовий світшот від паризького дому моди AMI Alexandre Mattiussi. Вишитий червоний символ любові та дружби Ami de Coeur на грудях та тональна вишивка AMI на спині. Щільна органічна французька бавовна French Terry.</p><ul><li><strong>Склад:</strong> 100% органічна бавовна (GOTS certified French Terry 420 GSM).</li><li><strong>Крій:</strong> Boxy regular fit. Зроблено в Португалії.</li><li><strong>Догляд:</strong> делікатне прання при 30°C.</li></ul>',
+    vendor: 'AMI Paris',
+    productType: 'Одяг / Худі та світшоти',
+    tags: ['Світшот', 'AMI Paris', 'Одяг', 'Ami De Coeur', 'Органічна бавовна', 'Хіт'],
+    price: 9200,
+    compareAtPrice: 10800,
+    images: [
+      'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&auto=format&fit=crop&q=80',
+    ],
+    featuredImage: 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&auto=format&fit=crop&q=80',
+    available: true,
+    sku: 'BFUSW001-724-001',
+    variants: [
+      { id: 'v-ami-s', title: 'S (Regular fit)', price: 9200, compareAtPrice: 10800, sku: 'BFUSW001-S' },
+      { id: 'v-ami-m', title: 'M (Regular fit)', price: 9200, compareAtPrice: 10800, sku: 'BFUSW001-M' },
+      { id: 'v-ami-l', title: 'L (Regular fit)', price: 9200, compareAtPrice: 10800, sku: 'BFUSW001-L' },
+      { id: 'v-ami-xl', title: 'XL (Regular fit)', price: 9200, compareAtPrice: 10800, sku: 'BFUSW001-XL' },
+    ],
+  },
+  {
+    id: 'prod-ganni-graphic-tee-white',
+    handle: 'ganni-graphic-organic-cotton-t-shirt-white',
+    title: "Ganni Graphic Organic Cotton T-Shirt 'Bright White'",
+    bodyHtml: '<p>Культова футболка від копенгагенського бренду Ganni з фірмовим ретро-принтом та слоганом бренду. Створена з турботою про довкілля з 100% органічної сертифікованої бавовни.</p><ul><li><strong>Склад:</strong> 100% органічна бавовна.</li><li><strong>Крій:</strong> Вільний Scandinavian relaxed fit.</li><li><strong>Деталі:</strong> круглий виріз горловини в рубчик, стійкий шовкотрафаретний принт.</li></ul>',
+    vendor: 'Ganni',
+    productType: 'Одяг / Футболки',
+    tags: ['Футболки', 'Ganni', 'Одяг', 'Скандинавський дизайн', 'Новинки'],
+    price: 3600,
+    compareAtPrice: 4200,
+    images: [
+      'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&auto=format&fit=crop&q=80',
+    ],
+    featuredImage: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&auto=format&fit=crop&q=80',
+    available: true,
+    sku: 'T3350-100',
+    variants: [
+      { id: 'v-gan-xs', title: 'XS (Relaxed)', price: 3600, compareAtPrice: 4200, sku: 'T3350-100-XS' },
+      { id: 'v-gan-s', title: 'S (Relaxed)', price: 3600, compareAtPrice: 4200, sku: 'T3350-100-S' },
+      { id: 'v-gan-m', title: 'M (Relaxed)', price: 3600, compareAtPrice: 4200, sku: 'T3350-100-M' },
+      { id: 'v-gan-l', title: 'L (Relaxed)', price: 3600, compareAtPrice: 4200, sku: 'T3350-100-L' },
+    ],
+  },
+  {
+    id: 'prod-breda-jane-watch-gold',
+    handle: 'breda-jane-vintage-gold-mesh-watch',
+    title: "Breda Jane 1741 Gold Mesh Watch 'Champagne'",
+    bodyHtml: '<p>Мінімалістичний вінтажний годинник від американського дизайн-ательє Breda (Даллас). Витончений овальний корпус із золотим PVD-покриттям, перламутровий циферблат та міланський сітчастий браслет.</p><ul><li><strong>Механізм:</strong> японський кварцовий Seiko / Miyota.</li><li><strong>Матеріал:</strong> нержавіюча сталь 316L з PVD-покриттям кольору 18K золота.</li><li><strong>Водонепроникність:</strong> 3 ATM (захист від бризок). Комплектується фірмовим футляром.</li></ul>',
+    vendor: 'Breda',
+    productType: 'Аксесуари / Годинники',
+    tags: ['Аксесуари', 'Годинники', 'Breda', 'Jane', 'Подарунок', 'Преміум'],
+    price: 6800,
+    compareAtPrice: 7900,
+    images: [
+      'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80',
+    ],
+    featuredImage: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80',
+    available: true,
+    sku: 'BREDA-1741-GLD',
+    variants: [
+      { id: 'v-breda-os', title: 'One Size (Регульований)', price: 6800, compareAtPrice: 7900, sku: 'BREDA-1741-GLD-OS' },
+    ],
+  },
 ];
 
 export const SAMPLE_SHOPIFY_CSV = `Handle,Title,Body (HTML),Vendor,Type,Tags,Published,Option1 Name,Option1 Value,Variant SKU,Variant Price,Variant Compare At Price,Image Src
 air-jordan-1-lost-and-found,"Air Jordan 1 Retro High OG 'Chicago Lost & Found'","Культова класика 1985 року у вінтажному переосмисленні з натуральною шкірою.","Jordan","Взуття / Кросівки","Кросівки, Jordan, Хіт, Deadstock, Взуття",TRUE,"Title","EU 42 (26.5 cm)","DZ5485-612-42",9800,11500,https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800
+jacquemus-le-chiquito-moyen,"Jacquemus Le Chiquito Moyen Leather Bag 'Black'","Культова дизайнерська сумка Le Chiquito Moyen з преміальної шкіри.","Jacquemus","Сумки / Кросбоді","Сумки, Jacquemus, Аксесуари, Шкіра, Преміум",TRUE,"Title","One Size","213BA002-990-OS",19800,23500,https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800
+ami-paris-ami-de-coeur-sweatshirt,"AMI Paris Ami de Coeur Sweatshirt 'Noir / Red'","Фірмовий світшот з органічної бавовни French Terry з вишивкою Ami de Coeur.","AMI Paris","Одяг / Худі та світшоти","Світшот, AMI Paris, Одяг, Ami De Coeur, Хіт",TRUE,"Title","L (Regular fit)","BFUSW001-L",9200,10800,https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800
+ganni-graphic-tee-white,"Ganni Graphic Organic Cotton T-Shirt 'Bright White'","Футболка зі 100% органічної бавовни з ретро-принтом у скандинавському стилі.","Ganni","Одяг / Футболки","Футболки, Ganni, Одяг, Скандинавський дизайн",TRUE,"Title","S (Relaxed)","T3350-100-S",3600,4200,https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800
+breda-jane-watch-gold,"Breda Jane 1741 Gold Mesh Watch 'Champagne'","Мінімалістичний годинник з PVD-покриттям золота та міланським браслетом.","Breda","Аксесуари / Годинники","Аксесуари, Годинники, Breda, Преміум",TRUE,"Title","One Size","BREDA-1741-GLD-OS",6800,7900,https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800
 stussy-basic-hoodie-black,"Stüssy Basic Applique Hoodie 'Black'","Фірмове важке худі з флісу щільністю 380 GSM від піонера каліфорнійського streetwear.","Stüssy","Одяг / Худі та світшоти","Худі, Stüssy, Одяг, Oversize, Хіт",TRUE,"Title","L (Oversize)","STU-HOOD-L",5400,6200,https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800
 new-balance-1906r-silver,"New Balance 1906R 'Silver Metallic / Cordura'","Технологічний біговий силует початку 2000-х з амортизацією N-ergy та ABZORB.","New Balance","Взуття / Кросівки","Кросівки, New Balance, Топ продажів, Gorpcore",TRUE,"Title","EU 43 (27.5 cm)","M1906REE-43",6900,7800,https://images.unsplash.com/photo-1539185441755-769473a23570?w=800
 carhartt-double-knee-pant,"Carhartt WIP Double Knee Pant 'Hamilton Brown'","Еталонні робочі штани з подвійними посиленими наколінниками та органічного канвасу.","Carhartt WIP","Одяг / Штани та джинси","Штани, Carhartt WIP, Одяг, Workwear",TRUE,"Title","W32 / L32","I029196-HZ-32",4800,5600,https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800

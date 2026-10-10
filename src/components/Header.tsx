@@ -10,9 +10,9 @@ import {
   Menu,
   X,
   ChevronDown,
-  Percent,
   Flame,
   ArrowRight,
+  ShieldCheck,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { DispatchCountdown } from './DispatchCountdown';
@@ -25,29 +25,83 @@ interface NavCategory {
   subcategories?: { title: string; categoryKey: string }[];
 }
 
+const BRAND_TICKER_ITEMS = [
+  'AMI PARIS',
+  'CARHARTT WIP',
+  'STONE ISLAND',
+  'GANNI',
+  'JACQUEMUS',
+  'JIL SANDER',
+  'GOLDEN GOOSE',
+  'MARC JACOBS',
+  'ACNE STUDIOS',
+  'A.P.C.',
+  'NEW BALANCE',
+  'ASICS',
+  'SALOMON',
+  'BIRKENSTOCK',
+  'AIR JORDAN',
+  'BREDA',
+  'D1 MILANO',
+  'STÜSSY',
+  'SUPREME',
+];
+
 const NAV_CATEGORIES: NavCategory[] = [
+  {
+    id: 'brands',
+    label: 'БРЕНДИ',
+    badge: '20+',
+    subcategories: [
+      { title: 'AMI Paris', categoryKey: 'AMI Paris' },
+      { title: 'Ganni', categoryKey: 'Ganni' },
+      { title: 'Jacquemus', categoryKey: 'Jacquemus' },
+      { title: 'Jil Sander', categoryKey: 'Jil Sander' },
+      { title: 'Stone Island', categoryKey: 'Stone Island' },
+      { title: 'Carhartt WIP', categoryKey: 'Carhartt WIP' },
+      { title: 'New Balance', categoryKey: 'New Balance' },
+      { title: 'Salomon', categoryKey: 'Salomon' },
+      { title: 'Golden Goose', categoryKey: 'Golden Goose' },
+      { title: 'Marc Jacobs', categoryKey: 'Marc Jacobs' },
+      { title: 'Acne Studios', categoryKey: 'Acne Studios' },
+      { title: 'Breda (Годинники)', categoryKey: 'Breda' },
+      { title: 'Air Jordan & Nike', categoryKey: 'Jordan' },
+      { title: 'Stüssy & Supreme', categoryKey: 'Stüssy' },
+      { title: 'Усі бренди від А до Я', categoryKey: 'all' },
+    ],
+  },
+  {
+    id: 'clothing',
+    label: 'ОДЯГ',
+    subcategories: [
+      { title: 'Весь одяг', categoryKey: 'all' },
+      { title: 'Верхній одяг & куртки', categoryKey: 'Куртки' },
+      { title: 'Футболки & топи', categoryKey: 'Футболки' },
+      { title: 'Худі & світшоти', categoryKey: 'Худі' },
+      { title: 'Штани & карго', categoryKey: 'Штани' },
+      { title: 'Джинси & денім', categoryKey: 'Штани' },
+    ],
+  },
   {
     id: 'footwear',
     label: 'ВЗУТТЯ',
     subcategories: [
-      { title: 'Всі кросівки та снікери', categoryKey: 'all' },
-      { title: 'Кросівки & Снікери', categoryKey: 'Кросівки' },
-      { title: 'Air Jordan & Retro', categoryKey: 'Jordan' },
-      { title: 'New Balance (1906R / 2002R)', categoryKey: 'New Balance' },
-      { title: 'Salomon & Gorpcore', categoryKey: 'Salomon' },
-      { title: 'Nike Classics & Dunks', categoryKey: 'Nike' },
+      { title: 'Все взуття', categoryKey: 'all' },
+      { title: 'Кросівки & снікери', categoryKey: 'Взуття' },
+      { title: 'New Balance (1906R / 990v6)', categoryKey: 'New Balance' },
+      { title: 'Salomon XT-6 & Tech', categoryKey: 'Salomon' },
+      { title: 'Air Jordan Retro & Dunks', categoryKey: 'Jordan' },
+      { title: 'Кеди & літнє взуття', categoryKey: 'Взуття' },
     ],
   },
   {
-    id: 'apparel',
-    label: 'ОДЯГ',
+    id: 'bags',
+    label: 'СУМКИ',
     subcategories: [
-      { title: 'Весь одяг', categoryKey: 'all' },
-      { title: 'Худі та світшоти', categoryKey: 'Худі' },
-      { title: 'Футболки та лонгсліви', categoryKey: 'Футболки' },
-      { title: 'Штани та джинси', categoryKey: 'Штани' },
-      { title: 'Куртки та верхній одяг', categoryKey: 'Куртки' },
-      { title: 'Шорти та карго', categoryKey: 'Шорти' },
+      { title: 'Всі сумки', categoryKey: 'all' },
+      { title: 'Ganni Bou Bags', categoryKey: 'Ganni' },
+      { title: 'Сумки через плече & кросбоді', categoryKey: 'Сумки' },
+      { title: 'Тоути & місткі шопери', categoryKey: 'Сумки' },
     ],
   },
   {
@@ -55,33 +109,20 @@ const NAV_CATEGORIES: NavCategory[] = [
     label: 'АКСЕСУАРИ',
     subcategories: [
       { title: 'Всі аксесуари', categoryKey: 'all' },
-      { title: 'Кепки та панами (New Era)', categoryKey: 'Кепки' },
-      { title: 'Сумки та рюкзаки', categoryKey: 'Сумки' },
-      { title: 'Догляд за взуттям (Crep Protect)', categoryKey: 'Догляд' },
-      { title: 'Шкарпетки та дрібниці', categoryKey: 'Шкарпетки' },
+      { title: 'Годинники (Breda, D1 Milano)', categoryKey: 'Breda' },
+      { title: 'Головні убори (Кепки & шапки)', categoryKey: 'Кепки' },
+      { title: 'Шкарпетки & дрібниці', categoryKey: 'all' },
     ],
   },
   {
-    id: 'brands',
-    label: 'БРЕНДИ',
-    badge: '12+',
-    subcategories: [
-      { title: 'Jordan', categoryKey: 'Jordan' },
-      { title: 'Nike', categoryKey: 'Nike' },
-      { title: 'New Balance', categoryKey: 'New Balance' },
-      { title: 'Stüssy', categoryKey: 'Stüssy' },
-      { title: 'Carhartt WIP', categoryKey: 'Carhartt WIP' },
-      { title: 'Salomon', categoryKey: 'Salomon' },
-      { title: 'Supreme', categoryKey: 'Supreme' },
-      { title: 'Stone Island', categoryKey: 'Stone Island' },
-      { title: 'adidas Originals', categoryKey: 'adidas Originals' },
-      { title: "Arc'teryx", categoryKey: "Arc'teryx" },
-    ],
+    id: 'new-in',
+    label: 'НОВИНКИ',
+    badge: 'NEW',
   },
   {
     id: 'sale',
-    label: 'SALE ДО -50%',
-    badge: 'SALE',
+    label: 'SALE',
+    badge: '-40%',
     highlight: true,
   },
   {
@@ -110,7 +151,7 @@ export const Header: React.FC = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [mobileExpandedCat, setMobileExpandedCat] = useState<string | null>('face');
+  const [mobileExpandedCat, setMobileExpandedCat] = useState<string | null>('brands');
 
   const totalCartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const totalWishlistCount = wishlist.length;
@@ -153,8 +194,7 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
-  const freeThreshold = storeSettings.freeShippingThreshold || 2000;
-  const phoneFormatted = storeSettings.phone || '0 (800) 33-22-11';
+  const phoneFormatted = storeSettings.phone || '+38 (093) 345-68-10';
   const cleanPhoneLink = `tel:${phoneFormatted.replace(/[^\d+]/g, '')}`;
 
   const handleCategoryClick = (cat: NavCategory, sub?: { title: string; categoryKey: string }) => {
@@ -166,13 +206,13 @@ export const Header: React.FC = () => {
       return;
     }
 
-    if (cat.id === 'sale') {
+    if (cat.id === 'sale' || cat.id === 'new-in') {
       document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
       return;
     }
 
     if (cat.id === 'brands') {
-      if (sub) {
+      if (sub && sub.categoryKey !== 'all') {
         filterByBrand(sub.categoryKey);
       } else {
         document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
@@ -181,56 +221,77 @@ export const Header: React.FC = () => {
     }
 
     if (sub) {
-      filterByCategory(sub.categoryKey);
+      if (sub.categoryKey === 'all') {
+        document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        filterByCategory(sub.categoryKey);
+      }
     } else {
       filterByCategory(cat.label);
     }
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white hairline-b shadow-xs transition-all">
-      {/* 1. Top Utility Bar (Cosibella Style) */}
-      <div className="bg-neutral-950 text-white text-[11px] font-mono tracking-wider py-1.5 px-4 border-b border-neutral-800">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4 overflow-hidden whitespace-nowrap">
-            <span className="flex items-center gap-1.5 text-neutral-200">
-              <Truck className="w-3.5 h-3.5 text-[#dec400]" />
-              <span>БЕЗКОШТОВНА ДОСТАВКА ВІД {freeThreshold.toLocaleString('uk-UA')} ₴</span>
+    <header className="sticky top-0 z-40 bg-white border-b border-[#E3E0DB] shadow-xs transition-all">
+      {/* 1. Brand Ticker from the-rooms.com.ua */}
+      <div className="bg-[#111111] text-white text-[10px] sm:text-[11px] font-mono tracking-widest uppercase overflow-hidden whitespace-nowrap py-1.5 border-b border-neutral-800 select-none">
+        <div className="inline-flex marquee-track">
+          {[...BRAND_TICKER_ITEMS, ...BRAND_TICKER_ITEMS].map((brand, idx) => (
+            <span key={idx} className="inline-flex items-center mx-3 text-neutral-300 hover:text-white transition-colors">
+              <span>{brand}</span>
+              <span className="mx-3 text-[#A77A06]">•</span>
             </span>
-            <span className="hidden sm:inline text-neutral-600">//</span>
-            <div className="hidden sm:flex items-center">
+          ))}
+        </div>
+      </div>
+
+      {/* 2. Top Utility Announcement Bar */}
+      <div className="bg-[#F8F8F7] text-[#111111] text-[11px] font-sans tracking-wide py-1.5 px-4 border-b border-[#E3E0DB]">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3 sm:gap-6 overflow-hidden whitespace-nowrap text-xs text-neutral-600">
+            <div className="flex items-center gap-1.5 font-medium">
+              <Truck className="w-3.5 h-3.5 text-[#A77A06]" />
+              <span>Безкоштовна доставка від 3 000 ₴ по Києву та Україні</span>
+            </div>
+            <span className="hidden sm:inline text-neutral-300">|</span>
+            <div className="hidden sm:flex items-center gap-1.5 text-neutral-500 font-mono text-[11px]">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#A77A06]" />
+              <span>100% Оригінальні світові бренди</span>
+            </div>
+            <span className="hidden md:inline text-neutral-300">|</span>
+            <div className="hidden md:flex items-center">
               <DispatchCountdown variant="banner" />
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-neutral-300">
+          <div className="flex items-center gap-4 text-xs text-neutral-600">
             <a
               href={cleanPhoneLink}
-              className="flex items-center gap-1 hover:text-[#dec400] transition-colors"
+              className="flex items-center gap-1 hover:text-black transition-colors font-mono font-medium"
             >
-              <Phone className="w-3 h-3 text-[#dec400]" />
-              <span className="hidden md:inline font-bold">{phoneFormatted}</span>
+              <Phone className="w-3 h-3 text-[#A77A06]" />
+              <span className="hidden md:inline">{phoneFormatted}</span>
             </a>
             <button
               onClick={() => setIsTrackingOpen(true)}
-              className="hidden lg:inline hover:text-white transition-colors cursor-pointer"
+              className="hidden lg:inline hover:text-black transition-colors cursor-pointer font-sans"
             >
               ТТН Нова Пошта
             </button>
             <button
               onClick={() => openPolicyModal('about')}
-              className="hidden md:inline hover:text-white transition-colors cursor-pointer"
+              className="hidden md:inline hover:text-black transition-colors cursor-pointer font-sans"
             >
               Про нас
             </button>
-            <span className="text-[10px] font-bold text-neutral-400 border border-neutral-700 px-1.5 py-0.5 rounded">
+            <span className="text-[10px] font-mono font-bold text-neutral-600 border border-neutral-300 px-1.5 py-0.5 rounded">
               UA
             </span>
           </div>
         </div>
       </div>
 
-      {/* 2. Main Middle Bar: Hamburger | Logo | Search Input | Icons */}
+      {/* 3. Main Center Bar: Hamburger | Logo | Search | Actions */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-6">
           {/* Mobile Menu Button */}
@@ -242,31 +303,31 @@ export const Header: React.FC = () => {
             <Menu className="w-6 h-6" />
           </button>
 
-          {/* Brand Logo */}
+          {/* MOLAND Brand Logo */}
           <div className="flex items-center gap-2">
             <a href="#" className="flex flex-col group">
-              <span className="text-2xl sm:text-3xl font-black font-display tracking-tight text-black group-hover:text-neutral-800 transition-colors">
-                {storeSettings.storeName || 'DUNE'}
+              <span className="text-2xl sm:text-3xl font-serif tracking-[0.12em] font-normal text-black group-hover:text-neutral-700 transition-colors uppercase">
+                {storeSettings.storeName || 'MOLAND'}
               </span>
-              <span className="text-[9px] sm:text-[10px] font-mono font-medium tracking-widest text-neutral-500 uppercase -mt-1 flex items-center gap-1">
-                <span>STREETWEAR & SNEAKERS</span>
-                <span className="text-[#dec400]">//</span>
+              <span className="text-[8px] sm:text-[9px] font-mono tracking-[0.25em] text-neutral-500 uppercase -mt-0.5 flex items-center gap-1">
                 <span>CONCEPT STORE</span>
+                <span className="text-[#A77A06]">•</span>
+                <span>KYIV</span>
               </span>
             </a>
           </div>
 
-          {/* Central Search Bar (Cosibella Style) */}
+          {/* Central Search Bar (The Rooms / Stiletto Style) */}
           <div className="flex-1 max-w-xl mx-2 sm:mx-6 hidden sm:block">
             <div
               onClick={() => setIsSearchOpen(true)}
-              className="relative flex items-center w-full min-h-[44px] px-4 bg-neutral-50 hover:bg-neutral-100 hairline-all rounded-md cursor-pointer transition-all group border border-neutral-300 hover:border-black"
+              className="relative flex items-center w-full min-h-[42px] px-4 bg-white hover:bg-neutral-50 border border-[#E3E0DB] hover:border-black rounded-none cursor-pointer transition-all group"
             >
-              <Search className="w-4 h-4 text-neutral-500 group-hover:text-black mr-2.5 transition-colors" />
-              <span className="font-mono text-xs text-neutral-500 group-hover:text-neutral-700 select-none">
-                Пошук за назвою, брендом (Nike, Jordan, Stüssy, Salomon)...
+              <Search className="w-4 h-4 text-neutral-400 group-hover:text-black mr-2.5 transition-colors" />
+              <span className="font-sans text-xs text-neutral-400 group-hover:text-neutral-600 select-none">
+                Пошук бренду або речі (AMI Paris, Ganni, New Balance, Salomon)...
               </span>
-              <kbd className="ml-auto hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-white border border-neutral-200 rounded">
+              <kbd className="ml-auto hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 bg-neutral-100 border border-neutral-200">
                 ⌘K
               </kbd>
             </div>
@@ -283,27 +344,27 @@ export const Header: React.FC = () => {
               <Search className="w-5 h-5" />
             </button>
 
-            {/* Quiz Routine Quick Button */}
+            {/* Fit Guide Quick Button */}
             <button
               onClick={() => setIsQuizOpen(true)}
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-mono font-bold uppercase text-black bg-[#dec400]/20 hover:bg-[#dec400]/40 border border-[#dec400]/50 rounded transition-all cursor-pointer"
-              title="Підібрати рутину за 60 секунд"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-mono font-medium uppercase text-black bg-[#F8F8F7] hover:bg-neutral-100 border border-[#E3E0DB] transition-all cursor-pointer"
+              title="Підібрати розмір та образ"
             >
-              <Sparkles className="w-3.5 h-3.5 text-neutral-900" />
-              <span>ТЕСТ ШКІРИ (-15%)</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#A77A06]" />
+              <span>ПІДБІР РОЗМІРУ</span>
             </button>
 
             {/* Wishlist Button */}
             <button
               onClick={() => setIsWishlistOpen(true)}
-              className="relative p-2 sm:px-3 sm:py-2 text-neutral-700 hover:text-black rounded hover:bg-neutral-100 transition-colors flex items-center gap-1"
+              className="relative p-2 sm:px-3 sm:py-2 text-neutral-700 hover:text-black hover:bg-neutral-50 transition-colors flex items-center gap-1"
               title="Список бажань"
               aria-label="Список бажань"
             >
               <Heart
                 className={`w-5 h-5 ${totalWishlistCount > 0 ? 'text-rose-500 fill-current' : ''}`}
               />
-              <span className="hidden lg:inline text-xs font-mono font-medium">Бажане</span>
+              <span className="hidden lg:inline text-xs font-sans font-medium">Бажане</span>
               {totalWishlistCount > 0 && (
                 <span className="absolute -top-1 -right-1 sm:static sm:ml-1 bg-black text-white text-[10px] font-mono font-bold w-4 h-4 rounded-full flex items-center justify-center">
                   {totalWishlistCount}
@@ -320,22 +381,27 @@ export const Header: React.FC = () => {
                     window.location.hash = '#admin';
                   }
                 }}
-                className="hidden lg:inline-flex items-center p-2 text-neutral-500 hover:text-black"
-                title="Панель керування"
+                className={`p-2 rounded text-xs transition-colors flex items-center gap-1 ${
+                  isAdminOpen
+                    ? 'bg-neutral-900 text-white font-bold'
+                    : 'text-neutral-500 hover:text-black hover:bg-neutral-100'
+                }`}
+                title="Панель керування магазином"
               >
                 <Settings className="w-4 h-4" />
+                <span className="hidden xl:inline font-mono text-[11px]">ADMIN</span>
               </button>
             )}
 
-            {/* Cart Button (Cosibella / High-Fashion) */}
+            {/* Cart Button (The Rooms Style) */}
             <button
               onClick={() => setIsCartDrawerOpen(true)}
-              className="relative inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-black hover:bg-neutral-800 text-white font-mono text-xs font-bold uppercase rounded-md shadow-sm transition-all active:scale-95"
+              className="relative inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-[#111111] hover:bg-[#333333] text-white font-mono text-xs font-bold uppercase transition-all active:scale-95"
               aria-label="Кошик покупок"
             >
-              <ShoppingBag className="w-4 h-4 text-[#dec400]" />
+              <ShoppingBag className="w-4 h-4 text-[#A77A06]" />
               <span className="hidden sm:inline">КОШИК</span>
-              <span className="bg-white/20 text-[#dec400] text-[11px] px-1.5 py-0.5 rounded font-mono font-bold">
+              <span className="bg-white/20 text-white text-[11px] px-1.5 py-0.5 rounded font-mono font-bold">
                 {totalCartCount}
               </span>
             </button>
@@ -343,10 +409,10 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Cosibella-Style Main Categories Navigation Bar (Desktop) */}
-      <nav className="hidden lg:block bg-neutral-50 border-t border-neutral-200">
+      {/* 4. Desktop Navigation Categories Bar (The Rooms Stiletto Style) */}
+      <nav className="hidden lg:block bg-white border-t border-[#E3E0DB]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ul className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider text-neutral-800">
+          <ul className="flex items-center justify-between text-xs font-sans font-semibold uppercase tracking-[0.06em] text-neutral-800">
             {NAV_CATEGORIES.map((cat) => (
               <li
                 key={cat.id}
@@ -356,19 +422,19 @@ export const Header: React.FC = () => {
               >
                 <button
                   onClick={() => handleCategoryClick(cat)}
-                  className={`flex items-center gap-1.5 py-3 px-3 transition-colors cursor-pointer border-b-2 border-transparent hover:border-black ${
+                  className={`flex items-center gap-1.5 py-3.5 px-3 transition-colors cursor-pointer border-b-2 border-transparent hover:border-black ${
                     cat.highlight
-                      ? 'text-rose-600 hover:text-rose-700 bg-rose-50/50 font-black'
+                      ? 'text-[#A77A06] hover:text-[#8a6404] font-bold'
                       : 'hover:text-black'
                   }`}
                 >
-                  {cat.highlight && <Flame className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />}
+                  {cat.highlight && <Flame className="w-3.5 h-3.5 text-[#A77A06] fill-[#A77A06]" />}
                   <span>{cat.label}</span>
                   {cat.badge && (
                     <span
-                      className={`text-[9px] px-1 py-0.2 rounded font-bold ${
+                      className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-bold ${
                         cat.highlight
-                          ? 'bg-rose-600 text-white'
+                          ? 'bg-[#A77A06] text-white'
                           : 'bg-black text-white'
                       }`}
                     >
@@ -382,7 +448,7 @@ export const Header: React.FC = () => {
 
                 {/* Dropdown Mega-Menu */}
                 {cat.subcategories && activeDropdown === cat.id && (
-                  <div className="absolute left-0 top-full w-72 bg-white border border-neutral-200 shadow-xl rounded-b-lg py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="absolute left-0 top-full w-72 bg-white border border-[#E3E0DB] shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
                     <div className="px-3 py-1.5 border-b border-neutral-100 text-[10px] text-neutral-400 font-mono">
                       // {cat.label}
                     </div>
@@ -390,14 +456,14 @@ export const Header: React.FC = () => {
                       <button
                         key={sub.title}
                         onClick={() => handleCategoryClick(cat, sub)}
-                        className="w-full text-left px-4 py-2 text-xs font-mono font-medium text-neutral-700 hover:text-black hover:bg-neutral-50 flex items-center justify-between transition-colors cursor-pointer"
+                        className="w-full text-left px-4 py-2 text-xs font-sans font-medium text-neutral-700 hover:text-black hover:bg-neutral-50 flex items-center justify-between transition-colors cursor-pointer"
                       >
                         <span>{sub.title}</span>
                         <ArrowRight className="w-3 h-3 text-neutral-300 hover:text-black" />
                       </button>
                     ))}
                     {cat.id === 'brands' && (
-                      <div className="p-2 border-t border-neutral-100 bg-neutral-50">
+                      <div className="p-2 border-t border-neutral-100 bg-[#F8F8F7]">
                         <button
                           onClick={() => {
                             setActiveDropdown(null);
@@ -405,7 +471,7 @@ export const Header: React.FC = () => {
                           }}
                           className="w-full text-center py-1.5 text-[11px] font-mono font-bold text-black hover:underline uppercase"
                         >
-                          Всі бренди в каталозі →
+                          Всі бренди від А до Я →
                         </button>
                       </div>
                     )}
@@ -417,7 +483,7 @@ export const Header: React.FC = () => {
         </div>
       </nav>
 
-      {/* 4. Mobile Drawer Menu (Cosibella Style Off-Canvas) */}
+      {/* 5. Mobile Drawer Menu (The Rooms Off-Canvas) */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           {/* Backdrop */}
@@ -429,10 +495,10 @@ export const Header: React.FC = () => {
           {/* Drawer Body */}
           <div className="relative w-full max-w-sm bg-white h-full shadow-2xl flex flex-col z-10 overflow-hidden animate-in slide-in-from-left duration-250">
             {/* Drawer Header */}
-            <div className="flex items-center justify-between p-4 border-b border-neutral-200 bg-neutral-900 text-white">
+            <div className="flex items-center justify-between p-4 border-b border-neutral-200 bg-[#111111] text-white">
               <div>
-                <span className="font-display font-black text-xl tracking-tight">
-                  {storeSettings.storeName || 'DUNE'}
+                <span className="font-serif text-xl tracking-[0.1em] uppercase">
+                  {storeSettings.storeName || 'MOLAND'}
                 </span>
                 <span className="block text-[10px] font-mono text-neutral-400">
                   МЕНЮ КАТЕГОРІЙ & БРЕНДІВ
@@ -454,17 +520,17 @@ export const Header: React.FC = () => {
                   setIsMobileMenuOpen(false);
                   setIsSearchOpen(true);
                 }}
-                className="flex items-center px-3 py-2.5 bg-white border border-neutral-300 rounded text-xs font-mono text-neutral-500 cursor-pointer"
+                className="flex items-center px-3 py-2.5 bg-white border border-neutral-300 rounded text-xs font-sans text-neutral-500 cursor-pointer"
               >
                 <Search className="w-4 h-4 mr-2 text-neutral-400" />
-                <span>Пошук одягу, снікерів або бренду...</span>
+                <span>Пошук бренду або речі...</span>
               </div>
             </div>
 
             {/* Categories Accordion */}
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
               <div className="text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-2">
-                // КАТАЛОГ DUNE
+                // КАТАЛОГ MOLAND
               </div>
 
               {NAV_CATEGORIES.map((cat) => {
@@ -475,18 +541,18 @@ export const Header: React.FC = () => {
                     <button
                       key={cat.id}
                       onClick={() => handleCategoryClick(cat)}
-                      className={`w-full flex items-center justify-between p-3 rounded-lg text-left text-xs font-mono font-bold uppercase transition-all ${
+                      className={`w-full flex items-center justify-between p-3 rounded text-left text-xs font-sans font-semibold uppercase transition-all ${
                         cat.highlight
-                          ? 'bg-rose-50 text-rose-600 border border-rose-200'
-                          : 'bg-neutral-50 hover:bg-neutral-100 text-black'
+                          ? 'bg-amber-50 text-[#A77A06] border border-amber-200'
+                          : 'bg-neutral-50 text-neutral-800 hover:bg-neutral-100'
                       }`}
                     >
-                      <span className="flex items-center gap-2">
-                        {cat.highlight && <Percent className="w-4 h-4 text-rose-600" />}
-                        {cat.label}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {cat.highlight && <Flame className="w-4 h-4 text-[#A77A06]" />}
+                        <span>{cat.label}</span>
+                      </div>
                       {cat.badge && (
-                        <span className="px-1.5 py-0.5 rounded text-[10px] bg-black text-white">
+                        <span className="text-[10px] bg-black text-white px-2 py-0.5 rounded font-mono font-bold">
                           {cat.badge}
                         </span>
                       )}
@@ -495,26 +561,33 @@ export const Header: React.FC = () => {
                 }
 
                 return (
-                  <div key={cat.id} className="border border-neutral-200 rounded-lg overflow-hidden">
+                  <div key={cat.id} className="border border-neutral-200 rounded overflow-hidden">
                     <button
                       onClick={() => setMobileExpandedCat(isExpanded ? null : cat.id)}
-                      className="w-full flex items-center justify-between p-3 bg-neutral-50 text-left text-xs font-mono font-bold uppercase text-black"
+                      className="w-full flex items-center justify-between p-3 bg-neutral-50 text-left text-xs font-sans font-semibold uppercase text-neutral-900"
                     >
-                      <span>{cat.label}</span>
+                      <div className="flex items-center gap-2">
+                        <span>{cat.label}</span>
+                        {cat.badge && (
+                          <span className="text-[9px] bg-black text-white px-1.5 py-0.5 rounded font-mono font-bold">
+                            {cat.badge}
+                          </span>
+                        )}
+                      </div>
                       <ChevronDown
-                        className={`w-4 h-4 text-neutral-500 transition-transform ${
+                        className={`w-4 h-4 text-neutral-400 transition-transform ${
                           isExpanded ? 'rotate-180' : ''
                         }`}
                       />
                     </button>
 
                     {isExpanded && (
-                      <div className="bg-white p-2 divide-y divide-neutral-100">
+                      <div className="p-2 bg-white space-y-1 border-t border-neutral-100">
                         {cat.subcategories.map((sub) => (
                           <button
                             key={sub.title}
                             onClick={() => handleCategoryClick(cat, sub)}
-                            className="w-full text-left py-2 px-2 text-xs font-mono text-neutral-700 hover:text-black flex items-center justify-between"
+                            className="w-full text-left p-2 text-xs font-sans text-neutral-600 hover:text-black hover:bg-neutral-50 rounded flex items-center justify-between"
                           >
                             <span>{sub.title}</span>
                             <ArrowRight className="w-3 h-3 text-neutral-300" />
@@ -525,63 +598,20 @@ export const Header: React.FC = () => {
                   </div>
                 );
               })}
-
-              {/* Quick Info & Policies Links */}
-              <div className="pt-4 border-t border-neutral-200 space-y-1 text-xs font-mono">
-                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">
-                  // СЕРВІС & КЛІЄНТАМ
-                </div>
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    setIsTrackingOpen(true);
-                  }}
-                  className="w-full text-left py-2 px-1 text-neutral-600 hover:text-black flex items-center gap-2"
-                >
-                  <Truck className="w-4 h-4 text-[#dec400]" />
-                  <span>Відстежити замовлення (ТТН)</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    openPolicyModal('shipping');
-                  }}
-                  className="w-full text-left py-2 px-1 text-neutral-600 hover:text-black"
-                >
-                  Доставка та оплата
-                </button>
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    openPolicyModal('about');
-                  }}
-                  className="w-full text-left py-2 px-1 text-neutral-600 hover:text-black"
-                >
-                  Про магазин та гарантію
-                </button>
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    openPolicyModal('contacts');
-                  }}
-                  className="w-full text-left py-2 px-1 text-neutral-600 hover:text-black"
-                >
-                  Контакти
-                </button>
-              </div>
             </div>
 
-            {/* Drawer Footer with Phone & Messengers */}
-            <div className="p-4 border-t border-neutral-200 bg-neutral-50 text-xs font-mono">
+            {/* Mobile Drawer Footer Contacts */}
+            <div className="p-4 border-t border-neutral-200 bg-[#F8F8F7] space-y-2 text-xs">
               <a
                 href={cleanPhoneLink}
-                className="flex items-center justify-center gap-2 w-full py-2.5 bg-black text-white font-bold rounded uppercase mb-2"
+                className="flex items-center justify-center gap-2 w-full py-2.5 bg-black text-white font-mono font-bold uppercase rounded text-xs"
               >
-                <Phone className="w-4 h-4 text-[#dec400]" />
+                <Phone className="w-4 h-4 text-[#A77A06]" />
                 <span>{phoneFormatted}</span>
               </a>
-              <div className="text-center text-[10px] text-neutral-500">
-                Пн–Нд 10:00 — 20:00 • Київ, Україна
+              <div className="flex items-center justify-between pt-2 text-[11px] text-neutral-500 font-mono">
+                <span>Пн–Нд: 10:00 — 21:00</span>
+                <span>Київ, Україна</span>
               </div>
             </div>
           </div>

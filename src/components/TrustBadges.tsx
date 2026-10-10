@@ -11,12 +11,12 @@ export const TrustBadges: React.FC = () => {
             <div className="font-mono text-xs text-dune-ochre uppercase tracking-widest mb-1.5">
               // STANDARDS & SERVICE
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black font-display text-black uppercase tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-bold font-serif text-black uppercase tracking-tight">
               Принципи роботи
             </h2>
           </div>
           <p className="font-mono text-xs text-neutral-500 uppercase tracking-wider max-w-md">
-            Ми усунули всі бар'єри та ризики: огляд перед оплатою, оригінальна якість та щоденна відправка Новою Поштою.
+            Огляд перед оплатою, гарантія автентичності кожного айтему та щоденна відправка Новою Поштою.
           </p>
         </div>
 
@@ -31,11 +31,11 @@ export const TrustBadges: React.FC = () => {
                 </span>
                 <ShieldCheck className="w-5 h-5 text-black" />
               </div>
-              <h3 className="font-display font-bold text-lg text-black uppercase mb-3">
+              <h3 className="font-serif font-bold text-lg text-black uppercase mb-3">
                 Оплата при отриманні
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                Жодних передоплат. Оглядайте цілісність пакування у відділенні або поштоматі Нової Пошти. Розраховуйтесь карткою або готівкою тільки після повної перевірки.
+                Жодних передоплат. Оглядайте та приміряйте речі у відділенні або поштоматі Нової Пошти. Розраховуйтесь карткою або готівкою тільки після повної перевірки.
               </p>
             </div>
             <div className="pt-4 mt-6 hairline-t font-mono text-[11px] text-neutral-500 uppercase flex items-center gap-1.5">
@@ -53,11 +53,11 @@ export const TrustBadges: React.FC = () => {
                 </span>
                 <Truck className="w-5 h-5 text-black" />
               </div>
-              <h3 className="font-display font-bold text-lg text-black uppercase mb-3">
+              <h3 className="font-serif font-bold text-lg text-black uppercase mb-3">
                 Нова Пошта 1-2 дні
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                Щоденні відправлення замовлень до 18:00 зі складу в Києві. Замовлення від 2 000 ₴ доставляються повністю безкоштовно у відділення та поштомати.
+                Щоденні відправлення замовлень до 18:00 зі складу в Києві. Замовлення від 3 000 ₴ доставляються повністю безкоштовно у відділення та поштомати.
               </p>
             </div>
             <div className="pt-4 mt-6 hairline-t font-mono text-[11px] text-neutral-500 uppercase flex items-center gap-1.5">
@@ -75,11 +75,11 @@ export const TrustBadges: React.FC = () => {
                 </span>
                 <RefreshCw className="w-5 h-5 text-black" />
               </div>
-              <h3 className="font-display font-bold text-lg text-black uppercase mb-3">
-                Гарантія цілісності
+              <h3 className="font-serif font-bold text-lg text-black uppercase mb-3">
+                Обмін та повернення 14 днів
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                Гарантований обмін або повернення 100% коштів у разі виробничого дефекту дозатора чи пошкодження під час доставки. Швидкий розгляд за 1–3 дні.
+                Гарантований обмін або повернення коштів, якщо не підійшов розмір чи посадка. Збережіть товарний вигляд та фабричні бірки.
               </p>
             </div>
             <div className="pt-4 mt-6 hairline-t font-mono text-[11px] text-neutral-500 uppercase flex items-center gap-1.5">
@@ -88,7 +88,7 @@ export const TrustBadges: React.FC = () => {
             </div>
           </div>
 
-          {/* Card 4: Authentic Streetwear & Sneakers */}
+          {/* Card 4: Authentic Designer & Contemporary */}
           <div className="bg-white p-6 sm:p-7 hairline-all flex flex-col justify-between hover:border-black transition-colors group">
             <div>
               <div className="flex items-center justify-between mb-6">
@@ -97,11 +97,11 @@ export const TrustBadges: React.FC = () => {
                 </span>
                 <Sparkles className="w-5 h-5 text-black" />
               </div>
-              <h3 className="font-display font-bold text-lg text-black uppercase mb-3">
+              <h3 className="font-serif font-bold text-lg text-black uppercase mb-3">
                 100% Оригінал (Legit Check)
               </h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal">
-                Тільки оригінальні снікери та одяг від офіційних реселерів та брендів: Jordan, Nike, New Balance, Stüssy, Salomon, Carhartt WIP, Stone Island. Перевірка кожної деталі (Legit Check).
+                Тільки автентичні дизайнерські речі від перевірених європейських постачальників: AMI Paris, Ganni, Jacquemus, Stone Island, Carhartt WIP, New Balance, Salomon, Breda.
               </p>
             </div>
             <div className="pt-4 mt-6 hairline-t font-mono text-[11px] text-dune-ochre uppercase flex items-center gap-1.5">

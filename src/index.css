@@ -5,7 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-family: 'Jost', 'Inter Tight', 'IBM Plex Sans', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -14,9 +14,9 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Unbounded', sans-serif;
+    font-family: 'Playfair Display', Georgia, serif;
     text-wrap: balance;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
   }
   
   p, li {
@@ -26,7 +26,7 @@
   /* Tabular numbers for all currencies and prices */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
   }
 }
 

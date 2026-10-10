@@ -352,7 +352,7 @@ export const RoutineQuizModal: React.FC = () => {
             <div className="space-y-6 animate-fade-in font-mono">
               <div className="space-y-1">
                 <span className="text-[10px] text-dune-ochre font-bold tracking-widest uppercase">
-                  РЕЗУЛЬТАТ ПІДБОРУ // DUNE CURATED DROP
+                  РЕЗУЛЬТАТ ПІДБОРУ // MOLAND CURATED DROP
                 </span>
                 <h2 className="text-xl sm:text-2xl font-black font-display text-black uppercase tracking-tight">
                   Ваш персональний дроп-сет

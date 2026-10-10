@@ -618,7 +618,7 @@ export const AdminControlHub: React.FC = () => {
       <body>
         <div class="header">
           <div>
-            <div class="logo">${storeSettings.storeName || 'DUNE ATELIER'}</div>
+            <div class="logo">${storeSettings.storeName || 'MOLAND ATELIER'}</div>
             <div class="meta">Товарно-транспортна накладна / Комплектувальний лист</div>
           </div>
           <div style="text-align: right;">
@@ -1440,7 +1440,7 @@ export const AdminControlHub: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <Cloud className="w-4 h-4 text-slate-700" />
                       <span className="font-bold text-slate-800">
-                        {isSupabaseConfigured() ? 'Хмара Supabase DUNE:' : 'База товарів DUNE:'}
+                        {isSupabaseConfigured() ? 'Хмара Supabase MOLAND:' : 'База товарів MOLAND:'}
                       </span>
                       {isSupabaseConfigured() ? (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-bold border border-emerald-200 text-[11px]">

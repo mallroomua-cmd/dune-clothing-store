@@ -13,13 +13,12 @@ export interface FashionFilter {
 
 export const FASHION_COLLECTIONS: FashionFilter[] = [
   { id: 'all', label: 'УСІ РЕЧІ', keywords: [] },
-  { id: 'sneakers', label: '👟 КРОСІВКИ & СНІКЕРИ', keywords: ['кросів', 'sneaker', 'jordan', 'dunk', 'new balance', 'salomon'] },
-  { id: 'hoodies', label: '👕 ХУДІ ТА СВІТШОТИ', keywords: ['худі', 'hoodie', 'crewneck', 'світшот', 'fleece'] },
-  { id: 'tees', label: '⚡ ФУТБОЛКИ', keywords: ['футболк', 'tee', 't-shirt', 'лонгслів'] },
-  { id: 'pants', label: '👖 ШТАНИ ТА КАРГО', keywords: ['штани', 'pant', 'cargo', 'double knee', 'джинси'] },
-  { id: 'jackets', label: '🧥 КУРТКИ & ВЕРХНІЙ ОДЯГ', keywords: ['куртк', 'jacket', 'soft shell', 'gore-tex', 'верхній'] },
-  { id: 'accessories', label: '🧢 АКСЕСУАРИ ТА КЕПКИ', keywords: ['кепк', 'шапк', 'сумк', 'рюкзак', 'аксесуар', 'догляд'] },
-  { id: 'deadstock', label: '🔥 DEADSTOCK & ДРОПИ', keywords: ['deadstock', 'хіт', 'дроп', 'box logo', 'обмежен'] },
+  { id: 'clothing', label: '🧥 ОДЯГ', keywords: ['одяг', 'худі', 'hoodie', 'футболк', 'tee', 'штани', 'pant', 'куртк', 'jacket', 'світшот'] },
+  { id: 'footwear', label: '👟 ВЗУТТЯ', keywords: ['взуття', 'кросів', 'sneaker', 'jordan', 'new balance', 'salomon', 'кеди'] },
+  { id: 'bags', label: '👜 СУМКИ', keywords: ['сумк', 'bag', 'tote', 'рюкзак', 'chiquito', 'кросбоді'] },
+  { id: 'accessories', label: '🕶️ АКСЕСУАРИ', keywords: ['аксесуар', 'годинник', 'breda', 'кепк', 'шапк', 'ремінь'] },
+  { id: 'new', label: '✨ НОВИНКИ', keywords: ['new', 'нова', 'новинк', 'дроп'] },
+  { id: 'sale', label: '🏷️ SALE', keywords: ['sale', 'знижк', 'акція'] },
 ];
 
 export const SKIN_CONCERNS = FASHION_COLLECTIONS;
@@ -123,10 +122,10 @@ export const ProductGrid: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-6 hairline-b gap-4">
           <div>
             <div className="font-mono text-xs text-dune-ochre uppercase tracking-widest mb-1">
-              // CATALOG & ARCHIVE
+              // MOLAND ARCHIVE & CATALOG
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black font-display text-black uppercase tracking-tight">
-              Каталог товарів
+            <h2 className="text-2xl sm:text-4xl font-bold font-serif text-black uppercase tracking-tight">
+              Каталог концепт-стору
             </h2>
             <p className="font-mono text-xs text-neutral-500 uppercase tracking-wider mt-1">
               ДОСТУПНО ДО ВІДПРАВКИ: {filteredProducts.length} ПОЗИЦІЙ
@@ -159,7 +158,7 @@ export const ProductGrid: React.FC = () => {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
             <input
               type="text"
-              placeholder="ПОШУК: NIKE, JORDAN, NEW BALANCE, STÜSSY, КРОСІВКИ, ХУДІ..."
+              placeholder="ПОШУК: AMI PARIS, GANNI, JACQUEMUS, CARHARTT, СУМКИ, ВЗУТТЯ..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
