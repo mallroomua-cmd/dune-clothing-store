@@ -36,6 +36,8 @@ import {
   Printer,
   Users,
   Cloud,
+  UploadCloud,
+  DownloadCloud,
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { ProductFormModal } from './ProductFormModal';
@@ -69,6 +71,8 @@ export const AdminControlHub: React.FC = () => {
     setIsAdminOpen,
     products,
     uploadCsv,
+    syncCatalogWithCloud,
+    syncOrdersWithCloud,
     resetToDemo,
     updateProduct,
     addProduct,
@@ -310,6 +314,35 @@ export const AdminControlHub: React.FC = () => {
   const handleCancelPreview = () => {
     setCsvPreview(null);
     setPendingCsvString(null);
+  };
+
+  const [isSyncingCatalog, setIsSyncingCatalog] = useState(false);
+  const [isSyncingOrders, setIsSyncingOrders] = useState(false);
+
+  const handleCloudCatalogSync = async (direction: 'push' | 'pull') => {
+    setIsSyncingCatalog(true);
+    try {
+      const res = await syncCatalogWithCloud(direction);
+      addToast(res.message, res.success ? 'success' : 'error');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      addToast(`Помилка синхронізації каталогу: ${msg}`, 'error');
+    } finally {
+      setIsSyncingCatalog(false);
+    }
+  };
+
+  const handleCloudOrdersSync = async (direction: 'push' | 'pull') => {
+    setIsSyncingOrders(true);
+    try {
+      const res = await syncOrdersWithCloud(direction);
+      addToast(res.message, res.success ? 'success' : 'error');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      addToast(`Помилка синхронізації замовлень: ${msg}`, 'error');
+    } finally {
+      setIsSyncingOrders(false);
+    }
   };
 
   const handleDownloadUniversalTemplate = () => {
@@ -1553,13 +1586,39 @@ export const AdminControlHub: React.FC = () => {
                         </span>
                       )}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('supabase')}
-                      className="text-xs font-bold text-brand-600 hover:text-brand-800 hover:underline flex items-center gap-1 cursor-pointer"
-                    >
-                      {isSupabaseConfigured() ? 'Налаштування хмари →' : 'Підключити Supabase хмару →'}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      {isSupabaseConfigured() && (
+                        <div className="flex items-center gap-1.5 mr-1">
+                          <button
+                            type="button"
+                            disabled={isSyncingCatalog}
+                            onClick={() => handleCloudCatalogSync('pull')}
+                            className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] flex items-center gap-1 transition-colors disabled:opacity-50 cursor-pointer"
+                            title="Завантажити свіжі товари з бази Supabase"
+                          >
+                            <DownloadCloud className={`w-3.5 h-3.5 text-brand-600 ${isSyncingCatalog ? 'animate-bounce' : ''}`} />
+                            <span>З хмари</span>
+                          </button>
+                          <button
+                            type="button"
+                            disabled={isSyncingCatalog}
+                            onClick={() => handleCloudCatalogSync('push')}
+                            className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-[11px] flex items-center gap-1 transition-colors border border-emerald-200 disabled:opacity-50 cursor-pointer"
+                            title="Вивантажити всі локальні товари в Supabase"
+                          >
+                            <UploadCloud className={`w-3.5 h-3.5 text-emerald-600 ${isSyncingCatalog ? 'animate-bounce' : ''}`} />
+                            <span>У хмару</span>
+                          </button>
+                        </div>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab('supabase')}
+                        className="text-xs font-bold text-brand-600 hover:text-brand-800 hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        {isSupabaseConfigured() ? 'Налаштування хмари →' : 'Підключити Supabase хмару →'}
+                      </button>
+                    </div>
                   </div>
 
                   {/* Toolbar */}
@@ -2030,6 +2089,34 @@ export const AdminControlHub: React.FC = () => {
                         <option value="completed">Виконані</option>
                         <option value="cancelled">Скасовані</option>
                       </select>
+
+                      {/* Cloud Sync Buttons */}
+                      {isSupabaseConfigured() && (
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            disabled={isSyncingOrders}
+                            onClick={() => handleCloudOrdersSync('pull')}
+                            className="px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors flex items-center gap-1.5 shadow-2xs disabled:opacity-50 cursor-pointer"
+                            title="Завантажити замовлення з хмари Supabase"
+                          >
+                            <DownloadCloud className={`w-3.5 h-3.5 text-brand-600 ${isSyncingOrders ? 'animate-bounce' : ''}`} />
+                            <span>З хмари</span>
+                          </button>
+                          {orders.length > 0 && (
+                            <button
+                              type="button"
+                              disabled={isSyncingOrders}
+                              onClick={() => handleCloudOrdersSync('push')}
+                              className="px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold transition-colors flex items-center gap-1.5 shadow-2xs disabled:opacity-50 cursor-pointer"
+                              title="Вивантажити всі локальні замовлення у Supabase"
+                            >
+                              <UploadCloud className={`w-3.5 h-3.5 text-emerald-600 ${isSyncingOrders ? 'animate-bounce' : ''}`} />
+                              <span>У хмару</span>
+                            </button>
+                          )}
+                        </div>
+                      )}
 
                       {orders.length > 0 && (
                         <button

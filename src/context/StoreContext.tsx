@@ -39,6 +39,11 @@ import {
   saveProductToSupabase,
   deleteProductFromSupabase,
   bulkSyncProductsToSupabase,
+  fetchOrdersFromSupabase,
+  saveOrderToSupabase,
+  updateOrderStatusInSupabase,
+  updateOrderTtnInSupabase,
+  bulkSyncOrdersToSupabase,
   STORE_ID,
 } from '../lib/supabase';
 
@@ -164,6 +169,7 @@ interface StoreContextType {
     options?: { syncToSupabase?: boolean; mode?: 'replace' | 'upsert' }
   ) => Promise<{ count: number; syncedToCloud?: number; cloudError?: string }>;
   syncCatalogWithCloud: (direction: 'push' | 'pull') => Promise<{ success: boolean; count: number; message: string }>;
+  syncOrdersWithCloud: (direction: 'push' | 'pull') => Promise<{ success: boolean; count: number; message: string }>;
   resetToDemo: () => Promise<void>;
   updateAnalyticsConfig: (config: Partial<AnalyticsConfig>) => void;
   addToCart: (product: Product, quantity?: number, variant?: string) => void;
@@ -612,27 +618,61 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     void loadProducts();
   }, []);
 
-  // Load orders asynchronously from IndexedDB with localStorage fallback
+  // Load orders asynchronously from IndexedDB with localStorage fallback and optional Supabase pull
   useEffect(() => {
-    dbGet<StoredOrder[]>('shopify_store_orders')
-      .then((saved) => {
+    async function loadOrders() {
+      let initialOrders: StoredOrder[] = [];
+      try {
+        const saved = await dbGet<StoredOrder[]>('shopify_store_orders');
         if (saved && saved.length > 0) {
-          setOrders(saved);
+          initialOrders = saved;
         } else {
           try {
             const localSaved = localStorage.getItem('shopify_store_orders');
             if (localSaved) {
-              setOrders(JSON.parse(localSaved));
+              initialOrders = JSON.parse(localSaved);
             }
           } catch {
             // ignore
           }
         }
-      })
-      .catch((e) => console.warn('Failed to load orders from IndexedDB', e))
-      .finally(() => {
-        setOrdersHydrated(true);
-      });
+      } catch (e) {
+        console.warn('Failed to load orders from IndexedDB', e);
+      }
+
+      if (isSupabaseConfigured()) {
+        try {
+          const cloudOrders = await fetchOrdersFromSupabase(STORE_ID);
+          if (cloudOrders && cloudOrders.length > 0) {
+            const seen = new Set<string>();
+            const merged: StoredOrder[] = [];
+            for (const o of cloudOrders) {
+              const key = o.orderId || o.id;
+              if (!seen.has(key)) {
+                seen.add(key);
+                merged.push(o);
+              }
+            }
+            for (const o of initialOrders) {
+              const key = o.orderId || o.id;
+              if (!seen.has(key)) {
+                seen.add(key);
+                merged.push(o);
+              }
+            }
+            merged.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            initialOrders = merged;
+          }
+        } catch (err) {
+          console.warn('Cloud orders bootstrap fetch failed (using local):', err);
+        }
+      }
+
+      setOrders(initialOrders);
+      setOrdersHydrated(true);
+    }
+
+    void loadOrders();
   }, []);
 
   // Save products asynchronously to IndexedDB ONLY after initial hydration
@@ -751,6 +791,70 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const syncOrdersWithCloud = async (
+    direction: 'push' | 'pull'
+  ): Promise<{ success: boolean; count: number; message: string }> => {
+    if (!isSupabaseConfigured()) {
+      return { success: false, count: 0, message: 'Supabase не налаштовано. Перевірте URL та ключ у налаштуваннях.' };
+    }
+
+    if (direction === 'push') {
+      try {
+        const res = await bulkSyncOrdersToSupabase(orders, STORE_ID);
+        return {
+          success: res.failed === 0,
+          count: res.success,
+          message: `Вивантажено в Supabase: ${res.success} замовлень${res.failed > 0 ? ` (помилок: ${res.failed})` : ''}`,
+        };
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return { success: false, count: 0, message: `Помилка вивантаження замовлень в Supabase: ${msg}` };
+      }
+    } else {
+      try {
+        const cloudOrders = await fetchOrdersFromSupabase(STORE_ID);
+        if (!cloudOrders || cloudOrders.length === 0) {
+          return { success: false, count: 0, message: 'У хмарі Supabase ще немає збережених замовлень для цього магазину.' };
+        }
+
+        const seen = new Set<string>();
+        const merged: StoredOrder[] = [];
+        for (const o of cloudOrders) {
+          const key = o.orderId || o.id;
+          if (!seen.has(key)) {
+            seen.add(key);
+            merged.push(o);
+          }
+        }
+        for (const o of orders) {
+          const key = o.orderId || o.id;
+          if (!seen.has(key)) {
+            seen.add(key);
+            merged.push(o);
+          }
+        }
+        merged.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+        setOrders(merged);
+        await dbSet('shopify_store_orders', merged);
+        try {
+          localStorage.setItem('shopify_store_orders', JSON.stringify(merged));
+        } catch {
+          // ignore
+        }
+
+        return {
+          success: true,
+          count: cloudOrders.length,
+          message: `Успішно завантажено з Supabase: ${cloudOrders.length} замовлень!`,
+        };
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return { success: false, count: 0, message: `Помилка завантаження замовлень з Supabase: ${msg}` };
+      }
+    }
+  };
+
   const resetToDemo = async () => {
     setProducts(SAMPLE_PRODUCTS);
     await dbDelete('shopify_store_products');
@@ -812,6 +916,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
       return next;
     });
+
+    if (isSupabaseConfigured()) {
+      updateOrderStatusInSupabase(orderId, status, STORE_ID).catch((err) => {
+        console.warn('Failed to update order status in Supabase:', err);
+      });
+    }
   };
 
   const deleteOrder = async (orderId: string) => {
@@ -873,8 +983,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const updateOrderTtn = async (orderId: string, ttn: string) => {
+    const cleanTtn = ttn.trim();
     setOrders((prev) => {
-      const next = prev.map((o) => (o.orderId === orderId ? { ...o, ttn: ttn.trim() } : o));
+      const next = prev.map((o) => (o.orderId === orderId ? { ...o, ttn: cleanTtn } : o));
       void dbSet('shopify_store_orders', next);
       try {
         localStorage.setItem('shopify_store_orders', JSON.stringify(next));
@@ -883,6 +994,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
       return next;
     });
+
+    if (isSupabaseConfigured()) {
+      updateOrderTtnInSupabase(orderId, cleanTtn, STORE_ID).catch((err) => {
+        console.warn('Failed to update order TTN in Supabase:', err);
+      });
+    }
   };
 
   const addToCart = (product: Product, quantity = 1, variantTitle?: string) => {
@@ -1055,6 +1172,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       return next;
     });
 
+    // If Supabase is configured, also persist order to Supabase cloud
+    if (isSupabaseConfigured()) {
+      saveOrderToSupabase(storedOrder, STORE_ID).catch((err) => {
+        console.warn('Failed to save order to Supabase:', err);
+      });
+    }
+
     // 4. Track Purchase & Google Ads Enhanced Conversion AFTER order is successfully recorded!
     void trackPurchase({ ...fullOrder, orderId }, analyticsConfig);
 
@@ -1098,12 +1222,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         orders,
         outboxCount,
         selectedProduct,
+        setSelectedProduct,
         selectedVariant,
+        setSelectedVariant,
         isCheckoutOpen,
+        setIsCheckoutOpen,
         checkoutProduct,
         checkoutVariant,
         isAdminOpen,
+        setIsAdminOpen,
         isCartDrawerOpen,
+        setIsCartDrawerOpen,
         isQuizOpen,
         setIsQuizOpen,
         isTrackingOpen,
@@ -1118,15 +1247,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setSelectedBrand,
         filterByBrand,
         filterByCategory,
-        setSelectedProduct,
-        setSelectedVariant,
-        setIsCheckoutOpen,
-        setIsAdminOpen,
-        setIsCartDrawerOpen,
         isMobileFiltersOpen,
         setIsMobileFiltersOpen,
         uploadCsv,
         syncCatalogWithCloud,
+        syncOrdersWithCloud,
         resetToDemo,
         updateAnalyticsConfig,
         addToCart,

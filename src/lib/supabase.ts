@@ -1,5 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Product } from '../types';
+import { Product, StoredOrder, CartItem, OrderStatus } from '../types';
 
 export const STORE_ID = 'dune';
 
@@ -164,6 +164,71 @@ export function productToRow(product: Product, storeId: string = STORE_ID): DbPr
   };
 }
 
+export interface DbOrderRow {
+  id: string;
+  store_id: string;
+  order_id: string;
+  customer_name: string;
+  phone: string;
+  city: string;
+  warehouse: string;
+  delivery_method: string;
+  payment_method: string;
+  notes: string;
+  items: CartItem[] | string;
+  total: number;
+  status: OrderStatus;
+  ttn: string;
+  synced_to_telegram: boolean;
+  created_at?: string;
+}
+
+export function orderToRow(order: StoredOrder, storeId: string = STORE_ID): DbOrderRow {
+  return {
+    id: order.id,
+    store_id: storeId,
+    order_id: order.orderId || order.id,
+    customer_name: order.name || '',
+    phone: order.phone || '',
+    city: order.city || '',
+    warehouse: order.warehouse || '',
+    delivery_method: order.deliveryMethod || 'nova_poshta',
+    payment_method: order.paymentMethod || 'cash_on_delivery',
+    notes: order.notes || '',
+    items: order.items || [],
+    total: Number(order.total) || 0,
+    status: order.status || 'new',
+    ttn: order.ttn || '',
+    synced_to_telegram: Boolean(order.syncedToTelegram),
+    created_at: new Date(order.createdAt || Date.now()).toISOString(),
+  };
+}
+
+export function rowToOrder(row: DbOrderRow): StoredOrder {
+  const items = parseJsonArray<CartItem>(row.items, []);
+  const createdAtMs = row.created_at ? new Date(row.created_at).getTime() : Date.now();
+  const dateFormatted = new Date(createdAtMs).toLocaleString('uk-UA');
+
+  return {
+    id: row.id,
+    orderId: row.order_id || row.id,
+    name: row.customer_name || 'Клієнт',
+    phone: row.phone || '',
+    city: row.city || '',
+    warehouse: row.warehouse || '',
+    deliveryMethod: (row.delivery_method as StoredOrder['deliveryMethod']) || 'nova_poshta',
+    paymentMethod: (row.payment_method as StoredOrder['paymentMethod']) || 'cash_on_delivery',
+    notes: row.notes || '',
+    items,
+    total: Number(row.total) || 0,
+    status: (row.status as OrderStatus) || 'new',
+    ttn: row.ttn || '',
+    syncedToTelegram: Boolean(row.synced_to_telegram),
+    date: dateFormatted,
+    createdAt: createdAtMs,
+  };
+}
+
 export async function testSupabaseConnection(): Promise<{ success: boolean; message: string; count?: number }> {
   const client = getSupabaseClient();
   if (!client) {
@@ -298,3 +363,102 @@ export async function uploadProductImage(file: File, folder = STORE_ID): Promise
 
   return publicUrlData.publicUrl;
 }
+
+export async function fetchOrdersFromSupabase(storeId: string = STORE_ID): Promise<StoredOrder[]> {
+  const client = getSupabaseClient();
+  if (!client) return [];
+
+  const { data, error } = await client
+    .from('orders')
+    .select('*')
+    .eq('store_id', storeId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(`[Supabase] Помилка завантаження замовлень для store_id="${storeId}":`, error);
+    throw error;
+  }
+
+  return (data as DbOrderRow[]).map(rowToOrder);
+}
+
+export async function saveOrderToSupabase(order: StoredOrder, storeId: string = STORE_ID): Promise<void> {
+  const client = getSupabaseClient();
+  if (!client) return;
+
+  const row = orderToRow(order, storeId);
+  const { error } = await client.from('orders').upsert(row, { onConflict: 'id' });
+
+  if (error) {
+    console.error(`[Supabase] Помилка збереження замовлення "${order.id}":`, error);
+    throw error;
+  }
+}
+
+export async function updateOrderStatusInSupabase(
+  orderId: string,
+  status: OrderStatus,
+  storeId: string = STORE_ID
+): Promise<void> {
+  const client = getSupabaseClient();
+  if (!client) return;
+
+  const { error } = await client
+    .from('orders')
+    .update({ status })
+    .match({ store_id: storeId })
+    .or(`id.eq.${orderId},order_id.eq.${orderId}`);
+
+  if (error) {
+    console.error(`[Supabase] Помилка оновлення статусу замовлення "${orderId}":`, error);
+    throw error;
+  }
+}
+
+export async function updateOrderTtnInSupabase(
+  orderId: string,
+  ttn: string,
+  storeId: string = STORE_ID
+): Promise<void> {
+  const client = getSupabaseClient();
+  if (!client) return;
+
+  const { error } = await client
+    .from('orders')
+    .update({ ttn: ttn.trim() })
+    .match({ store_id: storeId })
+    .or(`id.eq.${orderId},order_id.eq.${orderId}`);
+
+  if (error) {
+    console.error(`[Supabase] Помилка оновлення ТТН замовлення "${orderId}":`, error);
+    throw error;
+  }
+}
+
+export async function bulkSyncOrdersToSupabase(
+  orders: StoredOrder[],
+  storeId: string = STORE_ID
+): Promise<{ success: number; failed: number }> {
+  const client = getSupabaseClient();
+  if (!client) throw new Error('Supabase client not configured');
+
+  let successCount = 0;
+  let failedCount = 0;
+
+  const CHUNK_SIZE = 40;
+  for (let i = 0; i < orders.length; i += CHUNK_SIZE) {
+    const chunk = orders.slice(i, i + CHUNK_SIZE);
+    const rows = chunk.map((o) => orderToRow(o, storeId));
+
+    const { error } = await client.from('orders').upsert(rows, { onConflict: 'id' });
+    if (error) {
+      console.error(`[Supabase] Помилка пакетного завантаження замовлень:`, error);
+      failedCount += chunk.length;
+    } else {
+      successCount += chunk.length;
+    }
+  }
+
+  return { success: successCount, failed: failedCount };
+}
+
