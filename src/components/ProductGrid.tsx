@@ -14,10 +14,10 @@ export interface FashionFilter {
 
 export const FASHION_COLLECTIONS: FashionFilter[] = [
   { id: 'all', label: 'УСІ ТОВАРИ', keywords: [] },
-  { id: 'makeup', label: '💄 ДЕКОРАТИВНА КОСМЕТИКА', keywords: ['декоративна', 'губи', 'блиск', 'тінт', 'бальзам', 'олійка', 'олівець', 'румʼяна', 'рум\'яна', 'хайлайтер', 'палітра', 'dior', 'fenty', 'rare', 'summer fridays', 'rhode', 'hourglass'] },
-  { id: 'skincare', label: '✨ ДОГЛЯД ЗА ОБЛИЧЧЯМ', keywords: ['догляд за обличчям', 'сироватк', 'крем', 'маск', 'очищенн', 'тонер', 'spf', 'cosrx', 'anua', 'biodance', 'round lab', 'centella', 'manyo', 'althea', 'paula'] },
-  { id: 'hair', label: '💇‍♀️ ДОГЛЯД ЗА ВОЛОССЯМ', keywords: ['волосся', 'волоссям', 'olaplex', 'k18', 'шампун', 'маска для волосся'] },
-  { id: 'body_fragrance', label: '🌸 ПАРФУМИ ТА ТІЛО', keywords: ['парфум', 'спрей', 'міст', 'тіло', 'тілом', 'sol de janeiro', 'rio radiance', 'bum bum'] },
+  { id: 'makeup', label: '💄 ДЕКОРАТИВНА КОСМЕТИКА', keywords: ['декоративна', 'губи', 'блиск', 'тінт', 'бальзам', 'олійка', 'олівець', 'румʼяна', 'рум\'яна', 'хайлайтер', 'палітра', 'пудр', 'консилер', 'тіні', 'туш', 'брів', 'dior', 'fenty', 'rare', 'summer fridays', 'rhode', 'hourglass', 'tarte', 'nyx', 'elegance', 'dr.ceuracle', 'revitabrow'] },
+  { id: 'skincare', label: '✨ ДОГЛЯД ЗА ОБЛИЧЧЯМ', keywords: ['догляд за обличчям', 'сироватк', 'крем', 'маск', 'очищенн', 'тонер', 'тонік', 'педи', 'патчі', 'spf', 'cosrx', 'anua', 'biodance', 'round lab', 'centella', 'manyo', 'althea', 'paula', 'la mer', 'panoxyl', 'skin1004', 'medicube', 'la roche-posay', 'tocobo', 'estee lauder'] },
+  { id: 'hair', label: '💇‍♀️ ДОГЛЯД ЗА ВОЛОССЯМ', keywords: ['волосся', 'волоссям', 'olaplex', 'k18', 'шампун', 'маска для волосся', 'олійка для волосся'] },
+  { id: 'body_fragrance', label: '🌸 ПАРФУМИ ТА ТІЛО', keywords: ['парфум', 'спрей', 'міст', 'тіло', 'тілом', 'sol de janeiro', 'rio radiance', 'cheirosa', 'bum bum', 'свічка', 'аромат'] },
   { id: 'bags', label: '👜 СУМКИ ТА АКСЕСУАРИ', keywords: ['сумк', 'bag', 'tote', 'рюкзак', 'chiquito', 'кросбоді', 'косметичк', 'аксесуар', 'годинник', 'breda', 'charlotte tilbury'] },
   { id: 'clothing', label: '🧥 ОДЯГ', keywords: ['одяг', 'худі', 'hoodie', 'футболк', 'tee', 'штани', 'pant', 'куртк', 'jacket', 'світшот'] },
   { id: 'footwear', label: '👟 ВЗУТТЯ', keywords: ['взуття', 'кросів', 'sneaker', 'jordan', 'new balance', 'salomon', 'кеди'] },

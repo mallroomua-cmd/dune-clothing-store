@@ -157,7 +157,7 @@ async function runTests() {
   if (fs.existsSync(importedCsvPath)) {
     const importedCsv = fs.readFileSync(importedCsvPath, 'utf-8');
     const importedProducts = await parseUniversalCsvFeed(importedCsv);
-    assert.strictEqual(importedProducts.length, 9, 'Should parse all 9 products from data/imported-catalog.csv');
+    assert.strictEqual(importedProducts.length, 46, 'Should parse all 46 products from data/imported-catalog.csv');
 
     // All must be in-stock, priced, with multiple images
     for (const p of importedProducts) {
@@ -168,20 +168,30 @@ async function runTests() {
 
     // Verify categories
     const makeup = importedProducts.filter((p) => p.productType === 'Декоративна косметика');
+    const skincare = importedProducts.filter((p) => p.productType === 'Догляд за обличчям');
     const fragrance = importedProducts.filter((p) => p.productType === 'Парфуми та аромати');
+    const haircare = importedProducts.filter((p) => p.productType === 'Догляд за волоссям');
+    const bodycare = importedProducts.filter((p) => p.productType === 'Догляд за тілом');
     const bags = importedProducts.filter((p) => p.productType === 'Аксесуари та сумки');
 
-    assert.strictEqual(makeup.length, 7, 'Expected 7 makeup items');
-    assert.strictEqual(fragrance.length, 1, 'Expected 1 fragrance item');
+    assert.strictEqual(makeup.length, 17, 'Expected 17 makeup items');
+    assert.strictEqual(skincare.length, 19, 'Expected 19 skincare items');
+    assert.strictEqual(fragrance.length, 5, 'Expected 5 fragrance items');
+    assert.strictEqual(haircare.length, 3, 'Expected 3 haircare items');
+    assert.strictEqual(bodycare.length, 1, 'Expected 1 bodycare item');
     assert.strictEqual(bags.length, 1, 'Expected 1 accessories/bag item');
 
     // Subcategory tag filtering
     const lips = importedProducts.filter((p) => p.tags.includes('Губи'));
-    assert.strictEqual(lips.length, 5, 'Expected 5 lip products (Fenty, Rare Beauty, SF balm, SF oil, Rhode)');
+    assert.strictEqual(lips.length, 7, 'Expected 7 lip products (Fenty, Rare Beauty, SF balm, SF oil, Rhode, Dior)');
 
     const face = importedProducts.filter((p) => p.tags.includes('Обличчя'));
-    assert.strictEqual(face.length, 2, 'Expected 2 face products (Dior, Hourglass)');
-    console.log('✓ Imported catalog beauty parsing & categorization verified (9 products across categories)!');
+    assert.strictEqual(face.length, 8, 'Expected 8 face makeup items (Dior, Hourglass, Rhode, Rare Beauty, Tarte, Elegance, Dr.Ceuracle, brushes)');
+
+    const eyes = importedProducts.filter((p) => p.tags.includes('Очі'));
+    assert.strictEqual(eyes.length, 2, 'Expected 2 eye makeup items (NYX palette, RevitaBrow)');
+
+    console.log(`✓ Imported catalog beauty parsing & categorization verified (${importedProducts.length} products across categories)!`);
   }
 
   console.log('✓ All Universal CSV parser & merge tests passed successfully!');

@@ -593,10 +593,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const saved = await dbGet<Product[]>('shopify_store_products');
         const nicheVersion = localStorage.getItem('moland_catalog_niche');
 
-        if (!saved || saved.length === 0 || nicheVersion !== 'dune_beauty_catalog_v2') {
+        if (!saved || saved.length === 0 || nicheVersion !== 'dune_beauty_catalog_v3') {
           setProducts(SAMPLE_PRODUCTS);
           void dbSet('shopify_store_products', SAMPLE_PRODUCTS);
-          localStorage.setItem('moland_catalog_niche', 'dune_beauty_catalog_v2');
+          localStorage.setItem('moland_catalog_niche', 'dune_beauty_catalog_v3');
         } else {
           setProducts(saved);
         }

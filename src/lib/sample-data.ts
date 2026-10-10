@@ -5,12 +5,13 @@ export const SAMPLE_PRODUCTS: Product[] = [
     "id": "sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mis",
     "handle": "sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mis",
     "title": "Спрей парфумований для тіла та волосся Sol de Janeiro Rio Radiance Perfume Mist 90 ml",
-    "bodyHtml": "<p><strong>Sol de Janeiro Rio Radiance Perfume Mist</strong> — це парфумований спрей для тіла, натхненний енергійною атмосферою сонячного Ріо-де-Жанейро. Він дарує відчуття тепла і радісного літнього дня, огортаючи шкіру стійким ароматом, що залишається надовго.</p>\n<h3>Основні характеристики та інгредієнти</h3>\n<ul>\n<li><strong>Верхні ноти</strong>: Свіжі цитрусові, які створюють яскравий і енергійний початок аромату.</li>\n<li><strong>Серцеві ноти</strong>: Екзотичні квіти, що надають аромату ніжності та витонченості.</li>\n<li><strong>Базові ноти</strong>: Теплі акценти ванілі та бурштинової деревини, які залишають привабливий і тривалий шлейф.</li>\n</ul>\n<h3>Переваги</h3>\n<ul>\n<li><strong>Стійкий аромат</strong>: забезпечує тривалу дію, яка залишається на шкірі весь день.</li>\n<li><strong>Легка текстура</strong>: спрей швидко вбирається, не залишаючи липкого ефекту.</li>\n<li><strong>Універсальність</strong>: підходить для будь-якого часу доби, додаючи свіжості та яскравості.</li>\n<li><strong>Компактний розмір</strong>: зручний флакон, що легко поміститься в сумочку.</li>\n</ul>\n<h3>Спосіб використання</h3>\n<ol>\n<li><strong>Нанесення</strong>: Розпиліть на чисту шкіру з відстані 15–20 см, уникаючи потрапляння в очі.</li>\n<li><strong>Завершення</strong>: Зачекайте кілька секунд для повного вбирання. Наносьте на зап'ястя, шию, декольте чи інші зони, щоб відчути аромат.</li>\n<li><strong>Повторне нанесення</strong>: Оновлюйте за потреби протягом дня.</li>\n</ol>\n<p>Sol de Janeiro Rio Radiance Perfume Mist – ідеальний вибір для тих, хто хоче додати до свого образу нотку екзотики та відчути впевненість і привабливість на весь день.</p>",
+    "bodyHtml": "<p><strong>Sol de Janeiro Rio Radiance Perfume Mist</strong> — парфумований спрей для тіла та волосся, натхненний сонячним теплом Ріо. Ноти сонячної туберози, кокосового молока та теплого піску.</p>",
     "vendor": "Sol de Janeiro",
     "productType": "Парфуми та аромати",
     "tags": [
       "Парфуми",
-      "Спреї"
+      "Спреї",
+      "Sol de Janeiro"
     ],
     "price": 799,
     "compareAtPrice": 920,
@@ -19,529 +20,1430 @@ export const SAMPLE_PRODUCTS: Product[] = [
       "https://lil-shop.com.ua/content/images/37/390x390l80mc0/sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mist-90-ml-22625774301625.webp",
       "https://lil-shop.com.ua/content/images/37/700x700l80mc0/sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mist-90-ml-70923026042711.webp"
     ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/37/390x390l80mc0/sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mist-90-ml-70923026042711.webp",
-    "available": true,
-    "sku": "SKU-SPREI-PARF",
+    "sku": "SDJ-RIO-90",
     "variants": [
       {
-        "id": "v-sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mis-0",
-        "title": "Standard",
+        "title": "90 ml",
         "price": 799,
         "compareAtPrice": 920,
-        "sku": "SKU-SPREI-PARF"
+        "sku": "SDJ-RIO-90",
+        "id": "v-sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mis-0"
       }
-    ]
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/37/390x390l80mc0/sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mist-90-ml-70923026042711.webp",
+    "available": true
+  },
+  {
+    "id": "sol-de-janeiro-brazilian-crush-cheirosa-71-mist-90ml",
+    "handle": "sol-de-janeiro-brazilian-crush-cheirosa-71-mist-90ml",
+    "title": "Спрей парфумований для тіла та волосся Sol de Janeiro Cheirosa 71 Mist 90ml",
+    "bodyHtml": "<p><strong>Sol de Janeiro Cheirosa 71</strong> — теплий та затишний гурманський спрей з нотами карамелізованої ванілі, смаженого горіха макадамія та бобів тонка.</p>",
+    "vendor": "Sol de Janeiro",
+    "productType": "Парфуми та аромати",
+    "tags": [
+      "Парфуми",
+      "Спреї",
+      "Sol de Janeiro"
+    ],
+    "price": 799,
+    "compareAtPrice": 920,
+    "images": [
+      "https://lil-shop.com.ua/content/images/8/1500x1500l80mc0/sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeirobrazilian-crush-cheirosa-71-90-ml-73260098762614.webp"
+    ],
+    "sku": "SDJ-CH71-90",
+    "variants": [
+      {
+        "title": "90 ml",
+        "price": 799,
+        "compareAtPrice": 920,
+        "sku": "SDJ-CH71-90",
+        "id": "v-sol-de-janeiro-brazilian-crush-cheirosa-71-mist-90ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/8/1500x1500l80mc0/sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeirobrazilian-crush-cheirosa-71-90-ml-73260098762614.webp",
+    "available": true
+  },
+  {
+    "id": "sol-de-janeiro-brazilian-crush-trio-mist-set",
+    "handle": "sol-de-janeiro-brazilian-crush-trio-mist-set",
+    "title": "Набір парфумованих спреїв Sol de Janeiro Brazilian Crush Trio (62, 71, Rio Radiance)",
+    "bodyHtml": "<p>Подарунковий набір трьох бестселерів Sol de Janeiro: культовий Cheirosa 62, ванільний Cheirosa 71 та сонячний Rio Radiance.</p>",
+    "vendor": "Sol de Janeiro",
+    "productType": "Парфуми та аромати",
+    "tags": [
+      "Парфуми",
+      "Спреї",
+      "Набори",
+      "Sol de Janeiro"
+    ],
+    "price": 1890,
+    "compareAtPrice": 2200,
+    "images": [
+      "https://lil-shop.com.ua/content/images/2/1800x1103l80mc0/nabir-aromativ-brazilian-crush-cheirosa-6271rio-sprei-dlia-tila-ta-volossia-brazilian-crush-cheirosa-49536280110337.webp"
+    ],
+    "sku": "SDJ-SET-TRIO",
+    "variants": [
+      {
+        "title": "3 x 90 ml",
+        "price": 1890,
+        "compareAtPrice": 2200,
+        "sku": "SDJ-SET-TRIO",
+        "id": "v-sol-de-janeiro-brazilian-crush-trio-mist-set-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/2/1800x1103l80mc0/nabir-aromativ-brazilian-crush-cheirosa-6271rio-sprei-dlia-tila-ta-volossia-brazilian-crush-cheirosa-49536280110337.webp",
+    "available": true
+  },
+  {
+    "id": "interierna-aromatychna-svichka-amber-vanilla",
+    "handle": "interierna-aromatychna-svichka-amber-vanilla",
+    "title": "Інтерʼєрна ароматична свічка Amber & Vanilla Essence 220g",
+    "bodyHtml": "<p>Ароматична інтер'єрна свічка з натурального соєвого воску з дерев'яним ґнотом. Ноти амбри, бурштину та теплої мадагаскарської ванілі.</p>",
+    "vendor": "MOLAND Home",
+    "productType": "Парфуми та аромати",
+    "tags": [
+      "Аромати для дому",
+      "Свічки",
+      "Інтер'єр"
+    ],
+    "price": 650,
+    "compareAtPrice": 780,
+    "images": [
+      "https://lil-shop.com.ua/content/images/2/1439x1200l80mc0/46837915370455.webp"
+    ],
+    "sku": "CANDLE-AMB-220",
+    "variants": [
+      {
+        "title": "220g",
+        "price": 650,
+        "compareAtPrice": 780,
+        "sku": "CANDLE-AMB-220",
+        "id": "v-interierna-aromatychna-svichka-amber-vanilla-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/2/1439x1200l80mc0/46837915370455.webp",
+    "available": true
+  },
+  {
+    "id": "podarunkovyi-nabir-soievykh-svichok",
+    "handle": "podarunkovyi-nabir-soievykh-svichok",
+    "title": "Подарунковий набір ароматичних свічок Luxury Home Set (3 шт)",
+    "bodyHtml": "<p>Ексклюзивний подарунковий бокс з трьома преміальними свічками: Santal 26, Cashmere Wood та Vanilla Orchid.</p>",
+    "vendor": "MOLAND Home",
+    "productType": "Парфуми та аромати",
+    "tags": [
+      "Аромати для дому",
+      "Свічки",
+      "Подарункові набори"
+    ],
+    "price": 1290,
+    "compareAtPrice": 1550,
+    "images": [
+      "https://lil-shop.com.ua/content/images/3/856x656l80mc0/17319949087054.webp"
+    ],
+    "sku": "CANDLE-SET-3",
+    "variants": [
+      {
+        "title": "3 x 80g",
+        "price": 1290,
+        "compareAtPrice": 1550,
+        "sku": "CANDLE-SET-3",
+        "id": "v-podarunkovyi-nabir-soievykh-svichok-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/3/856x656l80mc0/17319949087054.webp",
+    "available": true
   },
   {
     "id": "blysk-dlia-hub-fenty-beauty-gloss-bomb-universal-lip-luminizer-fenty-glow-9ml",
     "handle": "blysk-dlia-hub-fenty-beauty-gloss-bomb-universal-lip-luminizer-fenty-glow-9ml",
     "title": "Блиск для губ Fenty Beauty Gloss Bomb Universal Lip Luminizer - Fenty Glow 9ml",
-    "bodyHtml": "<p><strong>Fenty Beauty Gloss Bomb Universal Lip Luminizer</strong> – універсальний блиск для губ, створений, щоб підкреслити природну красу кожної. Його насичена, сяюча формула надає губам об’ємний ефект і робить їх візуально більш пухкими.</p>\n<p> <strong>Ключові особливості:</strong></p>\n<ul>\n<li> Універсальні відтінки, що підходять для всіх тонів шкіри</li>\n<li> Зволожувальний склад з маслом ши для м’якості та комфорту</li>\n<li> Нелипка текстура, що створює глянцевий фініш</li>\n<li> Приємний аромат персика та ванілі</li>\n<li> Зручний аплікатор для легкого нанесення</li>\n</ul>\n<p>Блиск ідеально доповнює будь-який образ – від повсякденного до вечірнього, надаючи губам виразність і привабливе сяйво.</p>",
+    "bodyHtml": "<p>Культовий універсальний блиск від Ріанни. Зволожувальне масло ши, нелипка текстура та спокусливий глянцевий блиск з ароматом персика.</p>",
     "vendor": "Fenty Beauty",
     "productType": "Декоративна косметика",
     "tags": [
       "Губи",
-      "Декоративна косметика"
+      "Декоративна косметика",
+      "Fenty Beauty",
+      "Блиски"
     ],
     "price": 599,
     "compareAtPrice": 690,
     "images": [
       "https://lil-shop.com.ua/content/images/1/374x390l80mc0/blysk-dlia-hub-gloss-bomb-universal-lip-luminizer-fenty-glow-33591340940514.webp",
       "https://lil-shop.com.ua/content/images/1/387x390l80mc0/blysk-dlia-hub-gloss-bomb-universal-lip-luminizer-fenty-glow-13099499521487.webp",
-      "https://lil-shop.com.ua/content/images/1/312x390l80mc0/blysk-dlia-hub-gloss-bomb-universal-lip-luminizer-fenty-glow-51825259419611.webp",
-      "https://lil-shop.com.ua/content/images/1/996x1038l80mc0/blysk-dlia-hub-gloss-bomb-universal-lip-luminizer-fenty-glow-33591340940514.webp"
+      "https://lil-shop.com.ua/content/images/1/312x390l80mc0/blysk-dlia-hub-gloss-bomb-universal-lip-luminizer-fenty-glow-51825259419611.webp"
     ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/1/374x390l80mc0/blysk-dlia-hub-gloss-bomb-universal-lip-luminizer-fenty-glow-33591340940514.webp",
-    "available": true,
-    "sku": "SKU-BLYSK-DLIA",
+    "sku": "FB-GLOSS-GLOW",
     "variants": [
       {
-        "id": "v-blysk-dlia-hub-fenty-beauty-gloss-bomb-universal-lip-luminizer-fenty-glow-9ml-0",
-        "title": "Standard",
+        "title": "Fenty Glow (9ml)",
         "price": 599,
         "compareAtPrice": 690,
-        "sku": "SKU-BLYSK-DLIA"
+        "sku": "FB-GLOSS-GLOW",
+        "id": "v-blysk-dlia-hub-fenty-beauty-gloss-bomb-universal-lip-luminizer-fenty-glow-9ml-0"
       }
-    ]
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/1/374x390l80mc0/blysk-dlia-hub-gloss-bomb-universal-lip-luminizer-fenty-glow-33591340940514.webp",
+    "available": true
   },
   {
     "id": "tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope",
     "handle": "tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope",
     "title": "Тінт для губ Rare Beauty Soft Pinch Tinted Lip Oil - Hope",
-    "bodyHtml": "<p>Олія-тінт для губ Rare Beauty Soft Pinch Tinted Lip Oil — це поєднання догляду та краси. Вона додає губам природний відтінок, зволоження та легкий блиск, забезпечуючи м’якість і комфорт на весь день.</p>\n<p>Soft Pinch Tinted Lip Oil представлена у різноманітних відтінках — від ніжних нюдових до насичених і яскравих, тож ви легко зможете підібрати колір відповідно до свого настрою та стилю. Цей продукт допоможе створити як ніжний денний образ, так і виразний вечірній лук.</p>\n<p>Завдяки легкій текстурі олія-тінт чудово зливається з губами, не залишаючи липкості чи важкості. Вона зволожує, робить губи гладенькими та доглянутими, надаючи їм свіжого вигляду.</p>\n<p>Компактний розмір дозволяє легко носити тінт із собою у сумочці чи косметичці, щоб швидко освіжити макіяж у будь-який момент.</p>",
+    "bodyHtml": "<p>Інноваційна желеподібна текстура олійки-тінту від Селени Гомес. Зволожує губи оліями жожоба та соняшника і залишає ніжний стійкий відтінок Hope.</p>",
     "vendor": "Rare Beauty",
     "productType": "Декоративна косметика",
     "tags": [
       "Губи",
-      "Декоративна косметика"
+      "Декоративна косметика",
+      "Rare Beauty",
+      "Тінти"
     ],
     "price": 1099,
-    "compareAtPrice": 1260,
+    "compareAtPrice": 1250,
     "images": [
       "https://lil-shop.com.ua/content/images/10/390x390l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-55545230580396.webp",
       "https://lil-shop.com.ua/content/images/10/390x390l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-18423838788886.webp",
-      "https://lil-shop.com.ua/content/images/10/390x390l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-21817775073710.webp",
-      "https://lil-shop.com.ua/content/images/10/390x390l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-94883791044546.webp",
-      "https://lil-shop.com.ua/content/images/10/600x600l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-55545230580396.webp"
+      "https://lil-shop.com.ua/content/images/10/390x390l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-21817775073710.webp"
     ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/10/390x390l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-55545230580396.webp",
-    "available": true,
-    "sku": "SKU-TINT-DLIA-",
+    "sku": "RB-TINT-HOPE",
     "variants": [
       {
-        "id": "v-tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-0",
-        "title": "Standard",
+        "title": "Hope (Нюд рожевий)",
         "price": 1099,
-        "compareAtPrice": 1260,
-        "sku": "SKU-TINT-DLIA-"
+        "compareAtPrice": 1250,
+        "sku": "RB-TINT-HOPE",
+        "id": "v-tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-0"
       }
-    ]
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/10/390x390l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-55545230580396.webp",
+    "available": true
   },
   {
     "id": "balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-15ml",
     "handle": "balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-15ml",
     "title": "Бальзам для губ Summer Fridays Lip Butter Balm - Brown Sugar 15ml",
-    "bodyHtml": "<p>Бальзам для губ Summer Fridays Lip Butter Balm — справжній рятівник для сухих губ! Його унікальна формула з натуральними компонентами, такими як масло ши та насіння мурумури, чудово зволожує, заспокоює та відновлює шкіру. Ванільний аромат створює відчуття затишку та свіжості, а веганські воски надають губам м'якість і блиск без жирного шару. Такий бальзам ідеально підходить для щоденного догляду, особливо в холодну пору року, коли губи особливо потребують зволоження та захисту.</p>",
+    "bodyHtml": "<p>Улюблений шовковистий бальзам-баттер для губ з оліями ши та мурумуру. Надає дзеркальний блиск і теплий карамельний відтінок Brown Sugar.</p>",
     "vendor": "Summer Fridays",
     "productType": "Декоративна косметика",
     "tags": [
       "Губи",
-      "Декоративна косметика"
+      "Декоративна косметика",
+      "Summer Fridays",
+      "Бальзами"
     ],
     "price": 499,
-    "compareAtPrice": 570,
+    "compareAtPrice": 620,
     "images": [
       "https://lil-shop.com.ua/content/images/8/390x390l80mc0/balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-75168103762214.webp",
-      "https://lil-shop.com.ua/content/images/8/390x390l80mc0/balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-94935871299443.webp",
-      "https://lil-shop.com.ua/content/images/8/395x390l80mc0/balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-93831467476787.webp",
-      "https://lil-shop.com.ua/content/images/8/1800x1800l80mc0/balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-75168103762214.webp"
+      "https://lil-shop.com.ua/content/images/8/390x390l80mc0/balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-94935871299443.webp"
     ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/8/390x390l80mc0/balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-75168103762214.webp",
-    "available": true,
-    "sku": "SKU-BALZAM-DLI",
+    "sku": "SF-BALM-BROWN",
     "variants": [
       {
-        "id": "v-balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-15ml-0",
-        "title": "Standard",
+        "title": "Brown Sugar (15ml)",
         "price": 499,
-        "compareAtPrice": 570,
-        "sku": "SKU-BALZAM-DLI"
+        "compareAtPrice": 620,
+        "sku": "SF-BALM-BROWN",
+        "id": "v-balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-15ml-0"
       }
-    ]
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/8/390x390l80mc0/balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-75168103762214.webp",
+    "available": true
   },
   {
     "id": "oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-4-5ml",
     "handle": "oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-4-5ml",
     "title": "Олійка для губ Summer Fridays Dream Lip Oil - Soft Mauve 4.5ml",
-    "bodyHtml": "<p>Summer Fridays створили справжню мрію для ваших губ – <strong>Dream Oil</strong>. Ця ніжна олія має плюшеву текстуру та легко <strong>наноситься</strong>, залишаючи <strong>дзеркальний фініш</strong> із делікатним відтінком кольору. Її нелипка формула збагачена <strong>поживними компонентами</strong>, які забезпечують тривале зволоження та догляд.</p>\n<p>До складу входить <strong>суміш із дев’яти рослинних олій</strong>, що інтенсивно живлять і пом’якшують шкіру, а також <strong>веганський колаген</strong>, який допомагає губам залишатися гладенькими та еластичними. Не обійшлося й без <strong>вітаміну Е</strong> – потужного антиоксиданту, що захищає від сухості, впливу навколишнього середовища (вітер, УФ-випромінювання, забруднення) та сприяє здоровому вигляду губ.</p>\n<p>Dream Oil представлена у <strong>вишуканій палітрі відтінків</strong> – від спокусливих лілових до ніжно-рожевих, які дарують губам природний, свіжий вигляд. Ідеальний вибір для тих, хто цінує <strong>догляд, комфорт і стиль</strong> в одному продукті.</p>",
+    "bodyHtml": "<p>Живильна олійка для губ з комплексом з 9 натуральних рослинних олій та вітаміном E. Глибоко живить, не липне і дарує витончений відтінок Soft Mauve.</p>",
     "vendor": "Summer Fridays",
     "productType": "Декоративна косметика",
     "tags": [
       "Губи",
-      "Декоративна косметика"
+      "Декоративна косметика",
+      "Summer Fridays",
+      "Олійки"
     ],
     "price": 599,
-    "compareAtPrice": 690,
+    "compareAtPrice": 720,
     "images": [
       "https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-83798386800838.webp",
-      "https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-25124021246831.webp",
-      "https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-64562079570797.webp",
-      "https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-64718603326458.webp",
-      "https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-70374880472109.webp",
-      "https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-95760673383514.webp",
-      "https://lil-shop.com.ua/content/images/26/1000x1000l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-83798386800838.webp"
+      "https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-25124021246831.webp"
     ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-83798386800838.webp",
-    "available": true,
-    "sku": "SKU-OLIIKA-DLI",
+    "sku": "SF-OIL-MAUVE",
     "variants": [
       {
-        "id": "v-oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-4-5ml-0",
-        "title": "Standard",
+        "title": "Soft Mauve (4.5ml)",
         "price": 599,
-        "compareAtPrice": 690,
-        "sku": "SKU-OLIIKA-DLI"
+        "compareAtPrice": 720,
+        "sku": "SF-OIL-MAUVE",
+        "id": "v-oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-4-5ml-0"
       }
-    ]
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-83798386800838.webp",
+    "available": true
   },
   {
     "id": "konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch",
     "handle": "konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch",
     "title": "Контурний олівець для губ Rhode Peptide Lip Shape - Stretch",
-    "bodyHtml": "<p><strong>Rhode — Peptide Lip Shape</strong></p>\n<p>Інноваційний <strong>контурний олівець для губ</strong>, який поєднує у собі:</p>\n<ul>\n<li>\n<p>делікатний <strong>відтінок</strong>,</p>\n</li>\n<li>\n<p><strong>доглядову формулу</strong> з пептидами,</p>\n</li>\n<li>\n<p>і ефект <strong>спокусливого об’єму</strong>.</p>\n</li>\n</ul>\n<h3> Основні переваги:</h3>\n<ul>\n<li>\n<p><strong>Кремова текстура</strong> — легко наноситься та створює м’який, природний контур.</p>\n</li>\n<li>\n<p><strong>Візуальне збільшення губ</strong> — губи виглядають більш об’ємними та привабливими.</p>\n</li>\n<li>\n<p><strong>Зволоження та гладкість</strong> — доглядові компоненти роблять губи м’якими і доглянутими.</p>\n</li>\n<li>\n<p><strong>Пептиди в складі</strong> — сприяють поліпшенню текстури шкіри губ.</p>\n</li>\n</ul>\n<h3> Додатково:</h3>\n<ul>\n<li>\n<p>На іншому кінці — <strong>силіконовий аплікатор</strong> для точного підчищення та корекції контуру.</p>\n</li>\n</ul>\n<p><strong>Обʼєм:</strong> 0.75 г</p>",
-    "vendor": "Rhode Cosmetics",
+    "bodyHtml": "<p>Пептидний олівець для контурування губ від Гейлі Бібер. Оксамитова ковзаюча формула, що візуально збільшує об'єм губ та тримається цілий день.</p>",
+    "vendor": "Rhode",
     "productType": "Декоративна косметика",
     "tags": [
       "Губи",
-      "Декоративна косметика"
+      "Декоративна косметика",
+      "Rhode",
+      "Олівці"
+    ],
+    "price": 799,
+    "compareAtPrice": 950,
+    "images": [
+      "https://lil-shop.com.ua/content/images/2/390x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-98576261965888.webp",
+      "https://lil-shop.com.ua/content/images/2/390x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-17785765135199.webp"
+    ],
+    "sku": "RHODE-LIP-STR",
+    "variants": [
+      {
+        "title": "Stretch",
+        "price": 799,
+        "compareAtPrice": 950,
+        "sku": "RHODE-LIP-STR",
+        "id": "v-konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/2/390x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-98576261965888.webp",
+    "available": true
+  },
+  {
+    "id": "balzam-z-tintom-rhode-peptide-lip-tint-raspberry-jelly-10ml",
+    "handle": "balzam-z-tintom-rhode-peptide-lip-tint-raspberry-jelly-10ml",
+    "title": "Бальзам з тінтом для губ Rhode Peptide Lip Tint - Raspberry Jelly 10ml",
+    "bodyHtml": "<p>Вірусний пептидний тінт-бальзам Гейлі Бібер. Відтінок соковитої стиглої малини Raspberry Jelly відновлює сухі губи та дарує сяючий об'єм.</p>",
+    "vendor": "Rhode",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Губи",
+      "Декоративна косметика",
+      "Rhode",
+      "Тінти",
+      "Бальзами"
     ],
     "price": 799,
     "compareAtPrice": 920,
     "images": [
-      "https://lil-shop.com.ua/content/images/2/390x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-98576261965888.webp",
-      "https://lil-shop.com.ua/content/images/2/357x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-17785765135199.webp",
-      "https://lil-shop.com.ua/content/images/2/357x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-93268742301751.webp",
-      "https://lil-shop.com.ua/content/images/2/390x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-28377166352426.webp",
-      "https://lil-shop.com.ua/content/images/2/640x272l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-51536027419743.webp",
-      "https://lil-shop.com.ua/content/images/2/1500x1500l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-98576261965888.webp"
+      "https://lil-shop.com.ua/content/images/19/600x600l80mc0/balzam-z-tintom-rhode-peptide-lip-tint-raspberry-jelly-10ml-59876748159092.webp"
     ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/2/390x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-98576261965888.webp",
-    "available": true,
-    "sku": "SKU-KONTURNYI-",
+    "sku": "RHODE-TINT-RASP",
     "variants": [
       {
-        "id": "v-konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-0",
-        "title": "Standard",
+        "title": "Raspberry Jelly (10ml)",
         "price": 799,
         "compareAtPrice": 920,
-        "sku": "SKU-KONTURNYI-"
+        "sku": "RHODE-TINT-RASP",
+        "id": "v-balzam-z-tintom-rhode-peptide-lip-tint-raspberry-jelly-10ml-0"
       }
-    ]
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/19/600x600l80mc0/balzam-z-tintom-rhode-peptide-lip-tint-raspberry-jelly-10ml-59876748159092.webp",
+    "available": true
+  },
+  {
+    "id": "dior-addict-lip-glow-oil-001",
+    "handle": "dior-addict-lip-glow-oil-001",
+    "title": "Олія-блиск для губ Dior Addict Lip Glow Oil 001 Pink",
+    "bodyHtml": "<p>Культова олія для губ Dior Addict з технологією Color Reviver, що адаптується до індивідуального pH губ, створюючи неповторний свіжий рожевий відтінок.</p>",
+    "vendor": "Dior",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Губи",
+      "Декоративна косметика",
+      "Dior",
+      "Олійки"
+    ],
+    "price": 1850,
+    "compareAtPrice": 2100,
+    "images": [
+      "https://lil-shop.com.ua/content/images/14/400x500l80mc0/dior-addict-lip-glow-oil-oliia-dlia-hub-001-13168465110396.webp"
+    ],
+    "sku": "DIOR-GLOW-001",
+    "variants": [
+      {
+        "title": "001 Pink",
+        "price": 1850,
+        "compareAtPrice": 2100,
+        "sku": "DIOR-GLOW-001",
+        "id": "v-dior-addict-lip-glow-oil-001-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/14/400x500l80mc0/dior-addict-lip-glow-oil-oliia-dlia-hub-001-13168465110396.webp",
+    "available": true
   },
   {
     "id": "palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-univer",
     "handle": "palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-univer",
-    "title": "Палітра хайлайтерів для обличчя — Dior Backstage Glow Face Palette 001 Universal, 10g",
-    "bodyHtml": "<p><strong>Dior Backstage Glow Face Palette</strong> — культова палітра хайлайтерів для створення бездоганного сяйва у стилі backstage. Чотири гармонійно підібрані відтінки з високою пігментацією та делікатним шиммером дозволяють моделювати світло на обличчі — від м’якого природного підсвічування до виразного глянцевого блиску.</p>\n<p>Ультратонка текстура легко наноситься та розтушовується, не підкреслює текстуру шкіри й нашаровується без ефекту обтяження. Відтінки можна використовувати окремо або змішувати для досягнення індивідуального результату.</p>\n<h3>Переваги:</h3>\n<ul>\n<li>\n<p>Підкреслює вилиці, спинку носа та контури обличчя, розставляючи сяючі акценти</p>\n</li>\n<li>\n<p>Освіжає образ, візуально усуває ознаки втоми та тьмяності</p>\n</li>\n<li>\n<p>Створює ефект здорової, доглянутої шкіри</p>\n</li>\n<li>\n<p>Має високу стійкість — макіяж залишається бездоганним протягом усього дня</p>\n</li>\n<li>\n<p>Підходить для повсякденного та святкового макіяжу</p>\n</li>\n</ul>\n<h2>Відтінки:</h2>\n<ul>\n<li>\n<p><strong>001 Universal</strong> — універсальна палітра для природного багатовимірного сяйва</p>\n</li>\n<li>\n<p><strong>002 Glitz</strong> — сяючі відтінки з ефектом яскравого, глянцевого блиску</p>\n</li>\n<li>\n<p><strong>003 Pure Gold</strong> — розкішні золотисті тони для теплого, сонячного сяйва</p>\n</li>\n<li>\n<p><strong>004 Rose Gold</strong> — ніжні рожево-золоті відтінки для делікатного романтичного підсвічування</p>\n</li>\n</ul>\n<p><strong>Dior Backstage Glow Face Palette</strong> стане незамінною частиною вашої косметички, додаючи макіяжу вишуканого професійного фінішу з ефектом розкішного сяйва.</p>",
+    "title": "Палітра хайлайтерів для обличчя Dior Backstage Glow Face Palette 001 Universal 10g",
+    "bodyHtml": "<p>Знакова палітра хайлайтерів Dior Backstage. Чотири сяючі відтінки з мікроперламутром, що нашаровуються від ніжного внутрішнього сяйва до яскравого глянцю.</p>",
     "vendor": "Dior",
     "productType": "Декоративна косметика",
     "tags": [
       "Обличчя",
-      "Декоративна косметика"
+      "Декоративна косметика",
+      "Dior",
+      "Палітри",
+      "Хайлайтери"
     ],
     "price": 2199,
-    "compareAtPrice": 2530,
+    "compareAtPrice": 2500,
     "images": [
       "https://lil-shop.com.ua/content/images/47/390x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-83055883802753.webp",
-      "https://lil-shop.com.ua/content/images/47/390x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-30957074229681.webp",
-      "https://lil-shop.com.ua/content/images/47/312x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-33457916893184.webp",
-      "https://lil-shop.com.ua/content/images/47/390x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-82776746004367.webp",
-      "https://lil-shop.com.ua/content/images/47/390x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-97946577612126.webp",
-      "https://lil-shop.com.ua/content/images/47/1000x1000l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-83055883802753.webp"
+      "https://lil-shop.com.ua/content/images/47/390x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-30957074229681.webp"
     ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/47/390x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-83055883802753.webp",
-    "available": true,
-    "sku": "SKU-PALITRA-KH",
+    "sku": "DIOR-BACK-001",
     "variants": [
       {
-        "id": "v-palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-univer-0",
-        "title": "Standard",
+        "title": "001 Universal (10g)",
         "price": 2199,
-        "compareAtPrice": 2530,
-        "sku": "SKU-PALITRA-KH"
+        "compareAtPrice": 2500,
+        "sku": "DIOR-BACK-001",
+        "id": "v-palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-univer-0"
       }
-    ]
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/47/390x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-83055883802753.webp",
+    "available": true
   },
   {
     "id": "ridki-rumiana-hourglass-unreal-liquid-blush-whim-10-3ml",
     "handle": "ridki-rumiana-hourglass-unreal-liquid-blush-whim-10-3ml",
     "title": "Рідкі румʼяна Hourglass Unreal Liquid Blush - Whim 10.3ml",
-    "bodyHtml": "<p>Рідкі рум’яна Unreal з ліфтинг-комплексом</p>\n<p><strong>Секрет свіжості та природного сяйва в кожній краплі.</strong> Рідкі рум’яна Unreal — це більше, ніж макіяж. Вони поєднують догляд за шкірою та декоративну косметику, створюючи ефект натурального рум’янцю, що тримається до 12 годин.</p>\n<p><strong>Чим вони особливі?</strong></p>\n<ul>\n<li><strong>Формула, як сироватка.</strong> Легка текстура миттєво зволожує, підтягує та зміцнює шкіру. Щоки стають більш гладенькими та виглядають свіжими протягом усього дня.</li>\n<li><strong>Природний ефект.</strong> Рум’яна ідеально зливаються зі шкірою, створюючи ніжний градієнт кольору з натуральним фінішем.</li>\n<li><strong>Індивідуальний підхід.</strong> Інноваційна піпетка дозволяє дозувати продукт, щоб створити ефект від легкого натяку до насиченого макіяжу.</li>\n</ul>\n<p><strong>Переваги:</strong></p>\n<ul>\n<li>Ефект миттєвого ліфтингу щік.</li>\n<li>Легка, невагома консистенція.</li>\n<li>Зволоження та зміцнення шкіри протягом дня.</li>\n<li>Гладкий та сяючий результат.</li>\n<li>Не забиває пори, підходить для будь-якого типу шкіри.</li>\n<li>100% веганський продукт, що не тестується на тваринах.</li>\n</ul>\n<h3>Для тих, хто цінує догляд та стиль в одному флаконі.</h3>\n<p>Спробуйте Unreal та створіть свій ідеальний макіяж із комфортом та турботою про шкіру.</p>",
+    "bodyHtml": "<p>Преміальні невагомі рідкі рум'яна Hourglass Unreal з сироватковим ефектом. Формула з гіалуроновою кислотою та пептидами для ефекту розмитого фокусу.</p>",
     "vendor": "Hourglass",
     "productType": "Декоративна косметика",
     "tags": [
       "Обличчя",
-      "Декоративна косметика"
+      "Декоративна косметика",
+      "Hourglass",
+      "Рум'яна"
     ],
     "price": 899,
-    "compareAtPrice": 1030,
+    "compareAtPrice": 1050,
     "images": [
       "https://lil-shop.com.ua/content/images/21/390x390l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-59723467636263.webp",
-      "https://lil-shop.com.ua/content/images/21/390x390l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-91808013028194.webp",
-      "https://lil-shop.com.ua/content/images/21/390x390l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-51087360594803.webp",
-      "https://lil-shop.com.ua/content/images/21/390x390l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-39654498753239.webp",
-      "https://lil-shop.com.ua/content/images/21/1080x1080l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-59723467636263.webp"
+      "https://lil-shop.com.ua/content/images/21/390x390l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-91808013028194.webp"
     ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/21/390x390l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-59723467636263.webp",
-    "available": true,
-    "sku": "SKU-RIDKI-RUMI",
+    "sku": "HG-BLUSH-WHIM",
     "variants": [
       {
-        "id": "v-ridki-rumiana-hourglass-unreal-liquid-blush-whim-10-3ml-0",
-        "title": "Standard",
+        "title": "Whim (10.3ml)",
         "price": 899,
-        "compareAtPrice": 1030,
-        "sku": "SKU-RIDKI-RUMI"
+        "compareAtPrice": 1050,
+        "sku": "HG-BLUSH-WHIM",
+        "id": "v-ridki-rumiana-hourglass-unreal-liquid-blush-whim-10-3ml-0"
       }
-    ]
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/21/390x390l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-59723467636263.webp",
+    "available": true
+  },
+  {
+    "id": "rhode-pocket-blush-juice-box",
+    "handle": "rhode-pocket-blush-juice-box",
+    "title": "Пептидні кремові рум'яна Rhode Pocket Blush - Juice Box",
+    "bodyHtml": "<p>Компактні кремові рум'яна Rhode у трендовому відтінку Juice Box (яскравий ягідний). Надають шкірі свіжого натурального рум'янцю та легкого вологого сяйва.</p>",
+    "vendor": "Rhode",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Обличчя",
+      "Декоративна косметика",
+      "Rhode",
+      "Рум'яна"
+    ],
+    "price": 1150,
+    "compareAtPrice": 1300,
+    "images": [
+      "https://lil-shop.com.ua/content/images/39/1284x1605l80mc0/rumiana-peptydni-kremovi-rhode-pocket-blush-juice-box-86471484829067.webp"
+    ],
+    "sku": "RHODE-BLUSH-JB",
+    "variants": [
+      {
+        "title": "Juice Box",
+        "price": 1150,
+        "compareAtPrice": 1300,
+        "sku": "RHODE-BLUSH-JB",
+        "id": "v-rhode-pocket-blush-juice-box-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/39/1284x1605l80mc0/rumiana-peptydni-kremovi-rhode-pocket-blush-juice-box-86471484829067.webp",
+    "available": true
+  },
+  {
+    "id": "rare-beauty-positive-light-liquid-luminizer-enchant-15ml",
+    "handle": "rare-beauty-positive-light-liquid-luminizer-enchant-15ml",
+    "title": "Рідкий хайлайтер Rare Beauty Positive Light Liquid Luminizer - Enchant 15ml",
+    "bodyHtml": "<p>Шовковистий рідкий хайлайтер другого покоління від Rare Beauty. Відтінок Enchant (м'яке рожеве сяйво) бездоганно розтушовується без підкреслення текстури.</p>",
+    "vendor": "Rare Beauty",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Обличчя",
+      "Декоративна косметика",
+      "Rare Beauty",
+      "Хайлайтери"
+    ],
+    "price": 1250,
+    "compareAtPrice": 1400,
+    "images": [
+      "https://lil-shop.com.ua/content/images/37/1280x1280l80mc0/ridkyi-khailaiter-rare-beauty-positive-light-liquid-luminizer-enchant-15-ml-60956111488083.webp"
+    ],
+    "sku": "RB-LUM-ENCHANT",
+    "variants": [
+      {
+        "title": "Enchant (15ml)",
+        "price": 1250,
+        "compareAtPrice": 1400,
+        "sku": "RB-LUM-ENCHANT",
+        "id": "v-rare-beauty-positive-light-liquid-luminizer-enchant-15ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/37/1280x1280l80mc0/ridkyi-khailaiter-rare-beauty-positive-light-liquid-luminizer-enchant-15-ml-60956111488083.webp",
+    "available": true
+  },
+  {
+    "id": "tarte-shape-tape-contour-concealer-20b-light",
+    "handle": "tarte-shape-tape-contour-concealer-20b-light",
+    "title": "Консилер Tarte Shape Tape Contour Concealer - 20B Light",
+    "bodyHtml": "<p>Найпопулярніший у світі консилер з повним перекриттям. Миттєво маскує темні кола під очима та недосконалості без скочування до 16 годин.</p>",
+    "vendor": "Tarte",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Обличчя",
+      "Декоративна косметика",
+      "Консилери",
+      "Tarte"
+    ],
+    "price": 1100,
+    "compareAtPrice": 1280,
+    "images": [
+      "https://lil-shop.com.ua/content/images/37/1000x1000l80mc0/konsyler-tarte-shape-tape-contour-concealer-20b-light-29693226878509.webp"
+    ],
+    "sku": "TARTE-ST-20B",
+    "variants": [
+      {
+        "title": "20B Light",
+        "price": 1100,
+        "compareAtPrice": 1280,
+        "sku": "TARTE-ST-20B",
+        "id": "v-tarte-shape-tape-contour-concealer-20b-light-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/37/1000x1000l80mc0/konsyler-tarte-shape-tape-contour-concealer-20b-light-29693226878509.webp",
+    "available": true
+  },
+  {
+    "id": "elegance-la-poudre-haute-nuance-01-powder-27g",
+    "handle": "elegance-la-poudre-haute-nuance-01-powder-27g",
+    "title": "Стійка матуюча пудра для обличчя Elegance La Poudre Haute Nuance 01 (27g)",
+    "bodyHtml": "<p>Легендарна японська пудра вищого класу Elegance. Вирівнює рельєф пор, фіксує макіяж і створює шовковисту порцелянову шкіру.</p>",
+    "vendor": "Elegance",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Обличчя",
+      "Декоративна косметика",
+      "Пудри"
+    ],
+    "price": 2450,
+    "compareAtPrice": 2800,
+    "images": [
+      "https://lil-shop.com.ua/content/images/2/1280x1280l80mc0/elegance-la-poudre-haute-nuance-01-stiika-pudra-dlia-oblychchia-27g-95541467097747.webp"
+    ],
+    "sku": "ELEGANCE-01-27G",
+    "variants": [
+      {
+        "title": "01 Elegance (27g)",
+        "price": 2450,
+        "compareAtPrice": 2800,
+        "sku": "ELEGANCE-01-27G",
+        "id": "v-elegance-la-poudre-haute-nuance-01-powder-27g-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/2/1280x1280l80mc0/elegance-la-poudre-haute-nuance-01-stiika-pudra-dlia-oblychchia-27g-95541467097747.webp",
+    "available": true
+  },
+  {
+    "id": "dr-ceuracle-recovery-bb-cream-spf-28-45ml",
+    "handle": "dr-ceuracle-recovery-bb-cream-spf-28-45ml",
+    "title": "Стійкий BB-крем бальзам Dr.Ceuracle Recovery SPF 28 PA++ 45ml",
+    "bodyHtml": "<p>Корейський лікувальний BB-крем з матовим оксамитовим фінішем. Заспокоює чутливу шкіру, маскує почервоніння та захищає від ультрафіолету.</p>",
+    "vendor": "Dr.Ceuracle",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Обличчя",
+      "Декоративна косметика",
+      "BB крем",
+      "SPF",
+      "Dr.Ceuracle"
+    ],
+    "price": 890,
+    "compareAtPrice": 1050,
+    "images": [
+      "https://lil-shop.com.ua/content/images/5/390x390l80mc0/stiikyi-bb-krem-balzam-z-matovym-efektom-dr.ceuracle-recovery-spf-28-pa-45ml-70439076110325.webp"
+    ],
+    "sku": "DRC-BB-45",
+    "variants": [
+      {
+        "title": "45 ml",
+        "price": 890,
+        "compareAtPrice": 1050,
+        "sku": "DRC-BB-45",
+        "id": "v-dr-ceuracle-recovery-bb-cream-spf-28-45ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/5/390x390l80mc0/stiikyi-bb-krem-balzam-z-matovym-efektom-dr.ceuracle-recovery-spf-28-pa-45ml-70439076110325.webp",
+    "available": true
+  },
+  {
+    "id": "nyx-ultimate-eyeshadow-palette-16-warm-neutrals",
+    "handle": "nyx-ultimate-eyeshadow-palette-16-warm-neutrals",
+    "title": "Палетка тіней для повік NYX Professional Ultimate 16 Shades 04W Warm Neutrals",
+    "bodyHtml": "<p>Універсальна палетка тіней з 16 теплими базовими відтінками від сатинових до насичено матових. Висока пігментація та бездоганне розтушовування.</p>",
+    "vendor": "NYX Professional",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Очі",
+      "Декоративна косметика",
+      "NYX",
+      "Тіні"
+    ],
+    "price": 850,
+    "compareAtPrice": 980,
+    "images": [
+      "https://lil-shop.com.ua/content/images/13/1063x1063l80mc0/nyx-professional-paletka-tinei-ultimate-16-vidtinkiv-04w-warm-neutrals-98157405341796.webp"
+    ],
+    "sku": "NYX-ULT-16WN",
+    "variants": [
+      {
+        "title": "04W Warm Neutrals",
+        "price": 850,
+        "compareAtPrice": 980,
+        "sku": "NYX-ULT-16WN",
+        "id": "v-nyx-ultimate-eyeshadow-palette-16-warm-neutrals-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/13/1063x1063l80mc0/nyx-professional-paletka-tinei-ultimate-16-vidtinkiv-04w-warm-neutrals-98157405341796.webp",
+    "available": true
+  },
+  {
+    "id": "revitabrow-advanced-eyebrow-conditioner-3ml",
+    "handle": "revitabrow-advanced-eyebrow-conditioner-3ml",
+    "title": "Сироватка для росту та зміцнення брів RevitaBrow Advanced (3ml)",
+    "bodyHtml": "<p>Оригінальна сироватка з запатентованим BioPeptin Complex для стимуляції росту, густоти та захисту волосків брів від ламкості.</p>",
+    "vendor": "RevitaLash",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Очі",
+      "Декоративна косметика",
+      "Брови",
+      "Сироватки"
+    ],
+    "price": 2600,
+    "compareAtPrice": 2950,
+    "images": [
+      "https://lil-shop.com.ua/content/images/50/600x600l80mc0/3ml-revitabrow-advanced-syrovatka-dlia-rostu-briv-61074207028964.webp"
+    ],
+    "sku": "REV-BROW-3ML",
+    "variants": [
+      {
+        "title": "3 ml",
+        "price": 2600,
+        "compareAtPrice": 2950,
+        "sku": "REV-BROW-3ML",
+        "id": "v-revitabrow-advanced-eyebrow-conditioner-3ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/50/600x600l80mc0/3ml-revitabrow-advanced-syrovatka-dlia-rostu-briv-61074207028964.webp",
+    "available": true
+  },
+  {
+    "id": "nabir-penzliv-dlia-makiiazhu-pro",
+    "handle": "nabir-penzliv-dlia-makiiazhu-pro",
+    "title": "Набір професійних пензлів для макіяжу Pro Artist Brush Set (8 шт)",
+    "bodyHtml": "<p>Повний набір ультрам'яких синтетичних пензлів для нанесення тону, пудри, рум'ян, хайлайтера та тіней з чохлом для зберігання.</p>",
+    "vendor": "MOLAND Beauty",
+    "productType": "Декоративна косметика",
+    "tags": [
+      "Обличчя",
+      "Аксесуари",
+      "Пензлі"
+    ],
+    "price": 990,
+    "compareAtPrice": 1200,
+    "images": [
+      "https://lil-shop.com.ua/content/images/50/630x630l80mc0/41288408830248.webp"
+    ],
+    "sku": "BRUSH-SET-8",
+    "variants": [
+      {
+        "title": "8 шт + Чохол",
+        "price": 990,
+        "compareAtPrice": 1200,
+        "sku": "BRUSH-SET-8",
+        "id": "v-nabir-penzliv-dlia-makiiazhu-pro-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/50/630x630l80mc0/41288408830248.webp",
+    "available": true
+  },
+  {
+    "id": "prod-medicube-cleansing-oil",
+    "handle": "prod-medicube-cleansing-oil",
+    "title": "Очищувальна гідрофільна олія Medicube Zero Pore Blackhead Deep Cleansing Oil (150ml)",
+    "bodyHtml": "<p>Глибоко очищує пори від чорних цяток, водостійкого макіяжу та сонцезахисних кремів. Містить LHA-кислоти та ніацинамід для звуження пор.</p>",
+    "vendor": "Medicube",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Очищення",
+      "Medicube",
+      "Гідрофільна олія"
+    ],
+    "price": 880,
+    "compareAtPrice": 990,
+    "images": [
+      "https://lil-shop.com.ua/content/images/45/1800x1800l80mc0/ochyshchuvalna-hidrofilna-oliia-medicube-zero-pore-blackhead-deep-cleansing-oil-lha-ta-niatsynamid-150ml-95294052613319.webp"
+    ],
+    "sku": "MED-OIL-150",
+    "variants": [
+      {
+        "title": "150 ml",
+        "price": 880,
+        "compareAtPrice": 990,
+        "sku": "MED-OIL-150",
+        "id": "v-prod-medicube-cleansing-oil-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/45/1800x1800l80mc0/ochyshchuvalna-hidrofilna-oliia-medicube-zero-pore-blackhead-deep-cleansing-oil-lha-ta-niatsynamid-150ml-95294052613319.webp",
+    "available": true
+  },
+  {
+    "id": "skin1004-madagascar-centella-tone-brightening-cleansing-foam-125ml",
+    "handle": "skin1004-madagascar-centella-tone-brightening-cleansing-foam-125ml",
+    "title": "Освітлюючий гель-пінка для вмивання Skin1004 Madagascar Centella (125ml)",
+    "bodyHtml": "<p>Делікатна пінка з екстрактом центелли азіатської та мадекасосидом. Освітлює постакне, заспокоює подразнення і не сушить шкіру.</p>",
+    "vendor": "Skin1004",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Очищення",
+      "Skin1004",
+      "Центелла",
+      "Вмивання"
+    ],
+    "price": 540,
+    "compareAtPrice": 620,
+    "images": [
+      "https://lil-shop.com.ua/content/images/3/388x600l80mc0/skin1004-madagascar-centella-tone-brightening-cleansing-gel-foam-osvitliuiuchyi-hel-pinka-dlia-vmyvannia-z-tsenteloiu-125ml-71127830164614.webp"
+    ],
+    "sku": "SKIN-CENT-125",
+    "variants": [
+      {
+        "title": "125 ml",
+        "price": 540,
+        "compareAtPrice": 620,
+        "sku": "SKIN-CENT-125",
+        "id": "v-skin1004-madagascar-centella-tone-brightening-cleansing-foam-125ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/3/388x600l80mc0/skin1004-madagascar-centella-tone-brightening-cleansing-gel-foam-osvitliuiuchyi-hel-pinka-dlia-vmyvannia-z-tsenteloiu-125ml-71127830164614.webp",
+    "available": true
+  },
+  {
+    "id": "panoxyl-acne-foaming-wash-156ml",
+    "handle": "panoxyl-acne-foaming-wash-156ml",
+    "title": "Гель-пінка для проблемної шкіри з акне PanOxyl Acne Foaming Wash 10% (156ml)",
+    "bodyHtml": "<p>Максимальна концентрація 10% бензоїл пероксиду для лікування акне та запалень на обличчі, плечах та спині. Очищає пори від бактерій.</p>",
+    "vendor": "PanOxyl",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Очищення",
+      "PanOxyl",
+      "Вмивання"
+    ],
+    "price": 680,
+    "compareAtPrice": 790,
+    "images": [
+      "https://lil-shop.com.ua/content/images/23/700x700l80mc0/156ml-panoxyl-acne-foaming-wash-hel-pinka-dlia-chutlyvoi-ta-problemnoi-shkiry-z-akne-19561877194385.webp"
+    ],
+    "sku": "PANOXYL-10-156",
+    "variants": [
+      {
+        "title": "156 ml",
+        "price": 680,
+        "compareAtPrice": 790,
+        "sku": "PANOXYL-10-156",
+        "id": "v-panoxyl-acne-foaming-wash-156ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/23/700x700l80mc0/156ml-panoxyl-acne-foaming-wash-hel-pinka-dlia-chutlyvoi-ta-problemnoi-shkiry-z-akne-19561877194385.webp",
+    "available": true
+  },
+  {
+    "id": "molochko-dlia-ochyshchennia-sensitive",
+    "handle": "molochko-dlia-ochyshchennia-sensitive",
+    "title": "Заспокійливе молочко для очищення чутливої шкіри обличчя Gentle Milk (200ml)",
+    "bodyHtml": "<p>Ультрам'яке очищувальне молочко з церамідами та пантенолом для делікатного видалення макіяжу без порушення захисного ліпідного бар'єру.</p>",
+    "vendor": "MOLAND Skincare",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Очищення",
+      "Молочко"
+    ],
+    "price": 520,
+    "compareAtPrice": 610,
+    "images": [
+      "https://lil-shop.com.ua/content/images/48/500x500l80mc0/32889521080825.webp"
+    ],
+    "sku": "MILK-SENS-200",
+    "variants": [
+      {
+        "title": "200 ml",
+        "price": 520,
+        "compareAtPrice": 610,
+        "sku": "MILK-SENS-200",
+        "id": "v-molochko-dlia-ochyshchennia-sensitive-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/48/500x500l80mc0/32889521080825.webp",
+    "available": true
+  },
+  {
+    "id": "prod-anua-heartleaf-ampoule",
+    "handle": "prod-anua-heartleaf-ampoule",
+    "title": "Заспокійлива сироватка Anua Heartleaf 80% Soothing Ampoule (30ml)",
+    "bodyHtml": "<p>Концентрована ампула з 80% екстрактом хауттюйнії серцеподібної. Миттєво знімає почервоніння, подразнення та балансує виділення себуму.</p>",
+    "vendor": "Anua",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Сироватки",
+      "Anua",
+      "Заспокоєння"
+    ],
+    "price": 790,
+    "compareAtPrice": 890,
+    "images": [
+      "https://lil-shop.com.ua/content/images/22/800x800l80mc0/zvolozhuiucha-syrovatka-anua-heartleaf-80-soothing-ampoule-30ml-71235933533437.webp"
+    ],
+    "sku": "ANUA-AMP-30",
+    "variants": [
+      {
+        "title": "30 ml",
+        "price": 790,
+        "compareAtPrice": 890,
+        "sku": "ANUA-AMP-30",
+        "id": "v-prod-anua-heartleaf-ampoule-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/22/800x800l80mc0/zvolozhuiucha-syrovatka-anua-heartleaf-80-soothing-ampoule-30ml-71235933533437.webp",
+    "available": true
+  },
+  {
+    "id": "la-roche-posay-pure-vitamin-c10-serum-30ml",
+    "handle": "la-roche-posay-pure-vitamin-c10-serum-30ml",
+    "title": "Сироватка-антиоксидант проти зморшок La Roche-Posay Pure Vitamin C10 (30ml)",
+    "bodyHtml": "<p>Концентрована антиоксидантна сироватка з 10% чистим вітаміном C, саліциловою кислотою та нейросенсином для сяйва шкіри та вирівнювання рельєфу.</p>",
+    "vendor": "La Roche-Posay",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Сироватки",
+      "La Roche-Posay",
+      "Вітамін C"
+    ],
+    "price": 1290,
+    "compareAtPrice": 1450,
+    "images": [
+      "https://lil-shop.com.ua/content/images/17/195x630l80mc0/la-roche-posay-pure-vitamin-c10-syrovatka-antyoksydant-proty-zmorshok-dlia-vidnovlennia-shkiry-oblychchia-30-ml-14381565333304.webp"
+    ],
+    "sku": "LRP-VITC-30",
+    "variants": [
+      {
+        "title": "30 ml",
+        "price": 1290,
+        "compareAtPrice": 1450,
+        "sku": "LRP-VITC-30",
+        "id": "v-la-roche-posay-pure-vitamin-c10-serum-30ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/17/195x630l80mc0/la-roche-posay-pure-vitamin-c10-syrovatka-antyoksydant-proty-zmorshok-dlia-vidnovlennia-shkiry-oblychchia-30-ml-14381565333304.webp",
+    "available": true
+  },
+  {
+    "id": "la-roche-posay-retinol-b3-serum-30ml",
+    "handle": "la-roche-posay-retinol-b3-serum-30ml",
+    "title": "Сироватка проти зморшок з ретинолом La Roche-Posay Retinol B3 Serum (30ml)",
+    "bodyHtml": "<p>Антивікова сироватка з поступовим вивільненням чистого ретинолу та вітаміном B3 (ніацинамід). Зменшує глибокі зморшки та фотостаріння без подразнень.</p>",
+    "vendor": "La Roche-Posay",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Сироватки",
+      "La Roche-Posay",
+      "Ретинол"
+    ],
+    "price": 1350,
+    "compareAtPrice": 1520,
+    "images": [
+      "https://lil-shop.com.ua/content/images/15/750x700l80mc0/la-roche-posay-retinol-b3-serum-syrovatka-proty-zmorshok-z-retynolom-30ml-11184830109498.webp"
+    ],
+    "sku": "LRP-RET-30",
+    "variants": [
+      {
+        "title": "30 ml",
+        "price": 1350,
+        "compareAtPrice": 1520,
+        "sku": "LRP-RET-30",
+        "id": "v-la-roche-posay-retinol-b3-serum-30ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/15/750x700l80mc0/la-roche-posay-retinol-b3-serum-syrovatka-proty-zmorshok-z-retynolom-30ml-11184830109498.webp",
+    "available": true
+  },
+  {
+    "id": "la-roche-posay-pure-niacinamide-10-serum-30ml",
+    "handle": "la-roche-posay-pure-niacinamide-10-serum-30ml",
+    "title": "Сироватка проти пігментації La Roche-Posay Pure Niacinamide 10 Serum (30ml)",
+    "bodyHtml": "<p>Потужна дерматологічна сироватка з 10% ніацинамідом. Ефективно бореться з пігментними плямами, постакне та тьмяним тоном обличчя.</p>",
+    "vendor": "La Roche-Posay",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Сироватки",
+      "La Roche-Posay",
+      "Ніацинамід"
+    ],
+    "price": 1250,
+    "compareAtPrice": 1400,
+    "images": [
+      "https://lil-shop.com.ua/content/images/37/1010x1069l80mc0/syrovatka-dlia-oblychchia-la-roche-posay-pure-niacinamide-10-serum-72722839118468.webp"
+    ],
+    "sku": "LRP-NIAC-30",
+    "variants": [
+      {
+        "title": "30 ml",
+        "price": 1250,
+        "compareAtPrice": 1400,
+        "sku": "LRP-NIAC-30",
+        "id": "v-la-roche-posay-pure-niacinamide-10-serum-30ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/37/1010x1069l80mc0/syrovatka-dlia-oblychchia-la-roche-posay-pure-niacinamide-10-serum-72722839118468.webp",
+    "available": true
+  },
+  {
+    "id": "la-roche-posay-effaclar-daily-skin-renewal-serum-30ml",
+    "handle": "la-roche-posay-effaclar-daily-skin-renewal-serum-30ml",
+    "title": "Сироватка для оновлення шкіри La Roche-Posay Effaclar Daily Renewal (30ml)",
+    "bodyHtml": "<p>Ультраконцентрована сироватка з трьома кислотами (саліцилова, гліколева, LHA) та ніацинамідом проти стійких недосконалостей шкіри.</p>",
+    "vendor": "La Roche-Posay",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Сироватки",
+      "La Roche-Posay",
+      "Проблемна шкіра"
+    ],
+    "price": 1190,
+    "compareAtPrice": 1350,
+    "images": [
+      "https://lil-shop.com.ua/content/images/17/800x1011l80mc0/syrovatka-dlia-oblychchia-la-roche-posay-effaclar-daily-skin-renewal-serum-30ml-19626486072483.webp"
+    ],
+    "sku": "LRP-EFAC-30",
+    "variants": [
+      {
+        "title": "30 ml",
+        "price": 1190,
+        "compareAtPrice": 1350,
+        "sku": "LRP-EFAC-30",
+        "id": "v-la-roche-posay-effaclar-daily-skin-renewal-serum-30ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/17/800x1011l80mc0/syrovatka-dlia-oblychchia-la-roche-posay-effaclar-daily-skin-renewal-serum-30ml-19626486072483.webp",
+    "available": true
+  },
+  {
+    "id": "prod-paulas-choice-bha-exfoliant",
+    "handle": "prod-paulas-choice-bha-exfoliant",
+    "title": "Тонік-ексфоліант Paula's Choice Skin Perfecting 2% BHA Liquid Exfoliant (118ml)",
+    "bodyHtml": "<p>Світовий бестселер ексфоліації. 2% саліцилова кислота м'яко відлущує омертвілі клітини, очищає забиті пори та вирівнює тон шкіри.</p>",
+    "vendor": "Paula's Choice",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Тоніки",
+      "Paula's Choice",
+      "BHA"
+    ],
+    "price": 1450,
+    "compareAtPrice": 1650,
+    "images": [
+      "https://lil-shop.com.ua/content/images/24/1500x1500l80mc0/tonik-dlia-problemnoi-shkiry-exfoliate-paulas-choice-iz-salitsylovoiu-kyslotoiu-2-118ml-60428301325264.webp"
+    ],
+    "sku": "PC-BHA-118",
+    "variants": [
+      {
+        "title": "118 ml",
+        "price": 1450,
+        "compareAtPrice": 1650,
+        "sku": "PC-BHA-118",
+        "id": "v-prod-paulas-choice-bha-exfoliant-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/24/1500x1500l80mc0/tonik-dlia-problemnoi-shkiry-exfoliate-paulas-choice-iz-salitsylovoiu-kyslotoiu-2-118ml-60428301325264.webp",
+    "available": true
+  },
+  {
+    "id": "la-mer-the-treatment-lotion-30ml",
+    "handle": "la-mer-the-treatment-lotion-30ml",
+    "title": "Лосьйон для догляду за шкірою La Mer The Treatment Lotion (30ml)",
+    "bodyHtml": "<p>Шовковистий підготовчий лосьйон з клітинним Miracle Broth. Заряджає шкіру енергією, глибоко зволожує та готує до наступних етапів догляду.</p>",
+    "vendor": "La Mer",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Тоніки",
+      "La Mer",
+      "Лосьйони"
+    ],
+    "price": 2200,
+    "compareAtPrice": 2500,
+    "images": [
+      "https://lil-shop.com.ua/content/images/32/630x630l80mc0/la-mer-the-treatment-lotion-losion-dlia-dohliadu-za-shkiroiu-30ml-13881267600703.webp"
+    ],
+    "sku": "LAMER-LOT-30",
+    "variants": [
+      {
+        "title": "30 ml",
+        "price": 2200,
+        "compareAtPrice": 2500,
+        "sku": "LAMER-LOT-30",
+        "id": "v-la-mer-the-treatment-lotion-30ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/32/630x630l80mc0/la-mer-the-treatment-lotion-losion-dlia-dohliadu-za-shkiroiu-30ml-13881267600703.webp",
+    "available": true
+  },
+  {
+    "id": "la-mer-the-moisturizing-cream-60ml",
+    "handle": "la-mer-the-moisturizing-cream-60ml",
+    "title": "Зволожуючий крем для обличчя La Mer The Moisturizing Cream (60ml)",
+    "bodyHtml": "<p>Легендарний Crème de la Mer з ферментом морських водоростей Miracle Broth. Глибоко живить, заспокоює сухість та повертає шкірі молодість і сяйво.</p>",
+    "vendor": "La Mer",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Креми",
+      "La Mer",
+      "Зволоження"
+    ],
+    "price": 2950,
+    "compareAtPrice": 3400,
+    "images": [
+      "https://lil-shop.com.ua/content/images/26/1080x1080l80mc0/zvolozhuiuchyi-krem-dlia-oblychchia-la-mer-the-moisturizing-cream-60-ml-49795685594321.webp"
+    ],
+    "sku": "LAMER-CRM-60",
+    "variants": [
+      {
+        "title": "60 ml",
+        "price": 2950,
+        "compareAtPrice": 3400,
+        "sku": "LAMER-CRM-60",
+        "id": "v-la-mer-the-moisturizing-cream-60ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/26/1080x1080l80mc0/zvolozhuiuchyi-krem-dlia-oblychchia-la-mer-the-moisturizing-cream-60-ml-49795685594321.webp",
+    "available": true
+  },
+  {
+    "id": "centellian24-the-madeca-cream-season6-45ml",
+    "handle": "centellian24-the-madeca-cream-season6-45ml",
+    "title": "Багатофункціональний антивіковий крем Centellian24 The Madeca Cream Season 6 (45ml)",
+    "bodyHtml": "<p>Знаменитий регенеруючий крем з концентрованою центеллою TECA від фармгіганта Dongkook. Загоює, зміцнює бар'єр шкіри та бореться зі зморшками.</p>",
+    "vendor": "Centellian24",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Креми",
+      "Centellian24",
+      "Антивікові"
+    ],
+    "price": 620,
+    "compareAtPrice": 750,
+    "images": [
+      "https://lil-shop.com.ua/content/images/6/400x400l80mc0/centellian24-the-madeca-cream-season6-bahatofunktsionalnyi-antyvikovyi-krem-45ml-72337466721322.webp"
+    ],
+    "sku": "CENT-CRM-45",
+    "variants": [
+      {
+        "title": "45 ml",
+        "price": 620,
+        "compareAtPrice": 750,
+        "sku": "CENT-CRM-45",
+        "id": "v-centellian24-the-madeca-cream-season6-45ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/6/400x400l80mc0/centellian24-the-madeca-cream-season6-bahatofunktsionalnyi-antyvikovyi-krem-45ml-72337466721322.webp",
+    "available": true
+  },
+  {
+    "id": "tocobo-collagen-brightening-eye-gel-cream",
+    "handle": "tocobo-collagen-brightening-eye-gel-cream",
+    "title": "Колагеновий гель навколо очей Tocobo Collagen Brightening Eye Gel Cream (30ml)",
+    "bodyHtml": "<p>Легкий освіжаючий гель-крем з рослинним колагеном та водою лаванди. Освітлює темні кола, зменшує набряки та зволожує ніжну шкіру повік.</p>",
+    "vendor": "Tocobo",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Зона навколо очей",
+      "Tocobo",
+      "Креми"
+    ],
+    "price": 590,
+    "compareAtPrice": 680,
+    "images": [
+      "https://lil-shop.com.ua/content/images/1/500x500l80mc0/kolahenovyi-hel-navkolo-ochei-tocobo-collagen-brightening-eye-gel-cream-42337467305049.webp"
+    ],
+    "sku": "TOCOBO-EYE-30",
+    "variants": [
+      {
+        "title": "30 ml",
+        "price": 590,
+        "compareAtPrice": 680,
+        "sku": "TOCOBO-EYE-30",
+        "id": "v-tocobo-collagen-brightening-eye-gel-cream-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/1/500x500l80mc0/kolahenovyi-hel-navkolo-ochei-tocobo-collagen-brightening-eye-gel-cream-42337467305049.webp",
+    "available": true
+  },
+  {
+    "id": "silulan-collagen-eye-patches-5-pairs",
+    "handle": "silulan-collagen-eye-patches-5-pairs",
+    "title": "Колагенові патчі Silulan для шкіри навколо очей (5 пар)",
+    "bodyHtml": "<p>Гідрогелеві патчі з морським колагеном проти зморшок, набряків та втоми очей. Швидкий ефект відпочилого погляду за 15 хвилин.</p>",
+    "vendor": "Silulan",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Зона навколо очей",
+      "Патчі",
+      "Silulan"
+    ],
+    "price": 390,
+    "compareAtPrice": 460,
+    "images": [
+      "https://lil-shop.com.ua/content/images/18/1024x1024l80mc0/kolahenovi-patchi-silulan-dlia-shkiry-navkolo-ochei-proty-zmorshok-ta-nabriakiv-5-par-45050273724710.webp"
+    ],
+    "sku": "SIL-PATCH-5P",
+    "variants": [
+      {
+        "title": "5 пар",
+        "price": 390,
+        "compareAtPrice": 460,
+        "sku": "SIL-PATCH-5P",
+        "id": "v-silulan-collagen-eye-patches-5-pairs-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/18/1024x1024l80mc0/kolahenovi-patchi-silulan-dlia-shkiry-navkolo-ochei-proty-zmorshok-ta-nabriakiv-5-par-45050273724710.webp",
+    "available": true
+  },
+  {
+    "id": "estee-lauder-anr-eye-concentrate-matrix-15ml",
+    "handle": "estee-lauder-anr-eye-concentrate-matrix-15ml",
+    "title": "Омолоджувальний концентрат Estée Lauder Advanced Night Repair Matrix (15ml)",
+    "bodyHtml": "<p>Ультраживильний концентрат для контуру очей зі сталевим охолоджуючим аплікатором. Зміцнює делікатну шкіру та розгладжує мімічні зморшки.</p>",
+    "vendor": "Estée Lauder",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Зона навколо очей",
+      "Estée Lauder",
+      "Сироватки"
+    ],
+    "price": 2350,
+    "compareAtPrice": 2700,
+    "images": [
+      "https://lil-shop.com.ua/content/images/9/600x600l80mc0/estee-lauder-anr-eye-concentrate-matrix-omolodzhuvalnyi-dohliad-dlia-shkiry-navkolo-ochei-15ml-68224068447595.webp"
+    ],
+    "sku": "EL-ANR-EYE-15",
+    "variants": [
+      {
+        "title": "15 ml",
+        "price": 2350,
+        "compareAtPrice": 2700,
+        "sku": "EL-ANR-EYE-15",
+        "id": "v-estee-lauder-anr-eye-concentrate-matrix-15ml-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/9/600x600l80mc0/estee-lauder-anr-eye-concentrate-matrix-omolodzhuvalnyi-dohliad-dlia-shkiry-navkolo-ochei-15ml-68224068447595.webp",
+    "available": true
+  },
+  {
+    "id": "biodance-collagen-gel-toner-pads-60pcs",
+    "handle": "biodance-collagen-gel-toner-pads-60pcs",
+    "title": "Зволожуючі колагенові педи для обличчя Biodance Collagen Gel Toner Pads (60 шт)",
+    "bodyHtml": "<p>Щільні тонер-педи, просочені концентрованим колагеновим гелем та гіалуроновою кислотою. Миттєво освіжають, заспокоюють і дарують гладкість.</p>",
+    "vendor": "Biodance",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Маски та педи",
+      "Biodance",
+      "Тоніки"
+    ],
+    "price": 980,
+    "compareAtPrice": 1150,
+    "images": [
+      "https://lil-shop.com.ua/content/images/36/1080x1120l80mc0/zvolozhuiuchi-kolahenovi-pady-dlia-oblychchia-biodance-collagen-gel-toner-pads-60sht-58464449758575.webp"
+    ],
+    "sku": "BIO-PADS-60",
+    "variants": [
+      {
+        "title": "60 шт",
+        "price": 980,
+        "compareAtPrice": 1150,
+        "sku": "BIO-PADS-60",
+        "id": "v-biodance-collagen-gel-toner-pads-60pcs-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/36/1080x1120l80mc0/zvolozhuiuchi-kolahenovi-pady-dlia-oblychchia-biodance-collagen-gel-toner-pads-60sht-58464449758575.webp",
+    "available": true
+  },
+  {
+    "id": "prod-biodance-bio-collagen-mask",
+    "handle": "prod-biodance-bio-collagen-mask",
+    "title": "Гідрогелева маска з колагеном Biodance Bio-Collagen Real Deep Mask",
+    "bodyHtml": "<p>Вірусна корейська нічна маска, яка стає прозорою після повного вбирання оліго-гіалуронової кислоти та колагену в глибокі шари епідермісу.</p>",
+    "vendor": "Biodance",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "Маски та педи",
+      "Biodance",
+      "Маски"
+    ],
+    "price": 450,
+    "compareAtPrice": 520,
+    "images": [
+      "https://lil-shop.com.ua/content/images/45/1000x1000l80mc0/maska-hidroheleva-z-kolahenom-biodance-bio-collagen-real-deep-mask-57891938294814.webp"
+    ],
+    "sku": "BIO-MASK-DEEP",
+    "variants": [
+      {
+        "title": "1 шт (34g)",
+        "price": 450,
+        "compareAtPrice": 520,
+        "sku": "BIO-MASK-DEEP",
+        "id": "v-prod-biodance-bio-collagen-mask-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/45/1000x1000l80mc0/maska-hidroheleva-z-kolahenom-biodance-bio-collagen-real-deep-mask-57891938294814.webp",
+    "available": true
+  },
+  {
+    "id": "sontsezakhysnyi-krem-spf50",
+    "handle": "sontsezakhysnyi-krem-spf50",
+    "title": "Сонцезахисний зволожуючий крем Daily Moisture Sunscreen SPF 50+ PA++++ (50ml)",
+    "bodyHtml": "<p>Невагомий хімічний сонцезахисний крем нового покоління без білих слідів та липкості. Зволожує гіалуроновою кислотою та надійно блокує UVA/UVB.</p>",
+    "vendor": "MOLAND Skincare",
+    "productType": "Догляд за обличчям",
+    "tags": [
+      "Догляд за обличчям",
+      "SPF захист",
+      "Креми"
+    ],
+    "price": 640,
+    "compareAtPrice": 750,
+    "images": [
+      "https://lil-shop.com.ua/content/images/44/1000x667l80mc0/78795577073420.webp"
+    ],
+    "sku": "SPF50-DAILY-50",
+    "variants": [
+      {
+        "title": "50 ml",
+        "price": 640,
+        "compareAtPrice": 750,
+        "sku": "SPF50-DAILY-50",
+        "id": "v-sontsezakhysnyi-krem-spf50-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/44/1000x667l80mc0/78795577073420.webp",
+    "available": true
+  },
+  {
+    "id": "prod-olaplex-bonding-oil",
+    "handle": "prod-olaplex-bonding-oil",
+    "title": "Відновлююча олія для волосся Olaplex No.7 Bonding Oil (30ml)",
+    "bodyHtml": "<p>Ультралегка висококонцентрована олія для відновлення пошкоджених дисульфідних зв'язків волосся. Надає дзеркальний блиск і термозахист до 232°C.</p>",
+    "vendor": "Olaplex",
+    "productType": "Догляд за волоссям",
+    "tags": [
+      "Догляд за волоссям",
+      "Olaplex",
+      "Олії для волосся"
+    ],
+    "price": 1250,
+    "compareAtPrice": 1400,
+    "images": [
+      "https://lil-shop.com.ua/content/images/18/1000x1000l80mc0/olaplex-no.7-bonding-oil-30ml-vidnovliuiucha-oliia-dlia-volossia-43019718400082.webp"
+    ],
+    "sku": "OLA-NO7-30",
+    "variants": [
+      {
+        "title": "30 ml",
+        "price": 1250,
+        "compareAtPrice": 1400,
+        "sku": "OLA-NO7-30",
+        "id": "v-prod-olaplex-bonding-oil-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/18/1000x1000l80mc0/olaplex-no.7-bonding-oil-30ml-vidnovliuiucha-oliia-dlia-volossia-43019718400082.webp",
+    "available": true
+  },
+  {
+    "id": "prod-k18-leave-in-mask",
+    "handle": "prod-k18-leave-in-mask",
+    "title": "Незмивна маска для молекулярного відновлення волосся K18 Leave-in Mask (50ml)",
+    "bodyHtml": "<p>Революційний біоактивний пептид K18 відновлює кератинові ланцюжки волосся всього за 4 хвилини після фарбування чи термоукладання.</p>",
+    "vendor": "K18",
+    "productType": "Догляд за волоссям",
+    "tags": [
+      "Догляд за волоссям",
+      "K18",
+      "Маски для волосся"
+    ],
+    "price": 1190,
+    "compareAtPrice": 1350,
+    "images": [
+      "https://lil-shop.com.ua/content/images/12/509x515l80mc0/50ml-k18-maska-dlia-volossia-leave-in-molecular-repair-hair-mask-43210506973965.webp"
+    ],
+    "sku": "K18-MASK-50",
+    "variants": [
+      {
+        "title": "50 ml",
+        "price": 1190,
+        "compareAtPrice": 1350,
+        "sku": "K18-MASK-50",
+        "id": "v-prod-k18-leave-in-mask-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/12/509x515l80mc0/50ml-k18-maska-dlia-volossia-leave-in-molecular-repair-hair-mask-43210506973965.webp",
+    "available": true
+  },
+  {
+    "id": "vidnovliuvalnyi-bezsulfatnyi-shampun",
+    "handle": "vidnovliuvalnyi-bezsulfatnyi-shampun",
+    "title": "Відновлювальний безсульфатний шампунь Repair & Moisture (250ml)",
+    "bodyHtml": "<p>Професійний безсульфатний шампунь з амінокислотами шовку та рослинними протеїнами для щоденного дбайливого очищення пошкодженого волосся.</p>",
+    "vendor": "MOLAND Hair",
+    "productType": "Догляд за волоссям",
+    "tags": [
+      "Догляд за волоссям",
+      "Шампуні"
+    ],
+    "price": 580,
+    "compareAtPrice": 690,
+    "images": [
+      "https://lil-shop.com.ua/content/images/36/595x700l80mc0/84792797635563.webp"
+    ],
+    "sku": "SHAMP-REP-250",
+    "variants": [
+      {
+        "title": "250 ml",
+        "price": 580,
+        "compareAtPrice": 690,
+        "sku": "SHAMP-REP-250",
+        "id": "v-vidnovliuvalnyi-bezsulfatnyi-shampun-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/36/595x700l80mc0/84792797635563.webp",
+    "available": true
+  },
+  {
+    "id": "prod-sol-de-janeiro-bum-bum",
+    "handle": "prod-sol-de-janeiro-bum-bum",
+    "title": "Крем для тіла Sol de Janeiro Brazilian Bum Bum Cream (75ml)",
+    "bodyHtml": "<p>Культовий бразильський крем для пружності шкіри з екстрактом гуарани, олією купуасу та фірмовим п'янким ароматом солоної карамелі й фісташки.</p>",
+    "vendor": "Sol de Janeiro",
+    "productType": "Догляд за тілом",
+    "tags": [
+      "Догляд за тілом",
+      "Sol de Janeiro",
+      "Креми для тіла"
+    ],
+    "price": 890,
+    "compareAtPrice": 990,
+    "images": [
+      "https://lil-shop.com.ua/content/images/21/1200x630l80mc0/krem-dlia-tila-brazilian-bum-sol-de-janeiro-75ml-38934533931936.webp"
+    ],
+    "sku": "SDJ-BUM-75",
+    "variants": [
+      {
+        "title": "75 ml",
+        "price": 890,
+        "compareAtPrice": 990,
+        "sku": "SDJ-BUM-75",
+        "id": "v-prod-sol-de-janeiro-bum-bum-0"
+      }
+    ],
+    "featuredImage": "https://lil-shop.com.ua/content/images/21/1200x630l80mc0/krem-dlia-tila-brazilian-bum-sol-de-janeiro-75ml-38934533931936.webp",
+    "available": true
   },
   {
     "id": "kosmetychka-charlotte-tilbury-sumka-zhinocha",
     "handle": "kosmetychka-charlotte-tilbury-sumka-zhinocha",
     "title": "Косметичка Charlotte Tilbury сумка жіноча",
-    "bodyHtml": "<p><strong>Косметичка Charlotte Tilbury</strong> — практичний аксесуар для зберігання косметики, засобів для догляду та особистих речей. Модель виконана в стьобаному дизайні та представлена в кількох кольорових варіантах.</p>\n<p>Косметичка виготовлена з м'якої PU-шкіри, приємної на дотик і зручної у щоденному використанні. Завдяки місткому внутрішньому простору в ній можна зберігати декоративну косметику, засоби для догляду, аксесуари та інші необхідні речі.</p>\n<p>Компактна форма дозволяє використовувати косметичку вдома, брати її в подорожі або носити із собою в сумці. За потреби модель можна використовувати як невеликий клатч для зберігання особистих речей.</p>\n<h3><strong>Основні особливості</strong></h3>\n<ul>\n<li>стьобаний дизайн;</li>\n<li>містке внутрішнє відділення;</li>\n<li>застібка-блискавка;</li>\n<li>підходить для зберігання косметики та аксесуарів;</li>\n<li>представлена в різних кольорах.</li>\n</ul>\n<h3><strong>Характеристики</strong></h3>\n<ul>\n<li><strong>Розмір:</strong> 25 × 17 × 2 см;</li>\n<li><strong>Тип:</strong> косметичка;</li>\n<li><strong>Призначення:</strong> зберігання косметики, засобів для догляду та особистих речей.</li>\n</ul>\n<h3><strong>Спосіб використання</strong></h3>\n<p>Використовуйте косметичку для зберігання декоративної косметики, засобів для догляду, аксесуарів або інших необхідних речей.</p>",
+    "bodyHtml": "<p>Фірмова стьобана оксамитова косметичка Charlotte Tilbury у відтінку Rose Gold з золотою фурнітурою та водостійкою підкладкою.</p>",
     "vendor": "Charlotte Tilbury",
     "productType": "Аксесуари та сумки",
     "tags": [
       "Сумки",
-      "Аксесуари"
+      "Аксесуари",
+      "Charlotte Tilbury",
+      "Косметички"
     ],
     "price": 1499,
-    "compareAtPrice": 1720,
+    "compareAtPrice": 1800,
     "images": [
       "https://lil-shop.com.ua/content/images/24/505x390l80mc0/kosmetychka-charlotte-tilbury-18342289879514.webp",
       "https://lil-shop.com.ua/content/images/24/390x390l80mc0/kosmetychka-charlotte-tilbury-62947243149201.webp",
-      "https://lil-shop.com.ua/content/images/24/390x390l80mc0/kosmetychka-charlotte-tilbury-49868432513971.webp",
-      "https://lil-shop.com.ua/content/images/24/371x390l80mc0/kosmetychka-charlotte-tilbury-14099360909094.webp",
-      "https://lil-shop.com.ua/content/images/24/399x390l80mc0/kosmetychka-charlotte-tilbury-46482470561077.webp",
-      "https://lil-shop.com.ua/content/images/24/505x390l80mc0/kosmetychka-charlotte-tilbury-46019786041651.webp",
-      "https://lil-shop.com.ua/content/images/24/978x755l80mc0/kosmetychka-charlotte-tilbury-18342289879514.webp"
+      "https://lil-shop.com.ua/content/images/24/390x390l80mc0/kosmetychka-charlotte-tilbury-49868432513971.webp"
+    ],
+    "sku": "CT-BAG-ROSE",
+    "variants": [
+      {
+        "title": "One Size",
+        "price": 1499,
+        "compareAtPrice": 1800,
+        "sku": "CT-BAG-ROSE",
+        "id": "v-kosmetychka-charlotte-tilbury-sumka-zhinocha-0"
+      }
     ],
     "featuredImage": "https://lil-shop.com.ua/content/images/24/505x390l80mc0/kosmetychka-charlotte-tilbury-18342289879514.webp",
-    "available": true,
-    "sku": "SKU-KOSMETYCHK",
-    "variants": [
-      {
-        "id": "v-kosmetychka-charlotte-tilbury-sumka-zhinocha-0",
-        "title": "Standard",
-        "price": 1499,
-        "compareAtPrice": 1720,
-        "sku": "SKU-KOSMETYCHK"
-      }
-    ]
-  },
-  {
-    "id": "prod-olaplex-bonding-oil",
-    "handle": "olaplex-no-7-bonding-oil-30ml",
-    "title": "Відновлююча олія для волосся Olaplex No.7 Bonding Oil (30ml)",
-    "bodyHtml": "<p>Висококонцентрована ультралегка відновлююча олія для волосся. Збільшує блиск, м’якість та яскравість кольору. Зменшує пухнастість та забезпечує термозахист до 232°C.</p>",
-    "vendor": "Olaplex",
-    "productType": "Догляд за волоссям",
-    "tags": [
-      "Волосся",
-      "Олія для волосся",
-      "Olaplex",
-      "Догляд за волоссям",
-      "Хіт"
-    ],
-    "price": 1250,
-    "compareAtPrice": 1450,
-    "images": [
-      "https://lil-shop.com.ua/content/images/18/1000x1000l80mc0/olaplex-no.7-bonding-oil-30ml-vidnovliuiucha-oliia-dlia-volossia-43019718400082.webp"
-    ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/18/1000x1000l80mc0/olaplex-no.7-bonding-oil-30ml-vidnovliuiucha-oliia-dlia-volossia-43019718400082.webp",
-    "available": true,
-    "sku": "OLAPLEX-NO7-30",
-    "variants": [
-      {
-        "id": "v-olaplex-30",
-        "title": "30 ml",
-        "price": 1250,
-        "compareAtPrice": 1450,
-        "sku": "OLAPLEX-NO7-30"
-      }
-    ]
-  },
-  {
-    "id": "prod-k18-leave-in-mask",
-    "handle": "k18-leave-in-molecular-repair-hair-mask-50ml",
-    "title": "Незмивна маска для молекулярного відновлення волосся K18 Leave-in Molecular Repair Hair Mask (50ml)",
-    "bodyHtml": "<p>Запатентований пептид K18 відновлює пошкоджені кератинові зв’язки всередині волосся всього за 4 хвилини. Повертає волоссю первісну силу, еластичність та блиск.</p>",
-    "vendor": "K18",
-    "productType": "Догляд за волоссям",
-    "tags": [
-      "Волосся",
-      "Маска для волосся",
-      "K18",
-      "Догляд за волоссям",
-      "Тренд"
-    ],
-    "price": 1190,
-    "compareAtPrice": 1390,
-    "images": [
-      "https://lil-shop.com.ua/content/images/12/509x515l80mc0/50ml-k18-maska-dlia-volossia-leave-in-molecular-repair-hair-mask-43210506973965.webp"
-    ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/12/509x515l80mc0/50ml-k18-maska-dlia-volossia-leave-in-molecular-repair-hair-mask-43210506973965.webp",
-    "available": true,
-    "sku": "K18-MASK-50",
-    "variants": [
-      {
-        "id": "v-k18-50",
-        "title": "50 ml",
-        "price": 1190,
-        "compareAtPrice": 1390,
-        "sku": "K18-MASK-50"
-      }
-    ]
-  },
-  {
-    "id": "prod-sol-de-janeiro-bum-bum",
-    "handle": "sol-de-janeiro-brazilian-bum-bum-cream-75ml",
-    "title": "Крем для тіла Sol de Janeiro Brazilian Bum Bum Cream (75ml)",
-    "bodyHtml": "<p>Культовий крем для тіла з екстрактом гуарани, маслом купуасу та культовим фірмовим ароматом Cheirosa 62 з нотами фісташки та солоної карамелі. Помітно підтягує та живить шкіру.</p>",
-    "vendor": "Sol de Janeiro",
-    "productType": "Догляд за тілом",
-    "tags": [
-      "Тіло",
-      "Крем для тіла",
-      "Sol de Janeiro",
-      "Догляд за тілом",
-      "Хіт"
-    ],
-    "price": 890,
-    "compareAtPrice": 1050,
-    "images": [
-      "https://lil-shop.com.ua/content/images/21/1200x630l80mc0/krem-dlia-tila-brazilian-bum-sol-de-janeiro-75ml-38934533931936.webp"
-    ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/21/1200x630l80mc0/krem-dlia-tila-brazilian-bum-sol-de-janeiro-75ml-38934533931936.webp",
-    "available": true,
-    "sku": "SDJ-BUM-75",
-    "variants": [
-      {
-        "id": "v-sdj-bum-75",
-        "title": "75 ml",
-        "price": 890,
-        "compareAtPrice": 1050,
-        "sku": "SDJ-BUM-75"
-      }
-    ]
-  },
-  {
-    "id": "prod-biodance-bio-collagen-mask",
-    "handle": "biodance-bio-collagen-real-deep-mask",
-    "title": "Гідрогелева маска з колагеном Biodance Bio-Collagen Real Deep Mask",
-    "bodyHtml": "<p>Бестселер корейського догляду. Гідрогелева маска з низькомолекулярним колагеном, яка стає прозорою при повному вбиранні активних компонентів у шкіру. Забезпечує миттєве зволоження та ефект сяйва «скляної шкіри».",
-    "vendor": "Biodance",
-    "productType": "Догляд за обличчям",
-    "tags": [
-      "Обличчя",
-      "Маски",
-      "Biodance",
-      "Колаген",
-      "Догляд за обличчям",
-      "Хіт"
-    ],
-    "price": 450,
-    "compareAtPrice": 550,
-    "images": [
-      "https://lil-shop.com.ua/content/images/45/1000x1000l80mc0/maska-hidroheleva-z-kolahenom-biodance-bio-collagen-real-deep-mask-57891938294814.webp"
-    ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/45/1000x1000l80mc0/maska-hidroheleva-z-kolahenom-biodance-bio-collagen-real-deep-mask-57891938294814.webp",
-    "available": true,
-    "sku": "BIODANCE-MASK-1",
-    "variants": [
-      {
-        "id": "v-biodance-1",
-        "title": "1 шт",
-        "price": 450,
-        "compareAtPrice": 550,
-        "sku": "BIODANCE-MASK-1"
-      }
-    ]
-  },
-  {
-    "id": "prod-paulas-choice-bha-exfoliant",
-    "handle": "paulas-choice-skin-perfecting-2-bha-liquid-exfoliant",
-    "title": "Тонік-ексфоліант Paula's Choice Skin Perfecting 2% BHA Liquid Exfoliant (118ml)",
-    "bodyHtml": "<p>Культовий ексфоліант з 2% саліциловою кислотою (BHA). Очищає розширені пори, зменшує чорні цятки, вирівнює тон та текстуру шкіри без подразнення.</p>",
-    "vendor": "Paula's Choice",
-    "productType": "Догляд за обличчям",
-    "tags": [
-      "Обличчя",
-      "Тонік",
-      "Ексфоліант",
-      "BHA",
-      "Paula's Choice",
-      "Догляд за обличчям"
-    ],
-    "price": 1450,
-    "compareAtPrice": 1690,
-    "images": [
-      "https://lil-shop.com.ua/content/images/24/1500x1500l80mc0/tonik-dlia-problemnoi-shkiry-exfoliate-paulas-choice-iz-salitsylovoiu-kyslotoiu-2-118ml-60428301325264.webp"
-    ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/24/1500x1500l80mc0/tonik-dlia-problemnoi-shkiry-exfoliate-paulas-choice-iz-salitsylovoiu-kyslotoiu-2-118ml-60428301325264.webp",
-    "available": true,
-    "sku": "PC-BHA-118",
-    "variants": [
-      {
-        "id": "v-pc-118",
-        "title": "118 ml",
-        "price": 1450,
-        "compareAtPrice": 1690,
-        "sku": "PC-BHA-118"
-      }
-    ]
-  },
-  {
-    "id": "prod-anua-heartleaf-ampoule",
-    "handle": "anua-heartleaf-80-soothing-ampoule-30ml",
-    "title": "Заспокійлива сироватка Anua Heartleaf 80% Soothing Ampoule (30ml)",
-    "bodyHtml": "<p>Висококонцентрована ампула з 80% екстракту хауттюйнії серцеподібної (Heartleaf). Знімає почервоніння, заспокоює подразнення та відновлює захисний бар’єр шкіри.</p>",
-    "vendor": "Anua",
-    "productType": "Догляд за обличчям",
-    "tags": [
-      "Обличчя",
-      "Сироватка",
-      "Anua",
-      "Heartleaf",
-      "Догляд за обличчям",
-      "Хіт"
-    ],
-    "price": 790,
-    "compareAtPrice": 920,
-    "images": [
-      "https://lil-shop.com.ua/content/images/22/800x800l80mc0/zvolozhuiucha-syrovatka-anua-heartleaf-80-soothing-ampoule-30ml-71235933533437.webp"
-    ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/22/800x800l80mc0/zvolozhuiucha-syrovatka-anua-heartleaf-80-soothing-ampoule-30ml-71235933533437.webp",
-    "available": true,
-    "sku": "ANUA-AMP-30",
-    "variants": [
-      {
-        "id": "v-anua-30",
-        "title": "30 ml",
-        "price": 790,
-        "compareAtPrice": 920,
-        "sku": "ANUA-AMP-30"
-      }
-    ]
-  },
-  {
-    "id": "prod-medicube-cleansing-oil",
-    "handle": "medicube-zero-pore-deep-cleansing-oil-150ml",
-    "title": "Очищувальна гідрофільна олія Medicube Zero Pore Deep Cleansing Oil (150ml)",
-    "bodyHtml": "<p>Глибоко очищувальна гідрофільна олія з LHA-кислотами та ніацинамідом. Ефективно розчиняє стійкий макіяж, сонцезахисний крем та надлишок себуму в порах, не залишаючи жирної плівки.</p>",
-    "vendor": "Medicube",
-    "productType": "Догляд за обличчям",
-    "tags": [
-      "Обличчя",
-      "Очищення",
-      "Гідрофільна олія",
-      "Medicube",
-      "Догляд за обличчям"
-    ],
-    "price": 880,
-    "compareAtPrice": 1050,
-    "images": [
-      "https://lil-shop.com.ua/content/images/45/1800x1800l80mc0/ochyshchuvalna-hidrofilna-oliia-medicube-zero-pore-blackhead-deep-cleansing-oil-lha-ta-niatsynamid-150ml-95294052613319.webp"
-    ],
-    "featuredImage": "https://lil-shop.com.ua/content/images/45/1800x1800l80mc0/ochyshchuvalna-hidrofilna-oliia-medicube-zero-pore-blackhead-deep-cleansing-oil-lha-ta-niatsynamid-150ml-95294052613319.webp",
-    "available": true,
-    "sku": "MEDICUBE-OIL-150",
-    "variants": [
-      {
-        "id": "v-medicube-150",
-        "title": "150 ml",
-        "price": 880,
-        "compareAtPrice": 1050,
-        "sku": "MEDICUBE-OIL-150"
-      }
-    ]
+    "available": true
   },
   {
     "id": "prod-jordan-1-lost-and-found",
-    "handle": "air-jordan-1-retro-high-og-chicago-lost-and-found",
+    "handle": "air-jordan-1-chicago-lost-and-found",
     "title": "Air Jordan 1 Retro High OG 'Chicago Lost & Found'",
-    "bodyHtml": "<p>Культова класика 1985 року у вінтажному переосмисленні з потрісканою натуральною шкірою, оригінальною формою носка та автентичною ретро-коробкою. Символ снікер-культури, який поєднує спадщину Майкла Джордана та вуличний стиль сучасності.</p><ul><li><strong>Матеріали:</strong> 100% преміальна натуральна шкіра, текстильна підкладка, зносостійка гумова підошва з амортизацією Nike Air.</li><li><strong>Комплектація:</strong> оригінальна вінтажна коробка, додаткові чорні та білі шнурки, стилізований вінтажний чек 1986 року.</li><li><strong>Автентичність:</strong> 100% оригінал, verified legit check.</li></ul>",
+    "bodyHtml": "<p>Культовий силует 1985 року у вінтажному виконанні Lost & Found. Преміальна потріскана шкіра, оригінальний колорвей Varsity Red / Black / Sail та автентична коробка зі старовинним чеком.</p>",
     "vendor": "Jordan",
     "productType": "Взуття / Кросівки",
     "tags": [
+      "Взуття",
       "Кросівки",
       "Jordan",
-      "Хіт",
       "Deadstock",
-      "Взуття",
-      "Unisex",
-      "New In"
+      "Хіт"
     ],
     "price": 9800,
     "compareAtPrice": 11500,
@@ -549,650 +1451,523 @@ export const SAMPLE_PRODUCTS: Product[] = [
       "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80",
-    "available": true,
     "sku": "DZ5485-612",
     "variants": [
       {
-        "id": "v-jordan-41",
         "title": "EU 41 (26.0 cm)",
         "price": 9800,
-        "compareAtPrice": 11500,
-        "sku": "DZ5485-612-41"
+        "sku": "DZ5485-612-41",
+        "id": "v-prod-jordan-1-lost-and-found-0"
       },
       {
-        "id": "v-jordan-42",
         "title": "EU 42 (26.5 cm)",
         "price": 9800,
-        "compareAtPrice": 11500,
-        "sku": "DZ5485-612-42"
+        "sku": "DZ5485-612-42",
+        "id": "v-prod-jordan-1-lost-and-found-1"
       },
       {
-        "id": "v-jordan-425",
         "title": "EU 42.5 (27.0 cm)",
         "price": 9800,
-        "compareAtPrice": 11500,
-        "sku": "DZ5485-612-425"
+        "sku": "DZ5485-612-425",
+        "id": "v-prod-jordan-1-lost-and-found-2"
       },
       {
-        "id": "v-jordan-43",
         "title": "EU 43 (27.5 cm)",
         "price": 9800,
-        "compareAtPrice": 11500,
-        "sku": "DZ5485-612-43"
+        "sku": "DZ5485-612-43",
+        "id": "v-prod-jordan-1-lost-and-found-3"
       },
       {
-        "id": "v-jordan-44",
         "title": "EU 44 (28.0 cm)",
         "price": 9800,
-        "compareAtPrice": 11500,
-        "sku": "DZ5485-612-44"
-      },
-      {
-        "id": "v-jordan-45",
-        "title": "EU 45 (29.0 cm)",
-        "price": 9800,
-        "compareAtPrice": 11500,
-        "sku": "DZ5485-612-45"
+        "sku": "DZ5485-612-44",
+        "id": "v-prod-jordan-1-lost-and-found-4"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-stussy-basic-hoodie-black",
-    "handle": "stussy-basic-logo-pullover-hoodie-black",
+    "handle": "stussy-basic-applique-hoodie-black",
     "title": "Stüssy Basic Applique Hoodie 'Black'",
-    "bodyHtml": "<p>Фірмове важке худі від каліфорнійського піонера streetwear-культури Stüssy. Вільний розслаблений силует (relaxed fit), спущена лінія плечей та культовий рукописний логотип Шона Стуссі на грудях і спині.</p><ul><li><strong>Склад:</strong> 80% щільна бавовна (Heavyweight Fleece 380 GSM), 20% поліестер.</li><li><strong>Деталі:</strong> глибокий подвійний капюшон, кишеня-кенгуру, еластичні манжети в рубчик.</li><li><strong>Посадка:</strong> Relaxed / Oversize.</li></ul>",
+    "bodyHtml": "<p>Класичне важке худі від каліфорнійського бренду Stüssy з фірмовим вишитим логотипом на грудях. Щільна бавовна 380 gsm з м'яким начосом.</p>",
     "vendor": "Stüssy",
     "productType": "Одяг / Худі та світшоти",
     "tags": [
+      "Одяг",
       "Худі",
       "Stüssy",
-      "Одяг",
-      "Oversize",
-      "Хіт",
-      "Чоловіче",
-      "Унісекс"
+      "Streetwear",
+      "ТОП"
     ],
     "price": 5400,
     "compareAtPrice": 6200,
     "images": [
-      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&auto=format&fit=crop&q=80",
-    "available": true,
-    "sku": "STU-HOOD-BLK",
+    "sku": "STU-HD-BLK",
     "variants": [
       {
-        "id": "v-stu-s",
         "title": "S (Oversize)",
         "price": 5400,
-        "compareAtPrice": 6200,
-        "sku": "STU-HOOD-BLK-S"
+        "sku": "STU-HD-BLK-S",
+        "id": "v-prod-stussy-basic-hoodie-black-0"
       },
       {
-        "id": "v-stu-m",
         "title": "M (Oversize)",
         "price": 5400,
-        "compareAtPrice": 6200,
-        "sku": "STU-HOOD-BLK-M"
+        "sku": "STU-HD-BLK-M",
+        "id": "v-prod-stussy-basic-hoodie-black-1"
       },
       {
-        "id": "v-stu-l",
         "title": "L (Oversize)",
         "price": 5400,
-        "compareAtPrice": 6200,
-        "sku": "STU-HOOD-BLK-L"
+        "sku": "STU-HD-BLK-L",
+        "id": "v-prod-stussy-basic-hoodie-black-2"
       },
       {
-        "id": "v-stu-xl",
         "title": "XL (Oversize)",
         "price": 5400,
-        "compareAtPrice": 6200,
-        "sku": "STU-HOOD-BLK-XL"
+        "sku": "STU-HD-BLK-XL",
+        "id": "v-prod-stussy-basic-hoodie-black-3"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-newbalance-1906r-silver",
-    "handle": "new-balance-1906r-silver-metallic-castlerock",
+    "handle": "new-balance-1906r-silver-metallic",
     "title": "New Balance 1906R 'Silver Metallic / Cordura'",
-    "bodyHtml": "<p>Технологічний ретро-раннер початку 2000-х років, що став головним фаворитом снікерхедів у всьому світі. Поєднує металізовані накладки, дихаючу сітку та підошву N-ergy з амортизацією ABZORB для максимального комфорту під час щоденного носіння.</p><ul><li><strong>Технології:</strong> амортизація ABZORB SBS, підошва N-ergy, система фіксації шнурівки N-Lock.</li><li><strong>Стиль:</strong> Y2K / Tech-Runner / Gorpcore.</li><li><strong>Матеріали:</strong> синтетична сітка, преміальні полімерні накладки.</li></ul>",
+    "bodyHtml": "<p>Сучасна класика бігового ретро-стилю 2000-х. Амортизаційна підошва N-ergy та вставки ABZORB SBS забезпечують неперевершений комфорт протягом усього дня.</p>",
     "vendor": "New Balance",
     "productType": "Взуття / Кросівки",
     "tags": [
+      "Взуття",
       "Кросівки",
       "New Balance",
-      "Топ продажів",
-      "Gorpcore",
-      "Взуття",
-      "Y2K"
+      "Ретро-ранери"
     ],
     "price": 6900,
     "compareAtPrice": 7800,
     "images": [
       "https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&auto=format&fit=crop&q=80",
-    "available": true,
-    "sku": "M1906REE",
+    "sku": "M1906R-SLV",
     "variants": [
       {
-        "id": "v-nb-40",
-        "title": "EU 40 (25.0 cm)",
-        "price": 6900,
-        "compareAtPrice": 7800,
-        "sku": "M1906REE-40"
-      },
-      {
-        "id": "v-nb-415",
         "title": "EU 41.5 (26.0 cm)",
         "price": 6900,
-        "compareAtPrice": 7800,
-        "sku": "M1906REE-415"
+        "sku": "NB1906-415",
+        "id": "v-prod-newbalance-1906r-silver-0"
       },
       {
-        "id": "v-nb-42",
         "title": "EU 42 (26.5 cm)",
         "price": 6900,
-        "compareAtPrice": 7800,
-        "sku": "M1906REE-42"
+        "sku": "NB1906-42",
+        "id": "v-prod-newbalance-1906r-silver-1"
       },
       {
-        "id": "v-nb-43",
         "title": "EU 43 (27.5 cm)",
         "price": 6900,
-        "compareAtPrice": 7800,
-        "sku": "M1906REE-43"
+        "sku": "NB1906-43",
+        "id": "v-prod-newbalance-1906r-silver-2"
       },
       {
-        "id": "v-nb-44",
         "title": "EU 44 (28.0 cm)",
         "price": 6900,
-        "compareAtPrice": 7800,
-        "sku": "M1906REE-44"
-      },
-      {
-        "id": "v-nb-45",
-        "title": "EU 45 (29.0 cm)",
-        "price": 6900,
-        "compareAtPrice": 7800,
-        "sku": "M1906REE-45"
+        "sku": "NB1906-44",
+        "id": "v-prod-newbalance-1906r-silver-3"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-carhartt-double-knee-pant",
     "handle": "carhartt-wip-double-knee-pant-hamilton-brown",
     "title": "Carhartt WIP Double Knee Pant 'Hamilton Brown'",
-    "bodyHtml": "<p>Еталонні робочі штани з подвійними посиленими наколінниками та металевими заклепками. Виготовлені з надміцного фірмового органічного канвасу Dearborn Canvas, який набуває унікального вінтажного характеру з часом.</p><ul><li><strong>Матеріал:</strong> 100% органічна бавовна Dearborn Canvas (12 oz).</li><li><strong>Конструкція:</strong> потрійні посилені шви, утилітарні бічні кишені та петля для молотка.</li><li><strong>Крій:</strong> Relaxed straight fit з високою посадкою.</li></ul>",
+    "bodyHtml": "<p>Культові робочі штани зі щільного органічного канвасу Dearborn Canvas (12 oz). Подвійний шар тканини на колінах з металевими заклепками.</p>",
     "vendor": "Carhartt WIP",
     "productType": "Одяг / Штани та джинси",
     "tags": [
+      "Одяг",
       "Штани",
       "Carhartt WIP",
-      "Одяг",
-      "Workwear",
-      "Double Knee",
-      "Хіт"
+      "Workwear"
     ],
     "price": 4800,
     "compareAtPrice": 5600,
     "images": [
       "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&auto=format&fit=crop&q=80",
-    "available": true,
     "sku": "I029196-HZ",
     "variants": [
       {
-        "id": "v-car-30",
         "title": "W30 / L32",
         "price": 4800,
-        "compareAtPrice": 5600,
-        "sku": "I029196-HZ-30"
+        "sku": "CAR-DK-30",
+        "id": "v-prod-carhartt-double-knee-pant-0"
       },
       {
-        "id": "v-car-32",
         "title": "W32 / L32",
         "price": 4800,
-        "compareAtPrice": 5600,
-        "sku": "I029196-HZ-32"
+        "sku": "CAR-DK-32",
+        "id": "v-prod-carhartt-double-knee-pant-1"
       },
       {
-        "id": "v-car-34",
         "title": "W34 / L32",
         "price": 4800,
-        "compareAtPrice": 5600,
-        "sku": "I029196-HZ-34"
-      },
-      {
-        "id": "v-car-36",
-        "title": "W36 / L32",
-        "price": 4800,
-        "compareAtPrice": 5600,
-        "sku": "I029196-HZ-36"
+        "sku": "CAR-DK-34",
+        "id": "v-prod-carhartt-double-knee-pant-2"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-salomon-xt6-black",
-    "handle": "salomon-xt-6-black-phantom-ebony",
+    "handle": "salomon-xt-6-black-phantom",
     "title": "Salomon XT-6 'Black / Phantom'",
-    "bodyHtml": "<p>Легендарний трейловий силует, який став іконою gorpcore-стилю у світових столицях моди. Безшовна термополіуретанова конструкція Sensifit забезпечує неперевершену фіксацію та захист стопи в будь-яку погоду.</p><ul><li><strong>Шнурівка:</strong> надшвидка система затягування Quicklace з кишенею на язичку.</li><li><strong>Шасі:</strong> система Agile Chassis System (ACS) для стабільності на нерівній поверхні.</li><li><strong>Підошва:</strong> Mud Contagrip з агресивним протектором.</li></ul>",
+    "bodyHtml": "<p>Ультимативна трейлова пара у стилі gorpcore. Система швидкого шнурування Quicklace, шасі ACS для стабільності та чіпка підошва Mud Contagrip.</p>",
     "vendor": "Salomon",
     "productType": "Взуття / Кросівки",
     "tags": [
+      "Взуття",
       "Кросівки",
       "Salomon",
-      "Gorpcore",
-      "Quicklace",
-      "Взуття",
-      "Тренд"
+      "Gorpcore"
     ],
     "price": 8200,
     "compareAtPrice": 9400,
     "images": [
-      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&auto=format&fit=crop&q=80",
-    "available": true,
     "sku": "L41086600",
     "variants": [
       {
-        "id": "v-sal-41",
-        "title": "EU 41 1/3 (26.0 cm)",
-        "price": 8200,
-        "compareAtPrice": 9400,
-        "sku": "L41086600-41"
-      },
-      {
-        "id": "v-sal-42",
         "title": "EU 42 (26.5 cm)",
         "price": 8200,
-        "compareAtPrice": 9400,
-        "sku": "L41086600-42"
+        "sku": "SAL-XT6-42",
+        "id": "v-prod-salomon-xt6-black-0"
       },
       {
-        "id": "v-sal-425",
-        "title": "EU 42 2/3 (27.0 cm)",
+        "title": "EU 43 (27.5 cm)",
         "price": 8200,
-        "compareAtPrice": 9400,
-        "sku": "L41086600-425"
+        "sku": "SAL-XT6-43",
+        "id": "v-prod-salomon-xt6-black-1"
       },
       {
-        "id": "v-sal-43",
-        "title": "EU 43 1/3 (27.5 cm)",
-        "price": 8200,
-        "compareAtPrice": 9400,
-        "sku": "L41086600-43"
-      },
-      {
-        "id": "v-sal-44",
         "title": "EU 44 (28.0 cm)",
         "price": 8200,
-        "compareAtPrice": 9400,
-        "sku": "L41086600-44"
-      },
-      {
-        "id": "v-sal-45",
-        "title": "EU 45 1/3 (29.0 cm)",
-        "price": 8200,
-        "compareAtPrice": 9400,
-        "sku": "L41086600-45"
+        "sku": "SAL-XT6-44",
+        "id": "v-prod-salomon-xt6-black-2"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-supreme-box-logo-crewneck",
     "handle": "supreme-box-logo-crewneck-heather-grey",
     "title": "Supreme Box Logo Crewneck 'Heather Grey'",
-    "bodyHtml": "<p>Найбажаніший світшот у світі вуличної моди. Важкий щільний фліс Crossgrain Fleece канадського виробництва з вишитим червоним Box Logo на грудях. Обмежений реліз (limited drop).</p><ul><li><strong>Матеріал:</strong> 100% бавовна найвищої щільності (Heavyweight Crossgrain Fleece).</li><li><strong>Деталі:</strong> бічні ребристі вставки для свободи рухів, фірмові жакардові бірки.</li><li><strong>Походження:</strong> офіційний реліз Supreme New York.</li></ul>",
+    "bodyHtml": "<p>Справжня ікона нью-йоркського стрітвіру. Фірмовий вишитий логотип Box Logo на грудях, надщільний важкий фліс Crossgrain та ребристі манжети.</p>",
     "vendor": "Supreme",
     "productType": "Одяг / Худі та світшоти",
     "tags": [
+      "Одяг",
       "Світшот",
       "Supreme",
-      "Одяг",
-      "Дроп",
       "Box Logo",
-      "Deadstock"
+      "Дроп"
     ],
     "price": 7500,
     "compareAtPrice": 8900,
     "images": [
-      "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&auto=format&fit=crop&q=80",
-    "available": true,
     "sku": "SUP-BOGO-GRY",
     "variants": [
       {
-        "id": "v-sup-m",
         "title": "M (Regular/Oversize)",
         "price": 7500,
-        "compareAtPrice": 8900,
-        "sku": "SUP-BOGO-M"
+        "sku": "SUP-BOGO-M",
+        "id": "v-prod-supreme-box-logo-crewneck-0"
       },
       {
-        "id": "v-sup-l",
         "title": "L (Regular/Oversize)",
         "price": 7500,
-        "compareAtPrice": 8900,
-        "sku": "SUP-BOGO-L"
-      },
-      {
-        "id": "v-sup-xl",
-        "title": "XL (Oversize)",
-        "price": 7500,
-        "compareAtPrice": 8900,
-        "sku": "SUP-BOGO-XL"
+        "sku": "SUP-BOGO-L",
+        "id": "v-prod-supreme-box-logo-crewneck-1"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-stone-island-soft-shell",
     "handle": "stone-island-soft-shell-r-jacket-black",
     "title": "Stone Island Soft Shell-R Jacket 'Black'",
-    "bodyHtml": "<p>Високотехнологічна куртка з 2-шарової функціональної тканини Soft Shell-R з дихаючою мембраною та захистом від вітру й дощу (8000 мм водяного стовпа). Комплектується культовим знімним патчем Compass Badge на лівому рукаві.</p><ul><li><strong>Функціонал:</strong> вітрозахисна та водонепроникна мембрана, внутрішній шар з мікрофлісу.</li><li><strong>Фурнітура:</strong> двостороння блискавка YKK, регульований анатомічний капюшон.</li><li><strong>Автентичність:</strong> QR Certilogo для моментальної перевірки оригінальності.</li></ul>",
+    "bodyHtml": "<p>Високотехнологічна куртка з 2-шарового водостійкого та вітрозахисного еластичного матеріалу Soft Shell-R. Знімний автентичний патч компаса на лівому рукаві.</p>",
     "vendor": "Stone Island",
     "productType": "Одяг / Куртки та верхній одяг",
     "tags": [
+      "Одяг",
       "Куртки",
       "Stone Island",
-      "Верхній одяг",
-      "Soft Shell",
-      "Badge",
-      "Преміум"
+      "Технічний одяг"
     ],
     "price": 17800,
     "compareAtPrice": 21000,
     "images": [
-      "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1544441893-675973e31985?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=800&auto=format&fit=crop&q=80",
-    "available": true,
-    "sku": "SI-7715Q0122",
+    "sku": "771540927-V0029",
     "variants": [
       {
-        "id": "v-si-s",
-        "title": "S (Slim/Regular)",
-        "price": 17800,
-        "compareAtPrice": 21000,
-        "sku": "SI-7715Q0122-S"
-      },
-      {
-        "id": "v-si-m",
         "title": "M (Regular)",
         "price": 17800,
-        "compareAtPrice": 21000,
-        "sku": "SI-7715Q0122-M"
+        "sku": "SI-SOFTSHELL-M",
+        "id": "v-prod-stone-island-soft-shell-0"
       },
       {
-        "id": "v-si-l",
         "title": "L (Regular)",
         "price": 17800,
-        "compareAtPrice": 21000,
-        "sku": "SI-7715Q0122-L"
-      },
-      {
-        "id": "v-si-xl",
-        "title": "XL (Regular)",
-        "price": 17800,
-        "compareAtPrice": 21000,
-        "sku": "SI-7715Q0122-XL"
+        "sku": "SI-SOFTSHELL-L",
+        "id": "v-prod-stone-island-soft-shell-1"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1544441893-675973e31985?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-stussy-8ball-tee-white",
-    "handle": "stussy-8-ball-heavyweight-t-shirt-white",
+    "handle": "stussy-8-ball-heavyweight-tee-white",
     "title": "Stüssy 8 Ball Heavyweight T-Shirt 'White'",
-    "bodyHtml": "<p>Культова футболка з легендарним графічним принтом 8 Ball на спині та мінімалістичним логотипом на грудях. Виготовлена з важкої попередньо випраної бавовни (Pre-shrunk cotton) для збереження ідеальної форми.</p><ul><li><strong>Склад:</strong> 100% важка бавовна (240 GSM).</li><li><strong>Крій:</strong> Boxy Oversize fit.</li><li><strong>Догляд:</strong> прання при 30°C навиворіт.</li></ul>",
+    "bodyHtml": "<p>Легендарна футболка з графікою культової вісімки 8-Ball на спині та логотипом Stüssy на грудях. 100% щільна чесана бавовна.</p>",
     "vendor": "Stüssy",
     "productType": "Одяг / Футболки",
     "tags": [
+      "Одяг",
       "Футболки",
       "Stüssy",
-      "Одяг",
-      "8 Ball",
-      "Бавовна 100%",
-      "Хіт"
+      "Графіка"
     ],
     "price": 2400,
     "compareAtPrice": 2900,
     "images": [
       "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80",
-    "available": true,
     "sku": "STU-8BALL-WHT",
     "variants": [
       {
-        "id": "v-8b-s",
-        "title": "S (Boxy fit)",
-        "price": 2400,
-        "compareAtPrice": 2900,
-        "sku": "STU-8BALL-S"
-      },
-      {
-        "id": "v-8b-m",
         "title": "M (Boxy fit)",
         "price": 2400,
-        "compareAtPrice": 2900,
-        "sku": "STU-8BALL-M"
+        "sku": "STU-8BALL-M",
+        "id": "v-prod-stussy-8ball-tee-white-0"
       },
       {
-        "id": "v-8b-l",
         "title": "L (Boxy fit)",
         "price": 2400,
-        "compareAtPrice": 2900,
-        "sku": "STU-8BALL-L"
-      },
-      {
-        "id": "v-8b-xl",
-        "title": "XL (Boxy fit)",
-        "price": 2400,
-        "compareAtPrice": 2900,
-        "sku": "STU-8BALL-XL"
+        "sku": "STU-8BALL-L",
+        "id": "v-prod-stussy-8ball-tee-white-1"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-jacquemus-le-chiquito-moyen",
-    "handle": "jacquemus-le-chiquito-moyen-leather-bag-black",
+    "handle": "jacquemus-le-chiquito-moyen-black",
     "title": "Jacquemus Le Chiquito Moyen Leather Bag 'Black'",
-    "bodyHtml": "<p>Культова дизайнерська сумка Le Chiquito Moyen від французького бренду Jacquemus. Виготовлена з гладкої преміальної шкіри з золотистим металевим логотипом JACQUEMUS. Комплектується знімним регульованим ременем через плече та фірмовим пильником.</p><ul><li><strong>Матеріал:</strong> 100% натуральна теляча шкіра, бавовняна підкладка.</li><li><strong>Деталі:</strong> магнітна застібка, золотиста фурнітура, фірмовий пильник Jacquemus у комплекті.</li><li><strong>Розміри:</strong> 18 x 13.5 x 8 см.</li></ul>",
+    "bodyHtml": "<p>Еталон паризького мінімалізму від Симона Порта Жакмюса. Гладка натуральна теляча шкіра, фірмова видовжена ручка та золотий металевий логотип.</p>",
     "vendor": "Jacquemus",
     "productType": "Сумки / Кросбоді",
     "tags": [
       "Сумки",
-      "Jacquemus",
       "Аксесуари",
-      "Шкіра",
-      "Преміум",
-      "Новинки"
+      "Jacquemus",
+      "Люкс"
     ],
     "price": 19800,
     "compareAtPrice": 23500,
     "images": [
-      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=80",
-    "available": true,
-    "sku": "213BA002-3000-990",
+    "sku": "JACQ-CHIQ-BLK",
     "variants": [
       {
-        "id": "v-jacq-os",
         "title": "One Size",
         "price": 19800,
-        "compareAtPrice": 23500,
-        "sku": "213BA002-990-OS"
+        "sku": "JACQ-CHIQ-BLK",
+        "id": "v-prod-jacquemus-le-chiquito-moyen-0"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-ami-paris-ami-de-coeur-sweatshirt",
-    "handle": "ami-paris-ami-de-coeur-organic-cotton-sweatshirt-noir",
+    "handle": "ami-paris-ami-de-coeur-sweatshirt-black",
     "title": "AMI Paris Ami de Coeur Sweatshirt 'Noir / Red'",
-    "bodyHtml": "<p>Фірмовий світшот від паризького дому моди AMI Alexandre Mattiussi. Вишитий червоний символ любові та дружби Ami de Coeur на грудях та тональна вишивка AMI на спині. Щільна органічна французька бавовна French Terry.</p><ul><li><strong>Склад:</strong> 100% органічна бавовна (GOTS certified French Terry 420 GSM).</li><li><strong>Крій:</strong> Boxy regular fit. Зроблено в Португалії.</li><li><strong>Догляд:</strong> делікатне прання при 30°C.</li></ul>",
+    "bodyHtml": "<p>Французький преміальний світшот з культовою червоною вишивкою Ami de Coeur. М'яка органічна бавовна петлястого плетіння.</p>",
     "vendor": "AMI Paris",
     "productType": "Одяг / Худі та світшоти",
     "tags": [
+      "Одяг",
       "Світшот",
       "AMI Paris",
-      "Одяг",
-      "Ami De Coeur",
-      "Органічна бавовна",
-      "Хіт"
+      "Паризький стиль"
     ],
     "price": 9200,
     "compareAtPrice": 10800,
     "images": [
-      "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&auto=format&fit=crop&q=80",
-    "available": true,
-    "sku": "BFUSW001-724-001",
+    "sku": "AMI-COEUR-BLK",
     "variants": [
       {
-        "id": "v-ami-s",
-        "title": "S (Regular fit)",
-        "price": 9200,
-        "compareAtPrice": 10800,
-        "sku": "BFUSW001-S"
-      },
-      {
-        "id": "v-ami-m",
         "title": "M (Regular fit)",
         "price": 9200,
-        "compareAtPrice": 10800,
-        "sku": "BFUSW001-M"
+        "sku": "AMI-COEUR-BLK-M",
+        "id": "v-prod-ami-paris-ami-de-coeur-sweatshirt-0"
       },
       {
-        "id": "v-ami-l",
         "title": "L (Regular fit)",
         "price": 9200,
-        "compareAtPrice": 10800,
-        "sku": "BFUSW001-L"
-      },
-      {
-        "id": "v-ami-xl",
-        "title": "XL (Regular fit)",
-        "price": 9200,
-        "compareAtPrice": 10800,
-        "sku": "BFUSW001-XL"
+        "sku": "AMI-COEUR-BLK-L",
+        "id": "v-prod-ami-paris-ami-de-coeur-sweatshirt-1"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-ganni-graphic-tee-white",
-    "handle": "ganni-graphic-organic-cotton-t-shirt-white",
+    "handle": "ganni-graphic-organic-cotton-tee-white",
     "title": "Ganni Graphic Organic Cotton T-Shirt 'Bright White'",
-    "bodyHtml": "<p>Культова футболка від копенгагенського бренду Ganni з фірмовим ретро-принтом та слоганом бренду. Створена з турботою про довкілля з 100% органічної сертифікованої бавовни.</p><ul><li><strong>Склад:</strong> 100% органічна бавовна.</li><li><strong>Крій:</strong> Вільний Scandinavian relaxed fit.</li><li><strong>Деталі:</strong> круглий виріз горловини в рубчик, стійкий шовкотрафаретний принт.</li></ul>",
+    "bodyHtml": "<p>Скандинавський шик від копенгагенського бренду Ganni. Розслаблений силует, 100% органічна сертифікована бавовна та фірмовий принт.</p>",
     "vendor": "Ganni",
     "productType": "Одяг / Футболки",
     "tags": [
+      "Одяг",
       "Футболки",
       "Ganni",
-      "Одяг",
-      "Скандинавський дизайн",
-      "Новинки"
+      "Копенгаген"
     ],
     "price": 3600,
     "compareAtPrice": 4200,
     "images": [
       "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&auto=format&fit=crop&q=80",
-    "available": true,
-    "sku": "T3350-100",
+    "sku": "T3190-100",
     "variants": [
       {
-        "id": "v-gan-xs",
-        "title": "XS (Relaxed)",
-        "price": 3600,
-        "compareAtPrice": 4200,
-        "sku": "T3350-100-XS"
-      },
-      {
-        "id": "v-gan-s",
         "title": "S (Relaxed)",
         "price": 3600,
-        "compareAtPrice": 4200,
-        "sku": "T3350-100-S"
+        "sku": "GAN-TEE-S",
+        "id": "v-prod-ganni-graphic-tee-white-0"
       },
       {
-        "id": "v-gan-m",
         "title": "M (Relaxed)",
         "price": 3600,
-        "compareAtPrice": 4200,
-        "sku": "T3350-100-M"
-      },
-      {
-        "id": "v-gan-l",
-        "title": "L (Relaxed)",
-        "price": 3600,
-        "compareAtPrice": 4200,
-        "sku": "T3350-100-L"
+        "sku": "GAN-TEE-M",
+        "id": "v-prod-ganni-graphic-tee-white-1"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&auto=format&fit=crop&q=80",
+    "available": true
   },
   {
     "id": "prod-breda-jane-watch-gold",
-    "handle": "breda-jane-vintage-gold-mesh-watch",
+    "handle": "breda-jane-1741-mesh-watch-champagne",
     "title": "Breda Jane 1741 Gold Mesh Watch 'Champagne'",
-    "bodyHtml": "<p>Мінімалістичний вінтажний годинник від американського дизайн-ательє Breda (Даллас). Витончений овальний корпус із золотим PVD-покриттям, перламутровий циферблат та міланський сітчастий браслет.</p><ul><li><strong>Механізм:</strong> японський кварцовий Seiko / Miyota.</li><li><strong>Матеріал:</strong> нержавіюча сталь 316L з PVD-покриттям кольору 18K золота.</li><li><strong>Водонепроникність:</strong> 3 ATM (захист від бризок). Комплектується фірмовим футляром.</li></ul>",
+    "bodyHtml": "<p>Вишуканий вінтажний годинник з ювелірним міланським плетінням ремінця. Корпус із позолоченої нержавіючої сталі 23 мм та надійний японський кварцовий механізм Miyota.</p>",
     "vendor": "Breda",
     "productType": "Аксесуари / Годинники",
     "tags": [
       "Аксесуари",
       "Годинники",
       "Breda",
-      "Jane",
-      "Подарунок",
-      "Преміум"
+      "Вінтаж"
     ],
     "price": 6800,
     "compareAtPrice": 7900,
     "images": [
       "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80"
     ],
-    "featuredImage": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80",
-    "available": true,
     "sku": "BREDA-1741-GLD",
     "variants": [
       {
-        "id": "v-breda-os",
         "title": "One Size (Регульований)",
         "price": 6800,
-        "compareAtPrice": 7900,
-        "sku": "BREDA-1741-GLD-OS"
+        "sku": "BREDA-1741-GLD",
+        "id": "v-prod-breda-jane-watch-gold-0"
       }
-    ]
+    ],
+    "featuredImage": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80",
+    "available": true
   }
 ];
 
-export const SAMPLE_SHOPIFY_CSV = `Handle,Title,Body (HTML),Vendor,Type,Tags,Published,Option1 Name,Option1 Value,Variant SKU,Variant Price,Variant Compare At Price,Image Src
-blysk-dlia-hub-fenty-beauty-gloss-bomb,"Блиск для губ Fenty Beauty Gloss Bomb Universal Lip Luminizer - Fenty Glow 9ml","Універсальний блиск для губ з сяючою формулою та маслом ши.","Fenty Beauty","Декоративна косметика","Губи, Блиск для губ, Fenty Beauty, Декоративна косметика, Хіт",TRUE,"Title","9ml","FB-GLOSS-9ML",599,699,https://lil-shop.com.ua/content/images/1/374x390l80mc0/blysk-dlia-hub-gloss-bomb-universal-lip-luminizer-fenty-glow-33591340940514.webp
-tint-dlia-hub-rare-beauty,"Тінт для губ Rare Beauty Soft Pinch Tinted Lip Oil - Hope","Олія-тінт для губ, що дарує легкий відтінок і зволоження.","Rare Beauty","Декоративна косметика","Губи, Тінт для губ, Rare Beauty, Декоративна косметика, Хіт",TRUE,"Title","Hope","RB-OIL-HOPE",1099,1250,https://lil-shop.com.ua/content/images/10/390x390l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-55545230580396.webp
-balzam-dlia-hub-summer-fridays,"Бальзам для губ Summer Fridays Lip Butter Balm - Brown Sugar 15ml","Унікальна зволожувальна формула з маслом ши та насінням мурумуру.","Summer Fridays","Декоративна косметика","Губи, Бальзам для губ, Summer Fridays, Декоративна косметика",TRUE,"Title","15ml","SF-BALM-15",499,599,https://lil-shop.com.ua/content/images/8/390x390l80mc0/balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-75168103762214.webp
-oliika-dlia-hub-summer-fridays,"Олійка для губ Summer Fridays Dream Lip Oil - Soft Mauve 4.5ml","Плюшева олія з дев'ятьма рослинними оліями та вітаміном Е.","Summer Fridays","Декоративна косметика","Губи, Олійка для губ, Summer Fridays, Декоративна косметика",TRUE,"Title","4.5ml","SF-OIL-MAUVE",599,699,https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-83798386800838.webp
-rhode-peptide-lip-shape,"Контурний олівець для губ Rhode Peptide Lip Shape - Stretch","Інноваційний контурний олівець з доглядовою формулою пептидів.","Rhode","Декоративна косметика","Губи, Олівець для губ, Rhode, Декоративна косметика",TRUE,"Title","Stretch","RHODE-LIP-STRETCH",799,899,https://lil-shop.com.ua/content/images/2/390x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-98576261965888.webp
-dior-backstage-glow-face-palette,"Палітра хайлайтерів для обличчя — Dior Backstage Glow Face Palette 001 Universal, 10g","Культова палітра хайлайтерів для бездоганного сяйва у стилі backstage.","Dior","Декоративна косметика","Обличчя, Хайлайтер, Dior, Декоративна косметика, Преміум",TRUE,"Title","001 Universal","DIOR-001",2199,2450,https://lil-shop.com.ua/content/images/47/390x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-83055883802753.webp
-hourglass-unreal-liquid-blush,"Рідкі румʼяна Hourglass Unreal Liquid Blush - Whim 10.3ml","Рідкі румʼяна з ліфтинг-комплексом та природним сяйвом.","Hourglass","Декоративна косметика","Обличчя, Румʼяна, Hourglass, Декоративна косметика",TRUE,"Title","Whim 10.3ml","HG-WHIM-10",899,1050,https://lil-shop.com.ua/content/images/21/390x390l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-59723467636263.webp
-sprei-sol-de-janeiro-rio-radiance,"Спрей парфумований для тіла та волосся Sol de Janeiro Rio Radiance Perfume Mist 90 ml","Парфумований спрей з нотами цитрусових, екзотичних квітів та ванілі.","Sol de Janeiro","Парфуми та аромати","Парфуми, Спреї, Sol de Janeiro, Тіло, Волосся",TRUE,"Title","90ml","SDJ-RIO-90",799,920,https://lil-shop.com.ua/content/images/37/390x390l80mc0/sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mist-90-ml-70923026042711.webp
-charlotte-tilbury-kosmetychka,"Косметичка Charlotte Tilbury сумка жіноча","Стьобаний дизайн з PU-шкіри для зберігання косметики та аксесуарів.","Charlotte Tilbury","Аксесуари та сумки","Аксесуари, Сумки, Косметичка, Charlotte Tilbury",TRUE,"Title","25x17cm","CT-BAG-RED",1499,1750,https://lil-shop.com.ua/content/images/24/505x390l80mc0/kosmetychka-charlotte-tilbury-18342289879514.webp
-jacquemus-le-chiquito-moyen,"Jacquemus Le Chiquito Moyen Leather Bag 'Black'","Культова дизайнерська сумка Le Chiquito Moyen з преміальної шкіри.","Jacquemus","Аксесуари та сумки","Сумки, Jacquemus, Аксесуари, Шкіра, Преміум",TRUE,"Title","One Size","213BA002-990-OS",19800,23500,https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800
-ami-paris-ami-de-coeur-sweatshirt,"AMI Paris Ami de Coeur Sweatshirt 'Noir / Red'","Фірмовий світшот з органічної бавовни French Terry з вишивкою Ami de Coeur.","AMI Paris","Одяг","Світшот, AMI Paris, Одяг, Ami De Coeur, Хіт",TRUE,"Title","L (Regular fit)","BFUSW001-L",9200,10800,https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800
-ganni-graphic-tee-white,"Ganni Graphic Organic Cotton T-Shirt 'Bright White'","Футболка зі 100% органічної бавовни з ретро-принтом у скандинавському стилі.","Ganni","Одяг","Футболки, Ganni, Одяг, Скандинавський дизайн",TRUE,"Title","S (Relaxed)","T3350-100-S",3600,4200,https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800
-breda-jane-watch-gold,"Breda Jane 1741 Gold Mesh Watch 'Champagne'","Мінімалістичний годинник з PVD-покриттям золота та міланським браслетом.","Breda","Аксесуари та сумки","Аксесуари, Годинники, Breda, Преміум",TRUE,"Title","One Size","BREDA-1741-GLD-OS",6800,7900,https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800
-air-jordan-1-lost-and-found,"Air Jordan 1 Retro High OG 'Chicago Lost & Found'","Культова класика 1985 року у вінтажному переосмисленні з натуральною шкірою.","Jordan","Взуття / Кросівки","Кросівки, Jordan, Хіт, Deadstock, Взуття",TRUE,"Title","EU 42 (26.5 cm)","DZ5485-612-42",9800,11500,https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800
-stussy-basic-hoodie-black,"Stüssy Basic Applique Hoodie 'Black'","Фірмове важке худі з флісу щільністю 380 GSM від піонера каліфорнійського streetwear.","Stüssy","Одяг","Худі, Stüssy, Одяг, Oversize, Хіт",TRUE,"Title","L (Oversize)","STU-HOOD-L",5400,6200,https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800
-new-balance-1906r-silver,"New Balance 1906R 'Silver Metallic / Cordura'","Технологічний біговий силует початку 2000-х з амортизацією N-ergy та ABZORB.","New Balance","Взуття / Кросівки","Кросівки, New Balance, Топ продажів, Gorpcore",TRUE,"Title","EU 43 (27.5 cm)","M1906REE-43",6900,7800,https://images.unsplash.com/photo-1539185441755-769473a23570?w=800
-carhartt-double-knee-pant,"Carhartt WIP Double Knee Pant 'Hamilton Brown'","Еталонні робочі штани з подвійними посиленими наколінниками та органічного канвасу.","Carhartt WIP","Одяг","Штани, Carhartt WIP, Одяг, Workwear",TRUE,"Title","W32 / L32","I029196-HZ-32",4800,5600,https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800
-salomon-xt6-black,"Salomon XT-6 'Black / Phantom'","Культовий трейловий силует з системою швидкої шнурівки Quicklace та підошвою Contagrip.","Salomon","Взуття / Кросівки","Кросівки, Salomon, Gorpcore, Quicklace, Взуття",TRUE,"Title","EU 42.5 (27.0 cm)","L41086600-42",8200,9400,https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800
-supreme-box-logo-crewneck,"Supreme Box Logo Crewneck 'Heather Grey'","Культовий світшот з вишитим червоним логотипом Box Logo з важкого флісу.","Supreme","Одяг","Світшот, Supreme, Одяг, Дроп, Box Logo",TRUE,"Title","L (Regular)","SUP-BOGO-L",7500,8900,https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800
-stone-island-soft-shell,"Stone Island Soft Shell-R Jacket 'Black'","Високотехнологічна куртка з мембраною Soft Shell-R та знімним патчем Compass Badge.","Stone Island","Одяг","Куртки, Stone Island, Верхній одяг, Soft Shell",TRUE,"Title","L (Regular)","SI-7715Q0122-L",17800,21000,https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=800
-stussy-8ball-tee-white,"Stüssy 8 Ball Heavyweight T-Shirt 'White'","Футболка з культовим принтом 8 Ball з важкої 100% бавовни щільністю 240 GSM.","Stüssy","Одяг","Футболки, Stüssy, Одяг, 8 Ball, Бавовна 100%",TRUE,"Title","L (Boxy fit)","STU-8BALL-L",2400,2900,https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800
+export const SAMPLE_SHOPIFY_CSV = `Handle,Title,Body (HTML),Vendor,Product Category,Type,Tags,Published,Option1 Name,Option1 Value,Variant SKU,Variant Price,Variant Compare At Price,Image Src,Status
+"sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mis","Спрей парфумований для тіла та волосся Sol de Janeiro Rio Radiance Perfume Mist 90 ml","<p><strong>Sol de Janeiro Rio Radiance Perfume Mist</strong> — парфумований спрей для тіла та волосся, натхненний сонячним теплом Ріо. Ноти сонячної туберози, кокосового молока та теплого піску.</p>","Sol de Janeiro","Парфуми та аромати","Парфуми та аромати","Парфуми, Спреї, Sol de Janeiro",true,"Size","90 ml","SDJ-RIO-90","799","920","https://lil-shop.com.ua/content/images/37/390x390l80mc0/sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeiro-rio-radiance-perfume-mist-90-ml-70923026042711.webp","active"
+"sol-de-janeiro-brazilian-crush-cheirosa-71-mist-90ml","Спрей парфумований для тіла та волосся Sol de Janeiro Cheirosa 71 Mist 90ml","<p><strong>Sol de Janeiro Cheirosa 71</strong> — теплий та затишний гурманський спрей з нотами карамелізованої ванілі, смаженого горіха макадамія та бобів тонка.</p>","Sol de Janeiro","Парфуми та аромати","Парфуми та аромати","Парфуми, Спреї, Sol de Janeiro",true,"Size","90 ml","SDJ-CH71-90","799","920","https://lil-shop.com.ua/content/images/8/1500x1500l80mc0/sprei-parfumovanyi-dlia-tila-ta-volossia-sol-de-janeirobrazilian-crush-cheirosa-71-90-ml-73260098762614.webp","active"
+"sol-de-janeiro-brazilian-crush-trio-mist-set","Набір парфумованих спреїв Sol de Janeiro Brazilian Crush Trio (62, 71, Rio Radiance)","<p>Подарунковий набір трьох бестселерів Sol de Janeiro: культовий Cheirosa 62, ванільний Cheirosa 71 та сонячний Rio Radiance.</p>","Sol de Janeiro","Парфуми та аромати","Парфуми та аромати","Парфуми, Спреї, Набори, Sol de Janeiro",true,"Size","3 x 90 ml","SDJ-SET-TRIO","1890","2200","https://lil-shop.com.ua/content/images/2/1800x1103l80mc0/nabir-aromativ-brazilian-crush-cheirosa-6271rio-sprei-dlia-tila-ta-volossia-brazilian-crush-cheirosa-49536280110337.webp","active"
+"interierna-aromatychna-svichka-amber-vanilla","Інтерʼєрна ароматична свічка Amber & Vanilla Essence 220g","<p>Ароматична інтер'єрна свічка з натурального соєвого воску з дерев'яним ґнотом. Ноти амбри, бурштину та теплої мадагаскарської ванілі.</p>","MOLAND Home","Парфуми та аромати","Парфуми та аромати","Аромати для дому, Свічки, Інтер'єр",true,"Size","220g","CANDLE-AMB-220","650","780","https://lil-shop.com.ua/content/images/2/1439x1200l80mc0/46837915370455.webp","active"
+"podarunkovyi-nabir-soievykh-svichok","Подарунковий набір ароматичних свічок Luxury Home Set (3 шт)","<p>Ексклюзивний подарунковий бокс з трьома преміальними свічками: Santal 26, Cashmere Wood та Vanilla Orchid.</p>","MOLAND Home","Парфуми та аромати","Парфуми та аромати","Аромати для дому, Свічки, Подарункові набори",true,"Size","3 x 80g","CANDLE-SET-3","1290","1550","https://lil-shop.com.ua/content/images/3/856x656l80mc0/17319949087054.webp","active"
+"blysk-dlia-hub-fenty-beauty-gloss-bomb-universal-lip-luminizer-fenty-glow-9ml","Блиск для губ Fenty Beauty Gloss Bomb Universal Lip Luminizer - Fenty Glow 9ml","<p>Культовий універсальний блиск від Ріанни. Зволожувальне масло ши, нелипка текстура та спокусливий глянцевий блиск з ароматом персика.</p>","Fenty Beauty","Декоративна косметика","Декоративна косметика","Губи, Декоративна косметика, Fenty Beauty, Блиски",true,"Size","Fenty Glow (9ml)","FB-GLOSS-GLOW","599","690","https://lil-shop.com.ua/content/images/1/374x390l80mc0/blysk-dlia-hub-gloss-bomb-universal-lip-luminizer-fenty-glow-33591340940514.webp","active"
+"tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope","Тінт для губ Rare Beauty Soft Pinch Tinted Lip Oil - Hope","<p>Інноваційна желеподібна текстура олійки-тінту від Селени Гомес. Зволожує губи оліями жожоба та соняшника і залишає ніжний стійкий відтінок Hope.</p>","Rare Beauty","Декоративна косметика","Декоративна косметика","Губи, Декоративна косметика, Rare Beauty, Тінти",true,"Size","Hope (Нюд рожевий)","RB-TINT-HOPE","1099","1250","https://lil-shop.com.ua/content/images/10/390x390l80mc0/tint-dlia-hub-rare-beauty-soft-pinch-tinted-lip-oil-hope-55545230580396.webp","active"
+"balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-15ml","Бальзам для губ Summer Fridays Lip Butter Balm - Brown Sugar 15ml","<p>Улюблений шовковистий бальзам-баттер для губ з оліями ши та мурумуру. Надає дзеркальний блиск і теплий карамельний відтінок Brown Sugar.</p>","Summer Fridays","Декоративна косметика","Декоративна косметика","Губи, Декоративна косметика, Summer Fridays, Бальзами",true,"Size","Brown Sugar (15ml)","SF-BALM-BROWN","499","620","https://lil-shop.com.ua/content/images/8/390x390l80mc0/balzam-dlia-hub-summer-fridays-lip-butter-balm-brown-sugar-75168103762214.webp","active"
+"oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-4-5ml","Олійка для губ Summer Fridays Dream Lip Oil - Soft Mauve 4.5ml","<p>Живильна олійка для губ з комплексом з 9 натуральних рослинних олій та вітаміном E. Глибоко живить, не липне і дарує витончений відтінок Soft Mauve.</p>","Summer Fridays","Декоративна косметика","Декоративна косметика","Губи, Декоративна косметика, Summer Fridays, Олійки",true,"Size","Soft Mauve (4.5ml)","SF-OIL-MAUVE","599","720","https://lil-shop.com.ua/content/images/26/390x390l80mc0/oliika-dlia-hub-summer-fridays-dream-lip-oil-soft-mauve-83798386800838.webp","active"
+"konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch","Контурний олівець для губ Rhode Peptide Lip Shape - Stretch","<p>Пептидний олівець для контурування губ від Гейлі Бібер. Оксамитова ковзаюча формула, що візуально збільшує об'єм губ та тримається цілий день.</p>","Rhode","Декоративна косметика","Декоративна косметика","Губи, Декоративна косметика, Rhode, Олівці",true,"Size","Stretch","RHODE-LIP-STR","799","950","https://lil-shop.com.ua/content/images/2/390x390l80mc0/konturnyi-olivets-dlia-hub-rhode-peptide-lip-shape-stretch-98576261965888.webp","active"
+"balzam-z-tintom-rhode-peptide-lip-tint-raspberry-jelly-10ml","Бальзам з тінтом для губ Rhode Peptide Lip Tint - Raspberry Jelly 10ml","<p>Вірусний пептидний тінт-бальзам Гейлі Бібер. Відтінок соковитої стиглої малини Raspberry Jelly відновлює сухі губи та дарує сяючий об'єм.</p>","Rhode","Декоративна косметика","Декоративна косметика","Губи, Декоративна косметика, Rhode, Тінти, Бальзами",true,"Size","Raspberry Jelly (10ml)","RHODE-TINT-RASP","799","920","https://lil-shop.com.ua/content/images/19/600x600l80mc0/balzam-z-tintom-rhode-peptide-lip-tint-raspberry-jelly-10ml-59876748159092.webp","active"
+"dior-addict-lip-glow-oil-001","Олія-блиск для губ Dior Addict Lip Glow Oil 001 Pink","<p>Культова олія для губ Dior Addict з технологією Color Reviver, що адаптується до індивідуального pH губ, створюючи неповторний свіжий рожевий відтінок.</p>","Dior","Декоративна косметика","Декоративна косметика","Губи, Декоративна косметика, Dior, Олійки",true,"Size","001 Pink","DIOR-GLOW-001","1850","2100","https://lil-shop.com.ua/content/images/14/400x500l80mc0/dior-addict-lip-glow-oil-oliia-dlia-hub-001-13168465110396.webp","active"
+"palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-univer","Палітра хайлайтерів для обличчя Dior Backstage Glow Face Palette 001 Universal 10g","<p>Знакова палітра хайлайтерів Dior Backstage. Чотири сяючі відтінки з мікроперламутром, що нашаровуються від ніжного внутрішнього сяйва до яскравого глянцю.</p>","Dior","Декоративна косметика","Декоративна косметика","Обличчя, Декоративна косметика, Dior, Палітри, Хайлайтери",true,"Size","001 Universal (10g)","DIOR-BACK-001","2199","2500","https://lil-shop.com.ua/content/images/47/390x390l80mc0/palitra-khailaiteriv-dlia-oblychchia-dior-backstage-glow-face-palette-001-universal-10g-83055883802753.webp","active"
+"ridki-rumiana-hourglass-unreal-liquid-blush-whim-10-3ml","Рідкі румʼяна Hourglass Unreal Liquid Blush - Whim 10.3ml","<p>Преміальні невагомі рідкі рум'яна Hourglass Unreal з сироватковим ефектом. Формула з гіалуроновою кислотою та пептидами для ефекту розмитого фокусу.</p>","Hourglass","Декоративна косметика","Декоративна косметика","Обличчя, Декоративна косметика, Hourglass, Рум'яна",true,"Size","Whim (10.3ml)","HG-BLUSH-WHIM","899","1050","https://lil-shop.com.ua/content/images/21/390x390l80mc0/ridki-rumiana-unreal-liquid-blush-10.3ml-59723467636263.webp","active"
+"rhode-pocket-blush-juice-box","Пептидні кремові рум'яна Rhode Pocket Blush - Juice Box","<p>Компактні кремові рум'яна Rhode у трендовому відтінку Juice Box (яскравий ягідний). Надають шкірі свіжого натурального рум'янцю та легкого вологого сяйва.</p>","Rhode","Декоративна косметика","Декоративна косметика","Обличчя, Декоративна косметика, Rhode, Рум'яна",true,"Size","Juice Box","RHODE-BLUSH-JB","1150","1300","https://lil-shop.com.ua/content/images/39/1284x1605l80mc0/rumiana-peptydni-kremovi-rhode-pocket-blush-juice-box-86471484829067.webp","active"
+"rare-beauty-positive-light-liquid-luminizer-enchant-15ml","Рідкий хайлайтер Rare Beauty Positive Light Liquid Luminizer - Enchant 15ml","<p>Шовковистий рідкий хайлайтер другого покоління від Rare Beauty. Відтінок Enchant (м'яке рожеве сяйво) бездоганно розтушовується без підкреслення текстури.</p>","Rare Beauty","Декоративна косметика","Декоративна косметика","Обличчя, Декоративна косметика, Rare Beauty, Хайлайтери",true,"Size","Enchant (15ml)","RB-LUM-ENCHANT","1250","1400","https://lil-shop.com.ua/content/images/37/1280x1280l80mc0/ridkyi-khailaiter-rare-beauty-positive-light-liquid-luminizer-enchant-15-ml-60956111488083.webp","active"
+"tarte-shape-tape-contour-concealer-20b-light","Консилер Tarte Shape Tape Contour Concealer - 20B Light","<p>Найпопулярніший у світі консилер з повним перекриттям. Миттєво маскує темні кола під очима та недосконалості без скочування до 16 годин.</p>","Tarte","Декоративна косметика","Декоративна косметика","Обличчя, Декоративна косметика, Консилери, Tarte",true,"Size","20B Light","TARTE-ST-20B","1100","1280","https://lil-shop.com.ua/content/images/37/1000x1000l80mc0/konsyler-tarte-shape-tape-contour-concealer-20b-light-29693226878509.webp","active"
+"elegance-la-poudre-haute-nuance-01-powder-27g","Стійка матуюча пудра для обличчя Elegance La Poudre Haute Nuance 01 (27g)","<p>Легендарна японська пудра вищого класу Elegance. Вирівнює рельєф пор, фіксує макіяж і створює шовковисту порцелянову шкіру.</p>","Elegance","Декоративна косметика","Декоративна косметика","Обличчя, Декоративна косметика, Пудри",true,"Size","01 Elegance (27g)","ELEGANCE-01-27G","2450","2800","https://lil-shop.com.ua/content/images/2/1280x1280l80mc0/elegance-la-poudre-haute-nuance-01-stiika-pudra-dlia-oblychchia-27g-95541467097747.webp","active"
+"dr-ceuracle-recovery-bb-cream-spf-28-45ml","Стійкий BB-крем бальзам Dr.Ceuracle Recovery SPF 28 PA++ 45ml","<p>Корейський лікувальний BB-крем з матовим оксамитовим фінішем. Заспокоює чутливу шкіру, маскує почервоніння та захищає від ультрафіолету.</p>","Dr.Ceuracle","Декоративна косметика","Декоративна косметика","Обличчя, Декоративна косметика, BB крем, SPF, Dr.Ceuracle",true,"Size","45 ml","DRC-BB-45","890","1050","https://lil-shop.com.ua/content/images/5/390x390l80mc0/stiikyi-bb-krem-balzam-z-matovym-efektom-dr.ceuracle-recovery-spf-28-pa-45ml-70439076110325.webp","active"
+"nyx-ultimate-eyeshadow-palette-16-warm-neutrals","Палетка тіней для повік NYX Professional Ultimate 16 Shades 04W Warm Neutrals","<p>Універсальна палетка тіней з 16 теплими базовими відтінками від сатинових до насичено матових. Висока пігментація та бездоганне розтушовування.</p>","NYX Professional","Декоративна косметика","Декоративна косметика","Очі, Декоративна косметика, NYX, Тіні",true,"Size","04W Warm Neutrals","NYX-ULT-16WN","850","980","https://lil-shop.com.ua/content/images/13/1063x1063l80mc0/nyx-professional-paletka-tinei-ultimate-16-vidtinkiv-04w-warm-neutrals-98157405341796.webp","active"
+"revitabrow-advanced-eyebrow-conditioner-3ml","Сироватка для росту та зміцнення брів RevitaBrow Advanced (3ml)","<p>Оригінальна сироватка з запатентованим BioPeptin Complex для стимуляції росту, густоти та захисту волосків брів від ламкості.</p>","RevitaLash","Декоративна косметика","Декоративна косметика","Очі, Декоративна косметика, Брови, Сироватки",true,"Size","3 ml","REV-BROW-3ML","2600","2950","https://lil-shop.com.ua/content/images/50/600x600l80mc0/3ml-revitabrow-advanced-syrovatka-dlia-rostu-briv-61074207028964.webp","active"
+"nabir-penzliv-dlia-makiiazhu-pro","Набір професійних пензлів для макіяжу Pro Artist Brush Set (8 шт)","<p>Повний набір ультрам'яких синтетичних пензлів для нанесення тону, пудри, рум'ян, хайлайтера та тіней з чохлом для зберігання.</p>","MOLAND Beauty","Декоративна косметика","Декоративна косметика","Обличчя, Аксесуари, Пензлі",true,"Size","8 шт + Чохол","BRUSH-SET-8","990","1200","https://lil-shop.com.ua/content/images/50/630x630l80mc0/41288408830248.webp","active"
+"prod-medicube-cleansing-oil","Очищувальна гідрофільна олія Medicube Zero Pore Blackhead Deep Cleansing Oil (150ml)","<p>Глибоко очищує пори від чорних цяток, водостійкого макіяжу та сонцезахисних кремів. Містить LHA-кислоти та ніацинамід для звуження пор.</p>","Medicube","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Очищення, Medicube, Гідрофільна олія",true,"Size","150 ml","MED-OIL-150","880","990","https://lil-shop.com.ua/content/images/45/1800x1800l80mc0/ochyshchuvalna-hidrofilna-oliia-medicube-zero-pore-blackhead-deep-cleansing-oil-lha-ta-niatsynamid-150ml-95294052613319.webp","active"
+"skin1004-madagascar-centella-tone-brightening-cleansing-foam-125ml","Освітлюючий гель-пінка для вмивання Skin1004 Madagascar Centella (125ml)","<p>Делікатна пінка з екстрактом центелли азіатської та мадекасосидом. Освітлює постакне, заспокоює подразнення і не сушить шкіру.</p>","Skin1004","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Очищення, Skin1004, Центелла, Вмивання",true,"Size","125 ml","SKIN-CENT-125","540","620","https://lil-shop.com.ua/content/images/3/388x600l80mc0/skin1004-madagascar-centella-tone-brightening-cleansing-gel-foam-osvitliuiuchyi-hel-pinka-dlia-vmyvannia-z-tsenteloiu-125ml-71127830164614.webp","active"
+"panoxyl-acne-foaming-wash-156ml","Гель-пінка для проблемної шкіри з акне PanOxyl Acne Foaming Wash 10% (156ml)","<p>Максимальна концентрація 10% бензоїл пероксиду для лікування акне та запалень на обличчі, плечах та спині. Очищає пори від бактерій.</p>","PanOxyl","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Очищення, PanOxyl, Вмивання",true,"Size","156 ml","PANOXYL-10-156","680","790","https://lil-shop.com.ua/content/images/23/700x700l80mc0/156ml-panoxyl-acne-foaming-wash-hel-pinka-dlia-chutlyvoi-ta-problemnoi-shkiry-z-akne-19561877194385.webp","active"
+"molochko-dlia-ochyshchennia-sensitive","Заспокійливе молочко для очищення чутливої шкіри обличчя Gentle Milk (200ml)","<p>Ультрам'яке очищувальне молочко з церамідами та пантенолом для делікатного видалення макіяжу без порушення захисного ліпідного бар'єру.</p>","MOLAND Skincare","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Очищення, Молочко",true,"Size","200 ml","MILK-SENS-200","520","610","https://lil-shop.com.ua/content/images/48/500x500l80mc0/32889521080825.webp","active"
+"prod-anua-heartleaf-ampoule","Заспокійлива сироватка Anua Heartleaf 80% Soothing Ampoule (30ml)","<p>Концентрована ампула з 80% екстрактом хауттюйнії серцеподібної. Миттєво знімає почервоніння, подразнення та балансує виділення себуму.</p>","Anua","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Сироватки, Anua, Заспокоєння",true,"Size","30 ml","ANUA-AMP-30","790","890","https://lil-shop.com.ua/content/images/22/800x800l80mc0/zvolozhuiucha-syrovatka-anua-heartleaf-80-soothing-ampoule-30ml-71235933533437.webp","active"
+"la-roche-posay-pure-vitamin-c10-serum-30ml","Сироватка-антиоксидант проти зморшок La Roche-Posay Pure Vitamin C10 (30ml)","<p>Концентрована антиоксидантна сироватка з 10% чистим вітаміном C, саліциловою кислотою та нейросенсином для сяйва шкіри та вирівнювання рельєфу.</p>","La Roche-Posay","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Сироватки, La Roche-Posay, Вітамін C",true,"Size","30 ml","LRP-VITC-30","1290","1450","https://lil-shop.com.ua/content/images/17/195x630l80mc0/la-roche-posay-pure-vitamin-c10-syrovatka-antyoksydant-proty-zmorshok-dlia-vidnovlennia-shkiry-oblychchia-30-ml-14381565333304.webp","active"
+"la-roche-posay-retinol-b3-serum-30ml","Сироватка проти зморшок з ретинолом La Roche-Posay Retinol B3 Serum (30ml)","<p>Антивікова сироватка з поступовим вивільненням чистого ретинолу та вітаміном B3 (ніацинамід). Зменшує глибокі зморшки та фотостаріння без подразнень.</p>","La Roche-Posay","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Сироватки, La Roche-Posay, Ретинол",true,"Size","30 ml","LRP-RET-30","1350","1520","https://lil-shop.com.ua/content/images/15/750x700l80mc0/la-roche-posay-retinol-b3-serum-syrovatka-proty-zmorshok-z-retynolom-30ml-11184830109498.webp","active"
+"la-roche-posay-pure-niacinamide-10-serum-30ml","Сироватка проти пігментації La Roche-Posay Pure Niacinamide 10 Serum (30ml)","<p>Потужна дерматологічна сироватка з 10% ніацинамідом. Ефективно бореться з пігментними плямами, постакне та тьмяним тоном обличчя.</p>","La Roche-Posay","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Сироватки, La Roche-Posay, Ніацинамід",true,"Size","30 ml","LRP-NIAC-30","1250","1400","https://lil-shop.com.ua/content/images/37/1010x1069l80mc0/syrovatka-dlia-oblychchia-la-roche-posay-pure-niacinamide-10-serum-72722839118468.webp","active"
+"la-roche-posay-effaclar-daily-skin-renewal-serum-30ml","Сироватка для оновлення шкіри La Roche-Posay Effaclar Daily Renewal (30ml)","<p>Ультраконцентрована сироватка з трьома кислотами (саліцилова, гліколева, LHA) та ніацинамідом проти стійких недосконалостей шкіри.</p>","La Roche-Posay","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Сироватки, La Roche-Posay, Проблемна шкіра",true,"Size","30 ml","LRP-EFAC-30","1190","1350","https://lil-shop.com.ua/content/images/17/800x1011l80mc0/syrovatka-dlia-oblychchia-la-roche-posay-effaclar-daily-skin-renewal-serum-30ml-19626486072483.webp","active"
+"prod-paulas-choice-bha-exfoliant","Тонік-ексфоліант Paula's Choice Skin Perfecting 2% BHA Liquid Exfoliant (118ml)","<p>Світовий бестселер ексфоліації. 2% саліцилова кислота м'яко відлущує омертвілі клітини, очищає забиті пори та вирівнює тон шкіри.</p>","Paula's Choice","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Тоніки, Paula's Choice, BHA",true,"Size","118 ml","PC-BHA-118","1450","1650","https://lil-shop.com.ua/content/images/24/1500x1500l80mc0/tonik-dlia-problemnoi-shkiry-exfoliate-paulas-choice-iz-salitsylovoiu-kyslotoiu-2-118ml-60428301325264.webp","active"
+"la-mer-the-treatment-lotion-30ml","Лосьйон для догляду за шкірою La Mer The Treatment Lotion (30ml)","<p>Шовковистий підготовчий лосьйон з клітинним Miracle Broth. Заряджає шкіру енергією, глибоко зволожує та готує до наступних етапів догляду.</p>","La Mer","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Тоніки, La Mer, Лосьйони",true,"Size","30 ml","LAMER-LOT-30","2200","2500","https://lil-shop.com.ua/content/images/32/630x630l80mc0/la-mer-the-treatment-lotion-losion-dlia-dohliadu-za-shkiroiu-30ml-13881267600703.webp","active"
+"la-mer-the-moisturizing-cream-60ml","Зволожуючий крем для обличчя La Mer The Moisturizing Cream (60ml)","<p>Легендарний Crème de la Mer з ферментом морських водоростей Miracle Broth. Глибоко живить, заспокоює сухість та повертає шкірі молодість і сяйво.</p>","La Mer","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Креми, La Mer, Зволоження",true,"Size","60 ml","LAMER-CRM-60","2950","3400","https://lil-shop.com.ua/content/images/26/1080x1080l80mc0/zvolozhuiuchyi-krem-dlia-oblychchia-la-mer-the-moisturizing-cream-60-ml-49795685594321.webp","active"
+"centellian24-the-madeca-cream-season6-45ml","Багатофункціональний антивіковий крем Centellian24 The Madeca Cream Season 6 (45ml)","<p>Знаменитий регенеруючий крем з концентрованою центеллою TECA від фармгіганта Dongkook. Загоює, зміцнює бар'єр шкіри та бореться зі зморшками.</p>","Centellian24","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Креми, Centellian24, Антивікові",true,"Size","45 ml","CENT-CRM-45","620","750","https://lil-shop.com.ua/content/images/6/400x400l80mc0/centellian24-the-madeca-cream-season6-bahatofunktsionalnyi-antyvikovyi-krem-45ml-72337466721322.webp","active"
+"tocobo-collagen-brightening-eye-gel-cream","Колагеновий гель навколо очей Tocobo Collagen Brightening Eye Gel Cream (30ml)","<p>Легкий освіжаючий гель-крем з рослинним колагеном та водою лаванди. Освітлює темні кола, зменшує набряки та зволожує ніжну шкіру повік.</p>","Tocobo","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Зона навколо очей, Tocobo, Креми",true,"Size","30 ml","TOCOBO-EYE-30","590","680","https://lil-shop.com.ua/content/images/1/500x500l80mc0/kolahenovyi-hel-navkolo-ochei-tocobo-collagen-brightening-eye-gel-cream-42337467305049.webp","active"
+"silulan-collagen-eye-patches-5-pairs","Колагенові патчі Silulan для шкіри навколо очей (5 пар)","<p>Гідрогелеві патчі з морським колагеном проти зморшок, набряків та втоми очей. Швидкий ефект відпочилого погляду за 15 хвилин.</p>","Silulan","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Зона навколо очей, Патчі, Silulan",true,"Size","5 пар","SIL-PATCH-5P","390","460","https://lil-shop.com.ua/content/images/18/1024x1024l80mc0/kolahenovi-patchi-silulan-dlia-shkiry-navkolo-ochei-proty-zmorshok-ta-nabriakiv-5-par-45050273724710.webp","active"
+"estee-lauder-anr-eye-concentrate-matrix-15ml","Омолоджувальний концентрат Estée Lauder Advanced Night Repair Matrix (15ml)","<p>Ультраживильний концентрат для контуру очей зі сталевим охолоджуючим аплікатором. Зміцнює делікатну шкіру та розгладжує мімічні зморшки.</p>","Estée Lauder","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Зона навколо очей, Estée Lauder, Сироватки",true,"Size","15 ml","EL-ANR-EYE-15","2350","2700","https://lil-shop.com.ua/content/images/9/600x600l80mc0/estee-lauder-anr-eye-concentrate-matrix-omolodzhuvalnyi-dohliad-dlia-shkiry-navkolo-ochei-15ml-68224068447595.webp","active"
+"biodance-collagen-gel-toner-pads-60pcs","Зволожуючі колагенові педи для обличчя Biodance Collagen Gel Toner Pads (60 шт)","<p>Щільні тонер-педи, просочені концентрованим колагеновим гелем та гіалуроновою кислотою. Миттєво освіжають, заспокоюють і дарують гладкість.</p>","Biodance","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Маски та педи, Biodance, Тоніки",true,"Size","60 шт","BIO-PADS-60","980","1150","https://lil-shop.com.ua/content/images/36/1080x1120l80mc0/zvolozhuiuchi-kolahenovi-pady-dlia-oblychchia-biodance-collagen-gel-toner-pads-60sht-58464449758575.webp","active"
+"prod-biodance-bio-collagen-mask","Гідрогелева маска з колагеном Biodance Bio-Collagen Real Deep Mask","<p>Вірусна корейська нічна маска, яка стає прозорою після повного вбирання оліго-гіалуронової кислоти та колагену в глибокі шари епідермісу.</p>","Biodance","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, Маски та педи, Biodance, Маски",true,"Size","1 шт (34g)","BIO-MASK-DEEP","450","520","https://lil-shop.com.ua/content/images/45/1000x1000l80mc0/maska-hidroheleva-z-kolahenom-biodance-bio-collagen-real-deep-mask-57891938294814.webp","active"
+"sontsezakhysnyi-krem-spf50","Сонцезахисний зволожуючий крем Daily Moisture Sunscreen SPF 50+ PA++++ (50ml)","<p>Невагомий хімічний сонцезахисний крем нового покоління без білих слідів та липкості. Зволожує гіалуроновою кислотою та надійно блокує UVA/UVB.</p>","MOLAND Skincare","Догляд за обличчям","Догляд за обличчям","Догляд за обличчям, SPF захист, Креми",true,"Size","50 ml","SPF50-DAILY-50","640","750","https://lil-shop.com.ua/content/images/44/1000x667l80mc0/78795577073420.webp","active"
+"prod-olaplex-bonding-oil","Відновлююча олія для волосся Olaplex No.7 Bonding Oil (30ml)","<p>Ультралегка висококонцентрована олія для відновлення пошкоджених дисульфідних зв'язків волосся. Надає дзеркальний блиск і термозахист до 232°C.</p>","Olaplex","Догляд за волоссям","Догляд за волоссям","Догляд за волоссям, Olaplex, Олії для волосся",true,"Size","30 ml","OLA-NO7-30","1250","1400","https://lil-shop.com.ua/content/images/18/1000x1000l80mc0/olaplex-no.7-bonding-oil-30ml-vidnovliuiucha-oliia-dlia-volossia-43019718400082.webp","active"
+"prod-k18-leave-in-mask","Незмивна маска для молекулярного відновлення волосся K18 Leave-in Mask (50ml)","<p>Революційний біоактивний пептид K18 відновлює кератинові ланцюжки волосся всього за 4 хвилини після фарбування чи термоукладання.</p>","K18","Догляд за волоссям","Догляд за волоссям","Догляд за волоссям, K18, Маски для волосся",true,"Size","50 ml","K18-MASK-50","1190","1350","https://lil-shop.com.ua/content/images/12/509x515l80mc0/50ml-k18-maska-dlia-volossia-leave-in-molecular-repair-hair-mask-43210506973965.webp","active"
+"vidnovliuvalnyi-bezsulfatnyi-shampun","Відновлювальний безсульфатний шампунь Repair & Moisture (250ml)","<p>Професійний безсульфатний шампунь з амінокислотами шовку та рослинними протеїнами для щоденного дбайливого очищення пошкодженого волосся.</p>","MOLAND Hair","Догляд за волоссям","Догляд за волоссям","Догляд за волоссям, Шампуні",true,"Size","250 ml","SHAMP-REP-250","580","690","https://lil-shop.com.ua/content/images/36/595x700l80mc0/84792797635563.webp","active"
+"prod-sol-de-janeiro-bum-bum","Крем для тіла Sol de Janeiro Brazilian Bum Bum Cream (75ml)","<p>Культовий бразильський крем для пружності шкіри з екстрактом гуарани, олією купуасу та фірмовим п'янким ароматом солоної карамелі й фісташки.</p>","Sol de Janeiro","Догляд за тілом","Догляд за тілом","Догляд за тілом, Sol de Janeiro, Креми для тіла",true,"Size","75 ml","SDJ-BUM-75","890","990","https://lil-shop.com.ua/content/images/21/1200x630l80mc0/krem-dlia-tila-brazilian-bum-sol-de-janeiro-75ml-38934533931936.webp","active"
+"kosmetychka-charlotte-tilbury-sumka-zhinocha","Косметичка Charlotte Tilbury сумка жіноча","<p>Фірмова стьобана оксамитова косметичка Charlotte Tilbury у відтінку Rose Gold з золотою фурнітурою та водостійкою підкладкою.</p>","Charlotte Tilbury","Аксесуари та сумки","Аксесуари та сумки","Сумки, Аксесуари, Charlotte Tilbury, Косметички",true,"Size","One Size","CT-BAG-ROSE","1499","1800","https://lil-shop.com.ua/content/images/24/505x390l80mc0/kosmetychka-charlotte-tilbury-18342289879514.webp","active"
+"air-jordan-1-chicago-lost-and-found","Air Jordan 1 Retro High OG 'Chicago Lost & Found'","<p>Культовий силует 1985 року у вінтажному виконанні Lost & Found. Преміальна потріскана шкіра, оригінальний колорвей Varsity Red / Black / Sail та автентична коробка зі старовинним чеком.</p>","Jordan","Взуття / Кросівки","Взуття / Кросівки","Взуття, Кросівки, Jordan, Deadstock, Хіт",true,"Size","EU 41 (26.0 cm)","DZ5485-612-41","9800","","https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80","active"
+"stussy-basic-applique-hoodie-black","Stüssy Basic Applique Hoodie 'Black'","<p>Класичне важке худі від каліфорнійського бренду Stüssy з фірмовим вишитим логотипом на грудях. Щільна бавовна 380 gsm з м'яким начосом.</p>","Stüssy","Одяг / Худі та світшоти","Одяг / Худі та світшоти","Одяг, Худі, Stüssy, Streetwear, ТОП",true,"Size","S (Oversize)","STU-HD-BLK-S","5400","","https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&auto=format&fit=crop&q=80","active"
+"new-balance-1906r-silver-metallic","New Balance 1906R 'Silver Metallic / Cordura'","<p>Сучасна класика бігового ретро-стилю 2000-х. Амортизаційна підошва N-ergy та вставки ABZORB SBS забезпечують неперевершений комфорт протягом усього дня.</p>","New Balance","Взуття / Кросівки","Взуття / Кросівки","Взуття, Кросівки, New Balance, Ретро-ранери",true,"Size","EU 41.5 (26.0 cm)","NB1906-415","6900","","https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&auto=format&fit=crop&q=80","active"
+"carhartt-wip-double-knee-pant-hamilton-brown","Carhartt WIP Double Knee Pant 'Hamilton Brown'","<p>Культові робочі штани зі щільного органічного канвасу Dearborn Canvas (12 oz). Подвійний шар тканини на колінах з металевими заклепками.</p>","Carhartt WIP","Одяг / Штани та джинси","Одяг / Штани та джинси","Одяг, Штани, Carhartt WIP, Workwear",true,"Size","W30 / L32","CAR-DK-30","4800","","https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&auto=format&fit=crop&q=80","active"
+"salomon-xt-6-black-phantom","Salomon XT-6 'Black / Phantom'","<p>Ультимативна трейлова пара у стилі gorpcore. Система швидкого шнурування Quicklace, шасі ACS для стабільності та чіпка підошва Mud Contagrip.</p>","Salomon","Взуття / Кросівки","Взуття / Кросівки","Взуття, Кросівки, Salomon, Gorpcore",true,"Size","EU 42 (26.5 cm)","SAL-XT6-42","8200","","https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&auto=format&fit=crop&q=80","active"
+"supreme-box-logo-crewneck-heather-grey","Supreme Box Logo Crewneck 'Heather Grey'","<p>Справжня ікона нью-йоркського стрітвіру. Фірмовий вишитий логотип Box Logo на грудях, надщільний важкий фліс Crossgrain та ребристі манжети.</p>","Supreme","Одяг / Худі та світшоти","Одяг / Худі та світшоти","Одяг, Світшот, Supreme, Box Logo, Дроп",true,"Size","M (Regular/Oversize)","SUP-BOGO-M","7500","","https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&auto=format&fit=crop&q=80","active"
+"stone-island-soft-shell-r-jacket-black","Stone Island Soft Shell-R Jacket 'Black'","<p>Високотехнологічна куртка з 2-шарового водостійкого та вітрозахисного еластичного матеріалу Soft Shell-R. Знімний автентичний патч компаса на лівому рукаві.</p>","Stone Island","Одяг / Куртки та верхній одяг","Одяг / Куртки та верхній одяг","Одяг, Куртки, Stone Island, Технічний одяг",true,"Size","M (Regular)","SI-SOFTSHELL-M","17800","","https://images.unsplash.com/photo-1544441893-675973e31985?w=800&auto=format&fit=crop&q=80","active"
+"stussy-8-ball-heavyweight-tee-white","Stüssy 8 Ball Heavyweight T-Shirt 'White'","<p>Легендарна футболка з графікою культової вісімки 8-Ball на спині та логотипом Stüssy на грудях. 100% щільна чесана бавовна.</p>","Stüssy","Одяг / Футболки","Одяг / Футболки","Одяг, Футболки, Stüssy, Графіка",true,"Size","M (Boxy fit)","STU-8BALL-M","2400","","https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80","active"
+"jacquemus-le-chiquito-moyen-black","Jacquemus Le Chiquito Moyen Leather Bag 'Black'","<p>Еталон паризького мінімалізму від Симона Порта Жакмюса. Гладка натуральна теляча шкіра, фірмова видовжена ручка та золотий металевий логотип.</p>","Jacquemus","Сумки / Кросбоді","Сумки / Кросбоді","Сумки, Аксесуари, Jacquemus, Люкс",true,"Size","One Size","JACQ-CHIQ-BLK","19800","","https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop&q=80","active"
+"ami-paris-ami-de-coeur-sweatshirt-black","AMI Paris Ami de Coeur Sweatshirt 'Noir / Red'","<p>Французький преміальний світшот з культовою червоною вишивкою Ami de Coeur. М'яка органічна бавовна петлястого плетіння.</p>","AMI Paris","Одяг / Худі та світшоти","Одяг / Худі та світшоти","Одяг, Світшот, AMI Paris, Паризький стиль",true,"Size","M (Regular fit)","AMI-COEUR-BLK-M","9200","","https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80","active"
+"ganni-graphic-organic-cotton-tee-white","Ganni Graphic Organic Cotton T-Shirt 'Bright White'","<p>Скандинавський шик від копенгагенського бренду Ganni. Розслаблений силует, 100% органічна сертифікована бавовна та фірмовий принт.</p>","Ganni","Одяг / Футболки","Одяг / Футболки","Одяг, Футболки, Ganni, Копенгаген",true,"Size","S (Relaxed)","GAN-TEE-S","3600","","https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&auto=format&fit=crop&q=80","active"
+"breda-jane-1741-mesh-watch-champagne","Breda Jane 1741 Gold Mesh Watch 'Champagne'","<p>Вишуканий вінтажний годинник з ювелірним міланським плетінням ремінця. Корпус із позолоченої нержавіючої сталі 23 мм та надійний японський кварцовий механізм Miyota.</p>","Breda","Аксесуари / Годинники","Аксесуари / Годинники","Аксесуари, Годинники, Breda, Вінтаж",true,"Size","One Size (Регульований)","BREDA-1741-GLD","6800","","https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80","active"
 `;

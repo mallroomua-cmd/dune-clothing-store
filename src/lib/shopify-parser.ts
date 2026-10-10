@@ -49,15 +49,18 @@ export function inferVendorAndCategory(
     const knownVendors = [
       'Sol de Janeiro', 'Fenty Beauty', 'Rare Beauty', 'Summer Fridays',
       'Rhode Cosmetics', 'Rhode', 'Dior', 'Hourglass', 'Charlotte Tilbury',
-      'COSRX', 'Beauty of Joseon', 'Round Lab', 'Skin1004', 'Manyo',
-      'Anua', 'Dr. Althea', 'Olaplex', 'K18', "Paula's Choice", 'Biodance',
+      'La Mer', "Paula's Choice", 'Biodance', 'Anua', 'Medicube', 'Skin1004',
+      'PanOxyl', 'Centellian24', 'Tocobo', 'Silulan', 'Estée Lauder',
+      'La Roche-Posay', 'NYX Professional', 'NYX', 'Tarte', 'Elegance',
+      'RevitaLash', 'RevitaBrow', 'Dr.Ceuracle', 'COSRX', 'Beauty of Joseon',
+      'Round Lab', 'Manyo', 'Dr. Althea', 'Olaplex', 'K18',
       'AMI Paris', 'Ganni', 'Jacquemus', 'Jil Sander', 'New Balance',
       'Salomon', 'Jordan', 'Nike', 'Stüssy', 'Supreme', 'Carhartt WIP',
-      'Stone Island', 'Breda', 'D1 Milano'
+      'Stone Island', 'Breda', 'D1 Milano', 'MOLAND'
     ];
     const match = knownVendors.find((v) => titleLower.includes(v.toLowerCase()));
     if (match) {
-      vendor = match === 'Rhode Cosmetics' ? 'Rhode' : match;
+      vendor = match === 'Rhode Cosmetics' ? 'Rhode' : match === 'NYX' ? 'NYX Professional' : match === 'RevitaBrow' ? 'RevitaLash' : match;
     } else {
       vendor = 'MOLAND';
     }
@@ -79,15 +82,27 @@ export function inferVendorAndCategory(
     productType = 'Декоративна косметика';
     extraTags.push('Губи', 'Декоративна косметика');
   } else if (
+    text.includes('тіні') ||
+    text.includes('туш') ||
+    text.includes('брів') ||
+    text.includes('повік') ||
+    text.includes('eyeshadow') ||
+    text.includes('revitabrow')
+  ) {
+    productType = 'Декоративна косметика';
+    extraTags.push('Очі', 'Декоративна косметика');
+  } else if (
     text.includes('хайлайтер') ||
     text.includes('румʼян') ||
     text.includes('рум\'ян') ||
     text.includes('палітра') ||
     text.includes('пудр') ||
     text.includes('консилер') ||
-    text.includes('тіні') ||
-    text.includes('туш') ||
-    text.includes('макіяж')
+    text.includes('bb-крем') ||
+    text.includes('bb krem') ||
+    text.includes('dr.ceuracle') ||
+    text.includes('макіяж') ||
+    text.includes('пензл')
   ) {
     productType = 'Декоративна косметика';
     extraTags.push('Обличчя', 'Декоративна косметика');
@@ -95,7 +110,9 @@ export function inferVendorAndCategory(
     text.includes('парфум') ||
     text.includes('міст') ||
     text.includes('perfume mist') ||
-    text.includes('аромат')
+    text.includes('аромат') ||
+    text.includes('cheirosa') ||
+    text.includes('свічк')
   ) {
     productType = 'Парфуми та аромати';
     extraTags.push('Парфуми', 'Спреї');
@@ -104,10 +121,29 @@ export function inferVendorAndCategory(
     text.includes('сумк') ||
     text.includes('handbag') ||
     text.includes('рюкзак') ||
-    text.includes('chiquito')
+    text.includes('chiquito') ||
+    text.includes('годинник') ||
+    text.includes('breda')
   ) {
     productType = 'Аксесуари та сумки';
     extraTags.push('Сумки', 'Аксесуари');
+  } else if (
+    text.includes('волос') ||
+    text.includes('шампун') ||
+    text.includes('olaplex') ||
+    text.includes('k18') ||
+    text.includes('маска для волосся') ||
+    text.includes('олійка для волосся')
+  ) {
+    productType = 'Догляд за волоссям';
+    extraTags.push('Догляд за волоссям');
+  } else if (
+    text.includes('для тіла') ||
+    text.includes('bum bum') ||
+    text.includes('крем для тіла')
+  ) {
+    productType = 'Догляд за тілом';
+    extraTags.push('Догляд за тілом');
   } else if (
     text.includes('сироватк') ||
     text.includes('ампул') ||
@@ -118,25 +154,21 @@ export function inferVendorAndCategory(
     text.includes('тонер') ||
     text.includes('маск') ||
     text.includes('педи') ||
+    text.includes('патчі') ||
     text.includes('spf') ||
-    text.includes('сонцезахис')
+    text.includes('сонцезахис') ||
+    text.includes('la mer') ||
+    text.includes('biodance') ||
+    text.includes('centella') ||
+    text.includes('anua') ||
+    text.includes('medicube') ||
+    text.includes('panoxyl') ||
+    text.includes('tocobo') ||
+    text.includes('la roche-posay') ||
+    text.includes('estee lauder')
   ) {
     productType = 'Догляд за обличчям';
     extraTags.push('Догляд за обличчям');
-  } else if (
-    text.includes('волос') ||
-    text.includes('шампун') ||
-    text.includes('olaplex') ||
-    text.includes('k18')
-  ) {
-    productType = 'Догляд за волоссям';
-    extraTags.push('Догляд за волоссям');
-  } else if (
-    text.includes('для тіла') ||
-    text.includes('bum bum')
-  ) {
-    productType = 'Догляд за тілом';
-    extraTags.push('Догляд за тілом');
   } else if (
     text.includes('кросів') ||
     text.includes('снікер') ||
@@ -176,9 +208,6 @@ export function parseShopifyCsv(
           const hasActiveRows = results.data.some((r) => Boolean((r['Title'] || '').trim()) && isRowActive(r));
           const shouldFilterDrafts = !options?.includeDrafts && hasActiveRows;
 
-          // Check if CSV contains priced items
-          const hasPricedItems = results.data.some((r) => parsePrice(r['Variant Price'] || r['Price']) > 0);
-
           results.data.forEach((row) => {
             if (shouldFilterDrafts && !isRowActive(row)) return;
 
@@ -191,16 +220,19 @@ export function parseShopifyCsv(
             const price = parsePrice(row['Variant Price'] || row['Price']);
             const compareAtPrice = parsePrice(row['Variant Compare At Price'] || row['Compare At Price']) || undefined;
 
-            const productKey = handle || title;
-
-            // Skip taxonomy/category placeholder rows that have 0 price when real products exist
-            // (but do NOT skip secondary image/variant rows for products already registered in productsMap)
-            if (!productsMap.has(productKey) && hasPricedItems && price <= 0 && (!row['Variant SKU'] || row['Variant SKU'] === 'no-content')) {
-              return;
-            }
-
             // Extract image
             const imageSrc = (row['Image Src'] || row['image_src'] || row['Image URL'] || '').trim();
+
+            // Fallback price for products with images when price is omitted in export
+            const effectivePrice = price > 0 ? price : (imageSrc ? 799 : 0);
+
+            const productKey = handle || title;
+
+            // Skip taxonomy/category placeholder rows that have 0 price and no image when real products exist
+            // (but do NOT skip secondary image/variant rows for products already registered in productsMap)
+            if (!productsMap.has(productKey) && effectivePrice <= 0 && (!row['Variant SKU'] || row['Variant SKU'] === 'no-content')) {
+              return;
+            }
 
             // Inventory quantity (if tracker is empty, inventory is untracked and therefore available)
             const rawQty = row['Variant Inventory Qty'];
@@ -247,8 +279,8 @@ export function parseShopifyCsv(
                 vendor,
                 productType,
                 tags,
-                price: price || 0,
-                compareAtPrice: compareAtPrice && compareAtPrice > price ? compareAtPrice : undefined,
+                price: effectivePrice || 0,
+                compareAtPrice: compareAtPrice && compareAtPrice > effectivePrice ? compareAtPrice : undefined,
                 images: imageSrc ? [imageSrc] : [],
                 featuredImage: imageSrc || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80',
                 available: isAvailable,
@@ -260,7 +292,7 @@ export function parseShopifyCsv(
               newProduct.variants.push({
                 id: `var-${productKey}-0`,
                 title: variantTitle,
-                price: price || 0,
+                price: effectivePrice || 0,
                 compareAtPrice,
                 sku,
               });
